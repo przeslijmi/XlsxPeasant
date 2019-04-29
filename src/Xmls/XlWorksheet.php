@@ -1,0 +1,217 @@
+<?php declare(strict_types=1);
+
+/*
+ * @phpcs:disable Generic.Files.LineLength.TooLong
+ */
+
+namespace Przeslijmi\XlsxGenerator\Xmls;
+
+use Przeslijmi\XlsxGenerator\Xml;
+use Przeslijmi\XlsxGenerator\Items\Sheet;
+use Przeslijmi\XlsxGenerator\Items\Cell;
+
+/**
+ * XML nodes for `xl\worksheets\sheet*.xml`.
+ */
+class XlWorksheet extends Xml
+{
+
+    /**
+     * Parent Sheet.
+     *
+     * @var Sheet
+     */
+    private $sheet;
+
+    /**
+     * Constructor.
+     *
+     * @param Sheet $sheet Sheet to import to this XML.
+     *
+     * @since v1.0
+     */
+    public function __construct(Sheet $sheet)
+    {
+
+        // Save parent.
+        $this->sheet = $sheet;
+
+        // Define nodes.
+        $this->array = [
+            'worksheet' => [
+                '@xmlns'        => 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
+                '@xmlns:r'      => 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
+                '@xmlns:mc'     => 'http://schemas.openxmlformats.org/markup-compatibility/2006',
+                '@mc:Ignorable' => 'x14ac xr xr2 xr3',
+                '@xmlns:x14ac'  => 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac',
+                '@xmlns:xr'     => 'http://schemas.microsoft.com/office/spreadsheetml/2014/revision',
+                '@xmlns:xr2'    => 'http://schemas.microsoft.com/office/spreadsheetml/2015/revision2',
+                '@xmlns:xr3'    => 'http://schemas.microsoft.com/office/spreadsheetml/2016/revision3',
+                '@xr:uid'       => '{1F9F6C13-4E63-4813-B769-C4C69F609E0F}',
+                '@@' => [
+                    'dimension' => [
+                        '@ref' => 'A1',
+                    ],
+                    'sheetViews' => [
+                        '@@' => [
+                            'sheetView' => [
+                                '@workbookViewId' => '0',
+                            ],
+                        ],
+                    ],
+                    'sheetFormatPr' => [
+                        '@defaultRowHeight' => '14.4',
+                        '@x14ac:dyDescent'  => '0.3',
+                    ],
+                    'sheetData' => [
+                        '@@' => null,
+                    ],
+                    'mergeCells' => [
+                        '@@' => null,
+                    ],
+                    'pageMargins' => [
+                        '@left'   => '0.7',
+                        '@right'  => '0.7',
+                        '@top'    => '0.75',
+                        '@bottom' => '0.75',
+                        '@header' => '0.3',
+                        '@footer' => '0.3',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS);
+        $this->setHeader('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>');
+
+        parent::__construct();
+    }
+
+    /**
+     * Preparation method to update `$this->array` according to current values.
+     *
+     * @return self
+     */
+    public function prep() : self
+    {
+
+        $this->prepCells();
+        $this->prepMerges();
+
+        $this->array['worksheet']['@@']['dimension']['@ref'] = $this->sheet->getDimensionRef();
+
+        return $this;
+    }
+
+    /**
+     * Preparation of `sheetData` node.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    private function prepCells() : self
+    {
+
+        // Lvd.
+        $rowsAr = [];
+
+        // Foreach Row.
+        foreach ($this->sheet->getCells() as $row => $cols) {
+
+            // Lvd.
+            $colsAr = [];
+            $minCol = array_keys($cols)[0];
+            $maxCol = array_reverse(array_keys($cols))[0];
+
+            // Foreach Col in Row.
+            foreach ($cols as $col => $cell) {
+                $colsAr[] = $this->prepOneCell($cell);
+            }
+
+            // Add row.
+            $rowsAr[] = [
+                '@r'               => $row,
+                '@spans'           => $minCol . ':' . $maxCol,
+                '@x14ac:dyDescent' => '0.3',
+                '@@' => [
+                    'c' => $colsAr,
+                ],
+            ];
+        }//end foreach
+
+        // Save.
+        $this->array['worksheet']['@@']['sheetData']['@@']['row'] = $rowsAr;
+
+        return $this;
+    }
+
+    /**
+     * Preparation of one cell in `sheetData` node.
+     *
+     * @param Cell $cell Cell to prepare.
+     *
+     * @since  v1.0
+     * @return array
+     */
+    private function prepOneCell(Cell $cell) : array
+    {
+
+        // Default always.
+        $result = [
+            '@r' => $cell->getColRef() . $cell->getRow(),
+            '@t' => 's',
+        ];
+
+        // If this is not merged - add value.
+        if ($cell->isMerged() === false) {
+            $result['@@'] = [
+                'v' => $cell->getSharedStringsId(),
+            ];
+        }
+
+        // If this cell has style - add it.
+        if ($cell->hasStyle() === true) {
+            $result['@s'] = $cell->getStyle()->getId();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Prepare 'mergeCells' node.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    private function prepMerges() : self
+    {
+
+        // Lvd.
+        $mergesAr = [];
+
+        // Find all merges going through all cells.
+        foreach ($this->sheet->getCells() as $row => $cols) {
+            foreach ($cols as $col => $cell) {
+
+                // If this is not merging cell - don't go further.
+                if ($cell->isMerging() === false) {
+                    continue;
+                }
+
+                // Add to index.
+                $mergesAr[] = [
+                    '@ref' => $cell->getMergeRef(),
+                ];
+            }
+        }
+
+        // If there are merges - list them.
+        if (count($mergesAr) > 0) {
+            $this->array['worksheet']['@@']['mergeCells']                    = [];
+            $this->array['worksheet']['@@']['mergeCells']['@count']          = count($mergesAr);
+            $this->array['worksheet']['@@']['mergeCells']['@@']['mergeCell'] = $mergesAr;
+        }
+
+        return $this;
+    }
+}
