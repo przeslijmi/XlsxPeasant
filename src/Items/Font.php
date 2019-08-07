@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items\Color;
+use Przeslijmi\XlsxPeasant\Items\Color;
+use Przeslijmi\XlsxPeasant\Items\FontFactory;
 
 /**
  * Font definition used in Style.
@@ -53,7 +54,7 @@ class Font
     private $underline;
 
     /**
-     * Factory of Font.
+     * Factory of Font redirects to FontFactory class.
      *
      * @since  v1.0
      * @return Font
@@ -61,109 +62,7 @@ class Font
     public static function factory() : Font
     {
 
-        // Lvd.
-        $pm    = func_get_args();
-        $count = count($pm);
-
-        // Given 1 param.
-        if ($count === 1) {
-
-            // Given 1 param - Font object itself.
-            if (is_a($pm[0], self::class) === true) {
-                return $pm[0];
-            }
-
-            // Given 1 param - a string - assuming this is font name.
-            if (is_string($pm[0]) === true) {
-                $font = new Font();
-                $font->setName($pm[0]);
-            }
-        }
-
-        // Given 2 params - second is a string.
-        if ($count === 2 && is_string($pm[1]) === true) {
-
-            // Create Font.
-            $font = new Font();
-
-            // Add font name (if asked).
-            if (empty($pm[0]) === false) {
-                $font->setName($pm[0]);
-            }
-
-            // Look for emphasis.
-            preg_match_all('/(\b(bold|italic|underline)\b)/', $pm[1], $foundPreg);
-            $pm[1] = preg_replace('/(\b(bold|italic|underline)\b)/', '', $pm[1]);
-            if (isset($foundPreg[0]) === true) {
-                $foundPreg = array_flip($foundPreg[0]);
-
-                if (isset($foundPreg['bold']) === true) {
-                    $font->setBold(true);
-                }
-                if (isset($foundPreg['intalic']) === true) {
-                    $font->setItalic(true);
-                }
-                if (isset($foundPreg['underline']) === true) {
-                    $font->setUnderline(true);
-                }
-            }
-
-            // Look for size.
-            preg_match_all('/(\d)+/', $pm[1], $foundPreg);
-            $pm[1] = preg_replace('/(\d)+/', '', $pm[1]);
-            if (isset($foundPreg[0][0]) === true) {
-                $font->setSize((int) $foundPreg[0][0]);
-            }
-
-            // Look for color.
-            preg_match_all('/(\b([a-zA-Z]+)\b)/', $pm[1], $foundPreg);
-            $pm[1] = preg_replace('/(\d)+/', '', $pm[1]);
-            if (isset($foundPreg[0][0]) === true) {
-                $font->setColor($foundPreg[0][0]);
-            }
-
-            return $font;
-        }//end if
-
-        die('factory dead pmva439jf90jwe');
-    }
-
-    /**
-     * Create Font as a merge (sum) of two Fonts: A + B.
-     *
-     * @param Font $fontA Base font.
-     * @param Font $fontB Additional font.
-     *
-     * @since  v1.0
-     * @return ?Font
-     */
-    public static function factoryMerged(Font $fontA, Font $fontB) : ?Font
-    {
-
-        // Clone.
-        $font = clone $fontA;
-
-        // Define to A what was defined in B.
-        if ($fontB->hasName() === true) {
-            $font->setName($fontB->getName());
-        }
-        if ($fontB->hasSize() === true) {
-            $font->setSize($fontB->getSize());
-        }
-        if ($fontB->hasColor() === true) {
-            $font->setColor($fontB->getColor());
-        }
-        if ($fontB->hasBold() === true) {
-            $font->setBold($fontB->isBold());
-        }
-        if ($fontB->hasItalic() === true) {
-            $font->setItalic($fontB->isItalic());
-        }
-        if ($fontB->hasUnderline() === true) {
-            $font->setUnderline($fontB->isUnderline());
-        }
-
-        return $font;
+        return FontFactory::make(...func_get_args());
     }
 
     /**
@@ -414,8 +313,10 @@ class Font
     public function getSignature() : string
     {
 
+        // Lvd.
         $result = '';
 
+        // Fill up.
         if ($this->hasName() === true) {
             $result .= 'fontName:' . $this->getName();
         }

@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items\Cell;
-use Przeslijmi\XlsxGenerator\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\FontFactory;
 
 /**
  * One part of Cell value (can be only one in Cell or more).
@@ -21,7 +22,7 @@ class ValuePart
     /**
      * Actual contents of the value part.
      *
-     * @var string
+     * @var string|integer|float
      */
     private $contents;
 
@@ -35,13 +36,13 @@ class ValuePart
     /**
      * Constructor.
      *
-     * @param Cell      $cell     Cell parent.
-     * @param string    $contents Actual contents of part..
-     * @param null|Font $font     Optional Font to use in this part.
+     * @param Cell                 $cell     Cell parent.
+     * @param string|integer|float $contents Actual contents of part..
+     * @param null|Font            $font     Optional Font to use in this part.
      *
      * @since v1.0
      */
-    public function __construct(Cell $cell, string $contents, ?Font $font = null)
+    public function __construct(Cell $cell, $contents, ?Font $font = null)
     {
 
         // Lvd.
@@ -87,32 +88,56 @@ class ValuePart
     public function getFontMerged() : ?Font
     {
 
-        // If Cell has not - return from Part.
-        if ($this->cell->hasStyle() === true && $this->cell->getStyle()->hasFont() === false) {
+        // Lvd.
+        $cellHasFont      = ( ( $this->cell->hasStyle() === true ) ? $this->cell->getStyle()->hasFont() : false );
+        $valuePartHasFont = $this->hasFont();
+
+        // If Cell has no Font, but ValuePart has - return from ValuePart.
+        if ($cellHasFont === false && $valuePartHasFont === true) {
             return $this->getFont();
         }
 
-        // If Part has not - return from Cell.
-        if ($this->hasFont() === false) {
-
-            if ($this->cell->hasStyle() === true) {
-                return $this->cell->getStyle()->getFont();
-            }
-
-            return null;
+        // If ValuePart has no Font, but Cell has it - return from Cell.
+        if ($valuePartHasFont === false && $cellHasFont === true) {
+            return $this->cell->getStyle()->getFont();
         }
 
-        // If both have fonts - call to merge.
-        return Font::factoryMerged($this->cell->getStyle()->getFont(), $this->getFont());
+        // If none has Font - return default Font.
+        if ($cellHasFont === false && $valuePartHasFont === false) {
+            return $this->cell->getXlsx()->getDefaultFont();
+        }
+
+        // Finally if both have fonts - call to merge.
+        return FontFactory::makeMerged($this->cell->getStyle()->getFont(), $this->getFont());
     }
 
     /**
      * Getter for contents of this part.
      *
      * @since  v1.0
-     * @return string
+     * @return string|integer|float|array
      */
-    public function getContents() : string
+    public function getContents()
+    {
+
+        // Return as is for numeric.
+        if (in_array(gettype($this->contents), [ 'integer', 'float', 'double' ]) === true) {
+            return $this->contents;
+        }
+
+        // Return as array when text is not trimmed.
+        if (trim($this->contents) !== $this->contents) {
+            return [
+                '@xml:space' => 'preserve',
+                '@@' => $this->contents,
+            ];
+        }
+
+        // Otherwise return as string.
+        return $this->contents;
+    }
+
+    public function getContentsAsScalar()
     {
 
         return $this->contents;
@@ -128,7 +153,7 @@ class ValuePart
     {
 
         // Lvd.
-        $signature = 'contents:' . $this->contents;
+        $signature = 'contents:' . (string) $this->contents;
 
         // Add Font signature if needed.
         if ($this->hasFont() === true) {

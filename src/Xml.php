@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator;
+namespace Przeslijmi\XlsxPeasant;
 
 use Przeslijmi\Sivalidator\GeoProgression;
+use Przeslijmi\Sivalidator\RegEx;
 
 /**
  * Converter from PHP Array to XML (string).
@@ -344,6 +345,12 @@ class Xml
 
         foreach ($nodes as $name => $nodeOrNodes) {
 
+            // Empty option, ie. `$nodes` was
+            // for eg. an array: [ 'aaa' => [] ] (blah blah blah blah blah blah).
+            if (is_array($nodeOrNodes) === true && empty($nodeOrNodes) === true) {
+                $nodeOrNodes = null;
+            }
+
             // Shortest option, ie. $nodes was:
             // [ 0 => 'aaa', 1 => 'bbb' ]
             // So this is multionode structure and `<aaa /><bbb />` is expected.
@@ -377,9 +384,9 @@ class Xml
                 // Get keys, sort them and check if first key starts with `@`.
                 $keys = array_keys($nodeOrNodes);
                 sort($keys);
-                $firstKey = (string) $keys[0];
 
                 // If it is - this is second scenario - otherwise it is the first scenario.
+                $firstKey = (string) $keys[0];
                 if (substr($firstKey, 0, 1) !== '@') {
                     $thisIsNode = false;
                 }
@@ -470,7 +477,11 @@ class Xml
             // Call to draw all nodes that are deeper.
             $result .= $this->nodesToXml($contents);
         } else {
-            $result .= $contents;
+
+            $replacesFrom = [ '&', '<', '>', '"', "'" ];
+            $replacesTo   = [ '&amp;', '&lt;', '&gt;', '&quot;', '&apos;' ];
+
+            $result .= str_replace($replacesFrom, $replacesTo, $contents);
         }
 
         // Draw ending tag.
@@ -584,12 +595,14 @@ class Xml
      *
      * @param string $name Name of node.
      *
-     * @todo
      * @since  v1.0
      * @return void
      */
     private function validateNodeName(string $name) : void
     {
+
+        RegEx::ifMatches($name, '/^([a-z_:]){1}([a-z0-9_:\-.]){0,25}$/i');
+        RegEx::ifNotMatches($name, '/^(xml)/i');
     }
 
     /**
@@ -597,12 +610,13 @@ class Xml
      *
      * @param string $name Name of attribute.
      *
-     * @todo
      * @since  v1.0
      * @return void
      */
     private function validateAttributeName(string $name) : void
     {
+
+        RegEx::ifMatches($name, '/^([a-z_:]){1}([a-z0-9_:\-.]){0,25}$/i');
     }
 
     /**
@@ -610,11 +624,15 @@ class Xml
      *
      * @param string $value Value of attribute.
      *
-     * @todo
      * @since  v1.0
      * @return void
      */
     private function validateAttributeValue(string $value) : void
     {
+
+        // $value is made double for reason. During test it accepted one new line character as an
+        // acceptable value. While blocking new lines is the main purpose for this method - $value
+        // has been doubled - because two NEW LINE's are found properly by this regex.
+        RegEx::ifMatches($value . $value, '/^([\\x{0021}-\\x{007E}\\x{00A0}-\\x{FFFF}])*$/u');
     }
 }

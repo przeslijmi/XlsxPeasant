@@ -4,11 +4,11 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xlsx;
-use Przeslijmi\XlsxGenerator\Xml;
-use Przeslijmi\XlsxGenerator\Xmls\Common\FontXml;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xml;
+use Przeslijmi\XlsxPeasant\Xmls\Common\FontXml;
 
 /**
  * XML nodes for `xl\sharedStrings.xml`.
@@ -39,9 +39,9 @@ class XlSharedStrings extends Xml
         // Define nodes.
         $this->array = [
             'sst' => [
+                '@xmlns'       => 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
                 '@count'       => '1',
                 '@uniqueCount' => '1',
-                '@xmlns'       => 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
                 '@@'           => [
                 ],
             ],
@@ -71,13 +71,16 @@ class XlSharedStrings extends Xml
      *
      * @since  v1.0
      * @return self
+     *
+     * @phpcs:disable Zend.NamingConventions.ValidVariableName.ContainsNumbers
      */
     private function prepStrings() : self
     {
 
         // Lvd.
-        $values  = $this->xlsx->getSharedStrings()->getIndex();
-        $itemsAr = [];
+        $values     = $this->xlsx->getSharedStrings()->getIndex();
+        $itemsAr    = [];
+        $itemsMd5Ar = [];
 
         foreach ($values as $valueParts) {
 
@@ -103,7 +106,7 @@ class XlSharedStrings extends Xml
                 // Lvd.
                 $thisParts = [];
 
-                foreach ($valueParts as $valuePart) {
+                foreach ($valueParts as $vpId => $valuePart) {
 
                     // Define standard.
                     $thisPart = [
@@ -111,8 +114,9 @@ class XlSharedStrings extends Xml
                         ],
                     ];
 
-                    // Add `rPr` node if there is Font present.
-                    if ($valuePart->hasFont() === true) {
+                    // Add `rPr` node if there is Font present or this is more then first part (next parts
+                    // always need Font definition - even if there is any given)..
+                    if ($vpId >= 1 || $valuePart->hasFont() === true) {
 
                         $fontXml = new FontXml($this->xlsx, $valuePart->getFontMerged());
                         $fontXml->setForSharedStrings(true);
@@ -138,12 +142,15 @@ class XlSharedStrings extends Xml
             }//end if
 
             // Save all items.
-            $itemsAr[] = $oneSi;
+            $itemsAr[]    = $oneSi;
+            $itemsMd5Ar[] = md5(serialize($oneSi));
 
         }//end foreach
 
         // Save.
-        $this->array['sst']['@@']['si'] = $itemsAr;
+        $this->array['sst']['@@']['si']     = $itemsAr;
+        $this->array['sst']['@count']       = count($itemsAr);
+        $this->array['sst']['@uniqueCount'] = count(array_unique($itemsMd5Ar));
 
         return $this;
     }

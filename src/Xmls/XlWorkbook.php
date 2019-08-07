@@ -4,10 +4,10 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xlsx;
-use Przeslijmi\XlsxGenerator\Xml;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xml;
 
 /**
  * XML nodes for `xl\workbook.xml`.
@@ -64,20 +64,20 @@ class XlWorkbook extends Xml
                                 '@Requires' => 'x15',
                                 '@@' => [
                                     'x15ac:absPath' => [
-                                        '@url' => 'C:\Users\knowakowski\Desktop\\',
+                                        '@url' => '',
                                         '@xmlns:x15ac' => 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/ac',
                                     ],
                                 ],
                             ],
                         ],
                     ],
-                    'xr:revisionPtr' => [
-                        '@revIDLastSave' => '0',
-                        '@documentId' => '8_{A31A1446-E08E-47BC-8584-29124A2247F2}',
-                        '@xr6:coauthVersionLast' => '43',
-                        '@xr6:coauthVersionMax' => '43',
-                        '@xr10:uidLastSave' => '{00000000-0000-0000-0000-000000000000}',
-                    ],
+                    // 'xr:revisionPtr' => [
+                    //     '@revIDLastSave' => '0',
+                    //     '@documentId' => '8_{A31A1446-E08E-47BC-8584-29124A2247F2}',
+                    //     '@xr6:coauthVersionLast' => '43',
+                    //     '@xr6:coauthVersionMax' => '43',
+                    //     '@xr10:uidLastSave' => '{00000000-0000-0000-0000-000000000000}',
+                    // ],
                     'bookViews' => [
                         '@@' => [
                             'workbookView' => [
@@ -131,6 +131,8 @@ class XlWorkbook extends Xml
 
         $this->prepSheets();
 
+        $this->array['workbook']['@@']['mc:AlternateContent']['@@']['mc:Choice']['@@']['x15ac:absPath']['@url'] = $this->xlsx->getTargetUri(true);
+
         return $this;
     }
 
@@ -152,7 +154,7 @@ class XlWorkbook extends Xml
             $sheetsAr[] = [
                 '@name'    => $sheet->getName(),
                 '@sheetId' => $sheet->getId(),
-                '@r:id'    => 'rId1',
+                '@r:id'    => 'rId' . $sheet->getId(),
             ];
         }
 

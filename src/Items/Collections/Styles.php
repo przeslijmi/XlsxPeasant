@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items\Collections;
+namespace Przeslijmi\XlsxPeasant\Items\Collections;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Cell;
-use Przeslijmi\XlsxGenerator\Items\Style;
-use Przeslijmi\XlsxGenerator\Xlsx;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Style;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * Collection of Style objects.
@@ -23,9 +23,12 @@ class Styles extends Items
     /**
      * Collection index counter.
      *
+     * Beginning index is 1 becuase first available Style index is 2 beceasue there are two default styles
+     * defined (id: 0 & 1).
+     *
      * @var integer
      */
-    private $lastIndex = 0;
+    private $lastIndex = 1;
 
     /**
      * Register Style in collection.
@@ -50,7 +53,7 @@ class Styles extends Items
             // Add.
             $this->index[$signature] = [
                 'style' => $style,
-                'id' => $this->lastIndex,
+                'id'    => $this->lastIndex,
             ];
         }
 

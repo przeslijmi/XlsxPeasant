@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items\Collections;
+namespace Przeslijmi\XlsxPeasant\Items\Collections;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Cell;
-use Przeslijmi\XlsxGenerator\Xlsx;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * Collection of shared strings.

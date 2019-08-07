@@ -4,11 +4,11 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xml;
-use Przeslijmi\XlsxGenerator\Items\Sheet;
-use Przeslijmi\XlsxGenerator\Items\Cell;
+use Przeslijmi\XlsxPeasant\Xml;
+use Przeslijmi\XlsxPeasant\Items\Sheet;
+use Przeslijmi\XlsxPeasant\Items\Cell;
 
 /**
  * XML nodes for `xl\worksheets\sheet*.xml`.
@@ -63,6 +63,12 @@ class XlWorksheet extends Xml
                         '@defaultRowHeight' => '14.4',
                         '@x14ac:dyDescent'  => '0.3',
                     ],
+                    'cols' => [
+                        '@@' => [
+                            'col' => [
+                            ]
+                        ],
+                    ],
                     'sheetData' => [
                         '@@' => null,
                     ],
@@ -76,6 +82,9 @@ class XlWorksheet extends Xml
                         '@bottom' => '0.75',
                         '@header' => '0.3',
                         '@footer' => '0.3',
+                    ],
+                    'tableParts' => [
+                        '@@' => null,
                     ],
                 ],
             ],
@@ -97,7 +106,10 @@ class XlWorksheet extends Xml
 
         $this->prepCells();
         $this->prepMerges();
+        $this->prepTables();
+        $this->prepCols();
 
+        $this->array['worksheet']['@xr:uid']                 = $this->sheet->getUuid();
         $this->array['worksheet']['@@']['dimension']['@ref'] = $this->sheet->getDimensionRef();
 
         return $this;
@@ -128,25 +140,36 @@ class XlWorksheet extends Xml
                 $colsAr[] = $this->prepOneCell($cell);
             }
 
-            // Add row.
-            $rowsAr[] = [
+            // Prepare row.
+            $rowAr = [
                 '@r'               => $row,
                 '@spans'           => $minCol . ':' . $maxCol,
                 '@x14ac:dyDescent' => '0.3',
                 '@@' => [
                     'c' => $colsAr,
-                ],
+                ]
             ];
+
+            // Check height.
+            if ($this->sheet->getRowHeight($row) !== null) {
+                $rowAr['@customHeight'] = '1';
+                $rowAr['@ht']           = $this->sheet->getRowHeight($row);
+            }
+
+            // Add row.
+            $rowsAr[] = $rowAr;
         }//end foreach
 
         // Save.
-        $this->array['worksheet']['@@']['sheetData']['@@']['row'] = $rowsAr;
+        if (empty($rowsAr) === false) {
+            $this->array['worksheet']['@@']['sheetData']['@@']['row'] = $rowsAr;
+        }
 
         return $this;
     }
 
     /**
-     * Preparation of one cell in `sheetData` node.
+     * Preparation of one Cell in `sheetData` node.
      *
      * @param Cell $cell Cell to prepare.
      *
@@ -159,19 +182,34 @@ class XlWorksheet extends Xml
         // Default always.
         $result = [
             '@r' => $cell->getColRef() . $cell->getRow(),
-            '@t' => 's',
         ];
+
+        // If this Cell has style - add it.
+        if ($cell->hasStyle() === true) {
+            $result['@s'] = $cell->getStyle()->getId();
+        } else {
+            $result['@s'] = 1;
+        }
 
         // If this is not merged - add value.
         if ($cell->isMerged() === false) {
-            $result['@@'] = [
-                'v' => $cell->getSharedStringsId(),
-            ];
+
+            if ($cell->getValueType() === 'string' || $cell->getValueType() === 'array') {
+                $result['@t'] = 's';
+                $result['@@'] = [
+                    'v' => $cell->getSharedStringsId(),
+                ];
+            } else {
+                $result['@@'] = [
+                    'v' => $cell->getNumericValue(),
+                ];
+            }
+
         }
 
-        // If this cell has style - add it.
-        if ($cell->hasStyle() === true) {
-            $result['@s'] = $cell->getStyle()->getId();
+        // If this is merged - add 0 style.
+        if ($cell->isMerged() === true) {
+            $result['@s'] = '0';
         }
 
         return $result;
@@ -189,11 +227,11 @@ class XlWorksheet extends Xml
         // Lvd.
         $mergesAr = [];
 
-        // Find all merges going through all cells.
+        // Find all merges going through all Cells.
         foreach ($this->sheet->getCells() as $row => $cols) {
             foreach ($cols as $col => $cell) {
 
-                // If this is not merging cell - don't go further.
+                // If this is not merging Cell - don't go further.
                 if ($cell->isMerging() === false) {
                     continue;
                 }
@@ -210,6 +248,72 @@ class XlWorksheet extends Xml
             $this->array['worksheet']['@@']['mergeCells']                    = [];
             $this->array['worksheet']['@@']['mergeCells']['@count']          = count($mergesAr);
             $this->array['worksheet']['@@']['mergeCells']['@@']['mergeCell'] = $mergesAr;
+        } else {
+            unset($this->array['worksheet']['@@']['mergeCells']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Preparation of `tableParts` node.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    private function prepTables() : self
+    {
+
+        // Lvd.
+        $tablesAr = [];
+
+        // Find all Tables.
+        foreach ($this->sheet->getTables() as $table) {
+            $tablesAr[] = [
+                '@r:id' => 'rId' . $table->getId(),
+            ];
+        }
+
+        // If there are merges - list them.
+        if (count($tablesAr) > 0) {
+            $this->array['worksheet']['@@']['tableParts']                    = [];
+            $this->array['worksheet']['@@']['tableParts']['@count']          = count($tablesAr);
+            $this->array['worksheet']['@@']['tableParts']['@@']['tablePart'] = $tablesAr;
+        } else {
+            unset($this->array['worksheet']['@@']['tableParts']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Preparation of `cols` node.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    private function prepCols() : self
+    {
+
+        // Lvd.
+        $colsAr = [];
+
+        // Find all Tables.
+        foreach ($this->sheet->getColsWidth() as $colId => $width) {
+            $colsAr[] = [
+                '@customWidth' => '1',
+                '@max'         => $colId,
+                '@min'         => $colId,
+                '@width'       => $width,
+            ];
+        }
+
+        // If there are merges - list them.
+        if (count($colsAr) > 0) {
+            $this->array['worksheet']['@@']['cols']              = [];
+            $this->array['worksheet']['@@']['cols']['@@']['col'] = $colsAr;
+        } else {
+            unset($this->array['worksheet']['@@']['cols']);
         }
 
         return $this;

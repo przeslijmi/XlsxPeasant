@@ -4,13 +4,13 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xlsx;
-use Przeslijmi\XlsxGenerator\Xml;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xml;
 
 /**
- * XML nodes for `xl\rels\workbook.rels.xml`.
+ * XML nodes for `xl\rels\workbook.xml.rels`.
  */
 class XlRelsWorkbook extends Xml
 {
@@ -78,7 +78,7 @@ class XlRelsWorkbook extends Xml
     }
 
     /**
-     * Preparation of `sheet` node.
+     * Preparation of `Relationship` node.
      *
      * @since  v1.0
      * @return self
@@ -120,6 +120,7 @@ class XlRelsWorkbook extends Xml
             '@Target' => 'sharedStrings.xml',
         ];
 
+        // Save.
         $this->array['Relationships']['@@']['Relationship'] = $relationships;
 
         return $this;

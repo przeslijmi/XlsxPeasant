@@ -4,10 +4,10 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xml;
-use Przeslijmi\XlsxGenerator\Xlsx;
+use Przeslijmi\XlsxPeasant\Xml;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * XML nodes for `[ContentTypes].xml`.
@@ -51,34 +51,6 @@ class ContentTypes extends Xml
                         ],
                     ],
                     'Override' => [
-                        [
-                            '@PartName'    => '/xl/workbook.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml',
-                        ],
-                        [
-                            '@PartName'    => '/xl/worksheets/sheet1.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml',
-                        ],
-                        [
-                            '@PartName'    => '/xl/theme/theme1.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.theme+xml',
-                        ],
-                        [
-                            '@PartName'    => '/xl/styles.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml',
-                        ],
-                        [
-                            '@PartName'    => '/xl/sharedStrings.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml',
-                        ],
-                        [
-                            '@PartName'    => '/docProps/core.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-package.core-properties+xml',
-                        ],
-                        [
-                            '@PartName'    => '/docProps/app.xml',
-                            '@ContentType' => 'application/vnd.openxmlformats-officedocument.extended-properties+xml',
-                        ],
                     ],
                 ],
             ],
@@ -98,37 +70,51 @@ class ContentTypes extends Xml
     public function prep() : self
     {
 
-        $this->prepSheets();
+        // Add workbook.
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/xl/workbook.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml',
+        ];
 
-        return $this;
-    }
-
-    /**
-     * Preparation of `sheet` node.
-     *
-     * @since  v1.0
-     * @return self
-     */
-    private function prepSheets() : self
-    {
-
-        // Lvd.
-        $sheetCt = 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml';
-
-        // Delete all types with `$sheetCt` (sheets).
-        foreach ($this->array['Types']['@@']['Override'] as $id => $element) {
-            if ($element['@ContentType'] === $sheetCt) {
-                unset($this->array['Types']['@@']['Override'][$id]);
-            }
-        }
-
-        // Add sheets.
+        // Add Sheets.
         foreach ($this->xlsx->getBook()->getSheets() as $sheet) {
             $this->array['Types']['@@']['Override'][] = [
                 '@PartName'    => '/xl/worksheets/sheet' . $sheet->getId() . '.xml',
-                '@ContentType' => $sheetCt,
+                '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml',
             ];
         }
+
+        // Add theme, styles and shared strings.
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/xl/theme/theme1.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-officedocument.theme+xml',
+        ];
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/xl/styles.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml',
+        ];
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/xl/sharedStrings.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml',
+        ];
+
+        // Add Tables.
+        foreach ($this->xlsx->getBook()->getTables() as $table) {
+            $this->array['Types']['@@']['Override'][] = [
+                '@PartName'    => '/xl/tables/table' . $table->getId() . '.xml',
+                '@ContentType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml',
+            ];
+        }
+
+        // Add core and app.
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/docProps/core.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-package.core-properties+xml',
+        ];
+        $this->array['Types']['@@']['Override'][] = [
+            '@PartName'    => '/docProps/app.xml',
+            '@ContentType' => 'application/vnd.openxmlformats-officedocument.extended-properties+xml',
+        ];
 
         return $this;
     }

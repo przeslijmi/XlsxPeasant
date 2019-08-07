@@ -1,15 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Exceptions\HorizontalAlignOtosetException;
-use Przeslijmi\XlsxGenerator\Exceptions\StyleLockedException;
-use Przeslijmi\XlsxGenerator\Exceptions\VerticalAlignOtosetException;
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Cell;
-use Przeslijmi\XlsxGenerator\Items\Color;
-use Przeslijmi\XlsxGenerator\Items\Fill;
-use Przeslijmi\XlsxGenerator\Items\Font;
+use Przeslijmi\Sexceptions\Exceptions\ParamOtosetException;
+use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\HorizontalAlignOtosetException;
+use Przeslijmi\XlsxPeasant\Exceptions\StyleLockedException;
+use Przeslijmi\XlsxPeasant\Exceptions\VerticalAlignOtosetException;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Color;
+use Przeslijmi\XlsxPeasant\Items\Fill;
+use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\Format;
 
 /**
  * One Style can be used by one or more Cell objects.
@@ -18,39 +21,53 @@ class Style extends Items
 {
 
     /**
-     * Id of style (defined later on creation of XLSX file).
+     * Id of Style (defined later on creation of XLSX file).
      *
      * @var integer
      */
     private $id;
 
     /**
-     * Fill of Cell.
+     * Fill of Style.
      *
      * @var Fill
      */
     private $fill;
 
     /**
-     * Font of Cell.
+     * Font of Style.
      *
      * @var Font
      */
     private $font;
 
     /**
-     * Horizontal align in style (left, center, right).
+     * Horizontal align in Style (left, center, right).
      *
      * @var string
      */
     private $hAlign;
 
     /**
-     * Verical align in style (top, center, bottom).
+     * Verical align in Style (top, center, bottom).
      *
      * @var string
      */
     private $vAlign;
+
+    /**
+     * Wrap text?
+     *
+     * @var boolean
+     */
+    private $wrapText;
+
+    /**
+     * Format of this Style.
+     *
+     * @var Format
+     */
+    private $format;
 
     /**
      * If Style is locked (locked Style can't be changed).
@@ -60,10 +77,10 @@ class Style extends Items
     private $lock = false;
 
     /**
-     * Getter for style ID of this Cell.
+     * Getter for Style ID of this Style.
      *
      * @since  v1.0
-     * @return ?integer
+     * @return integer
      */
     public function getId() : int
     {
@@ -79,7 +96,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for id of style (used by XML files).
+     * Setter for id of Style (used by XML files).
      *
      * @param integer $id Created id.
      *
@@ -95,7 +112,7 @@ class Style extends Items
     }
 
     /**
-     * Checks if style has defined Fill.
+     * Checks if Style has defined Fill.
      *
      * @since  v1.0
      * @return boolean
@@ -107,7 +124,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for Fill of this Cell.
+     * Setter for Fill of this Style.
      *
      * @since  v1.0
      * @return self
@@ -122,7 +139,7 @@ class Style extends Items
     }
 
     /**
-     * Getter for Fill of this Cell.
+     * Getter for Fill of this Style.
      *
      * @since  v1.0
      * @return ?Fill
@@ -134,7 +151,7 @@ class Style extends Items
     }
 
     /**
-     * Checks if style has defined Font.
+     * Checks if Style has defined Font.
      *
      * @since  v1.0
      * @return boolean
@@ -146,7 +163,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for Font of this Cell.
+     * Setter for Font of this Style.
      *
      * @param null|Font $font Font to use.
      *
@@ -168,7 +185,7 @@ class Style extends Items
     }
 
     /**
-     * Getter for Font of this Cell.
+     * Getter for Font of this Style.
      *
      * @since  v1.0
      * @return ?Font
@@ -180,7 +197,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for font name of this Cell.
+     * Setter for font name of this Style.
      *
      * @param string $name Name of font.
      *
@@ -202,7 +219,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for font size of this Cell.
+     * Setter for font size of this Style.
      *
      * @param integer $size Size of font.
      *
@@ -224,7 +241,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for font color of this Cell.
+     * Setter for font color of this Style.
      *
      * @since  v1.0
      * @return self
@@ -244,9 +261,9 @@ class Style extends Items
     }
 
     /**
-     * Checks if style has defined align (vertical or horizontal).
+     * Checks if Style has defined align (vertical or horizontal).
      *
-     * @param string $which Values: `both`, `h` or `v`.
+     * @param string $which Optional, `both`. Possible values: `both`, `h` or `v`.
      *
      * @since  v1.0
      * @return boolean
@@ -254,23 +271,25 @@ class Style extends Items
     public function hasAlign(string $which = 'both') : bool
     {
 
+        // RegEx test.
+        RegEx::ifMatches($which, '/^(both|h|v)$/');
+
+        // Send answer.
         if ($which === 'both') {
             $logic = ( is_null($this->hAlign) === true && is_null($this->vAlign) === true );
         } elseif ($which === 'h') {
             $logic = ( is_null($this->hAlign) === true );
         } elseif ($which === 'v') {
             $logic = ( is_null($this->vAlign) === true );
-        } else {
-            die('throw hf934hq4');
         }
 
         return ( ! $logic );
     }
 
     /**
-     * Setter for align of this Cell.
+     * Setter for align of this Style.
      *
-     * @param string $align Align for cell (eg. L, C, CC, CB, LT).
+     * @param string $align Align for Style (eg. L, C, CC, CB, LT).
      *
      * @since  v1.0
      * @return self
@@ -278,10 +297,8 @@ class Style extends Items
     public function setAlign(string $align) : self
     {
 
-        // Check.
-        if (strlen($align) > 2 || strlen($align) < 1) {
-            die('throw 9fj3jf9pwje092');
-        }
+        // RegEx test.
+        RegEx::ifMatches($align, '/^(L|C|M|R){1}(T|C|M|B)?$/');
 
         // Define vertical if lenght is 2.
         if (strlen($align) === 2) {
@@ -295,7 +312,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for horizontal align of this Cell.
+     * Setter for horizontal align of this Style.
      *
      * @param string $align Desired horizontal align.
      *
@@ -306,10 +323,11 @@ class Style extends Items
     public function setHalign(?string $align = null) : self
     {
 
+        // Test if Style is locked (throw if it is).
         $this->testLock();
 
         // Short way.
-        if ($align === ' ' || empty($align) === true) {
+        if (empty(trim($align)) === true) {
             $this->hAlign = null;
         }
 
@@ -320,6 +338,7 @@ class Style extends Items
             'right'  => [ 'right', 'R', 'r' ],
         ];
 
+        // Set.
         if (in_array($align, $possible['center']) === true) {
             $this->hAlign = 'center';
         } elseif (in_array($align, $possible['left']) === true) {
@@ -336,7 +355,7 @@ class Style extends Items
     }
 
     /**
-     * Setter for vertical align of this Cell.
+     * Setter for vertical align of this Style.
      *
      * @param string $align Desired vertical align.
      *
@@ -347,10 +366,11 @@ class Style extends Items
     public function setValign(string $align) : self
     {
 
+        // Test if Style is locked (throw if it is).
         $this->testLock();
 
         // Short way.
-        if ($align === ' ' || empty($align) === true) {
+        if (empty(trim($align)) === true) {
             $this->vAlign = null;
         }
 
@@ -361,6 +381,7 @@ class Style extends Items
             'bottom' => [ 'bottom', 'B', 'b' ],
         ];
 
+        // Set.
         if (in_array($align, $possible['center']) === true) {
             $this->vAlign = 'center';
         } elseif (in_array($align, $possible['top']) === true) {
@@ -377,7 +398,7 @@ class Style extends Items
     }
 
     /**
-     * Getter for Cell align.
+     * Getter for Style align.
      *
      * ## Retrun value.
      * Array with two keys 'h' and 'v'.
@@ -395,14 +416,94 @@ class Style extends Items
     }
 
     /**
-     * Setter for Style lock (locked Style can't be changed).
+     * Checks if Style has defined text wrap.
      *
-     * @param boolean $lock Set true to set lock, false otherwise.
+     * @since  v1.0
+     * @return boolean
+     */
+    public function hasWrapText() : bool
+    {
+
+        return ( ! is_null($this->wrapText) );
+    }
+
+    /**
+     * Setter for align of this Style.
+     *
+     * @param boolean $wrapText WrapText for Style.
      *
      * @since  v1.0
      * @return self
      */
-    public function setLock(bool $lock) : self
+    public function setWrapText(bool $wrapText) : self
+    {
+
+        $this->wrapText = $wrapText;
+
+        return $this;
+    }
+
+    /**
+     * Getter for Style wrap text.
+     *
+     * @since  v1.0
+     * @return boolean
+     */
+    public function getWrapText() : bool
+    {
+
+        return $this->wrapText;
+    }
+
+    /**
+     * Checks if Style has format defined.
+     *
+     * @since  v1.0
+     * @return boolean
+     */
+    public function hasFormat() : bool
+    {
+
+        return ( ! is_null($this->format) );
+    }
+
+    /**
+     * Setter for format of this Style.
+     *
+     * @param Format $format Format of this Style.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setFormat(Format $format) : self
+    {
+
+        $this->format = $format;
+
+        return $this;
+    }
+
+    /**
+     * Getter for format of this Style.
+     *
+     * @since  v1.0
+     * @return Format
+     */
+    public function getFormat() : Format
+    {
+
+        return $this->format;
+    }
+
+    /**
+     * Setter for Style lock (locked Style can't be changed).
+     *
+     * @param boolean $lock Optional, true. Set true to set lock, false otherwise.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setLock(bool $lock = true) : self
     {
 
         $this->lock = $lock;
@@ -432,6 +533,7 @@ class Style extends Items
     private function testLock() : void
     {
 
+        // Shortcut.
         if ($this->getLock() === false) {
             return;
         }
@@ -440,7 +542,7 @@ class Style extends Items
     }
 
     /**
-     * Return signature of this Style - to use it in Styles collection.
+     * Return signature of this Style - to use it in Styles collection for hasing.
      *
      * @since  v1.0
      * @return string
@@ -451,7 +553,7 @@ class Style extends Items
         // Lvd.
         $result = '';
 
-        // Prepare style result.
+        // Prepare Style result.
         if ($this->fill !== null) {
             $result .= $this->fill->getSignature();
         }
@@ -460,6 +562,10 @@ class Style extends Items
         }
         $result .= 'hAlign:' . $this->hAlign;
         $result .= 'vAlign:' . $this->vAlign;
+        $result .= 'wrapText:' . $this->wrapText;
+        if ($this->format !== null) {
+            $result .= $this->format->getSignature();
+        }
 
         return $result;
     }

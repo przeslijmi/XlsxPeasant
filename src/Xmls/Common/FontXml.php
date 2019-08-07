@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Xmls\Common;
+namespace Przeslijmi\XlsxPeasant\Xmls\Common;
 
-use Przeslijmi\XlsxGenerator\Items\Font;
-use Przeslijmi\XlsxGenerator\Xlsx;
+use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * XML nodes creator for Font object.

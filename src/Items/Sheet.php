@@ -1,11 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Cell;
-use Przeslijmi\XlsxGenerator\Xlsx;
-use Przeslijmi\XlsxGenerator\Xmls\XlWorksheet;
+use Exception;
+use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\CellMergeConflictException;
+use Przeslijmi\XlsxPeasant\Exceptions\SheetNameAlrexException;
+use Przeslijmi\XlsxPeasant\Exceptions\SheetNameWrosynException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableCreaoranException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Book;
+use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Table;
+use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xmls\XlRelsWorksheet;
+use Przeslijmi\XlsxPeasant\Xmls\XlWorksheet;
 
 /**
  * Sheet object - child of Book - parent of Cell objects.
@@ -21,18 +32,18 @@ class Sheet extends Items
     private $id;
 
     /**
+     * UUID of Sheet.
+     *
+     * @var string
+     */
+    private $uuid;
+
+    /**
      * Name of Sheet.
      *
      * @var string
      */
     private $name;
-
-    /**
-     * XlWorksheet XML object.
-     *
-     * @var XlWorksheet
-     */
-    private $xml;
 
     /**
      * Collection of Cells.
@@ -42,37 +53,80 @@ class Sheet extends Items
     private $cells = [];
 
     /**
+     * XlWorksheet XML object.
+     *
+     * @var XlWorksheet
+     */
+    private $xml;
+
+    /**
+     * Book object.
+     *
+     * @var Book
+     */
+    private $book;
+
+    /**
+     * Defined widths of columns.
+     *
+     * @var int[]
+     */
+    private $colsWidth = [];
+
+    /**
+     * Defined heights of rows.
+     *
+     * @var int[]
+     */
+    private $rowsHeight = [];
+
+    /**
      * Constructor.
      *
-     * @param Xlsx    $xlsx Parent XLSX object.
-     * @param integer $id   Id of Sheet.
-     * @param string  $name Name of Sheet.
+     * @param Xlsx         $xlsx Parent XLSX object.
+     * @param string       $name Name of Sheet.
+     * @param null|integer $id   Optional Id of Sheet.
      *
      * @since v1.0
      */
-    public function __construct(Xlsx $xlsx, int $id, string $name)
+    public function __construct(Xlsx $xlsx, string $name, ?int $id = null)
     {
 
-        // Set.
-        $this->id   = $id;
-        $this->name = $name;
-        $this->xml  = new XlWorksheet($this);
-
+        // Set XLSX.
         parent::__construct($xlsx);
+
+        // Set.
+        $this->setId($id);
+        $this->setName($name);
+        $this->xml     = new XlWorksheet($this);
+        $this->xmlRels = new XlRelsWorksheet($this);
+        $this->uuid    = XlsxTools::createUuid();
     }
 
     /**
-     * Setter for name.
+     * Setter for id.
      *
-     * @param string $name Name of Sheet.
+     * @param integer $id Id of Table.
      *
      * @since  v1.0
+     * @throws SheetIdOtoranException When ID is below 1.
      * @return self
      */
-    public function setName(string $name) : self
+    public function setId(?int $id = null) : self
     {
 
-        $this->name = $name;
+        // Find id if not given.
+        if ($id === null) {
+            $id = $this->findSpareId($this->getXlsx()->getBook()->getSheets(false));
+        }
+
+        // Check.
+        if ($id < 1) {
+            throw new SheetIdOtoranException($id);
+        }
+
+        // Set.
+        $this->id = $id;
 
         return $this;
     }
@@ -90,6 +144,67 @@ class Sheet extends Items
     }
 
     /**
+     * Getter for uuid.
+     *
+     * @since  v1.0
+     * @return string
+     */
+    public function getUuid() : string
+    {
+
+        return $this->uuid;
+    }
+
+    /**
+     * Setter for name.
+     *
+     * @param string $name Name of Sheet.
+     *
+     * @since  v1.0
+     * @throws SheetNameWrosynException When Sheet name has wrong syntax.
+     * @throws SheetNameAlrexException  When Sheet name is already taken (exists).
+     * @return self
+     */
+    public function setName(string $name) : self
+    {
+
+        // Test.
+        try {
+
+            // Lvd.
+            $special = '\\!\\@\\#\\$\\%\\^\\&\\(\\)\\_\\+\\-\\=\\{\\}\\|\\"\\;\\.\\,\\ \\<\\>';
+
+            // @todo
+            $special .= 'ążśźęćńółĄŻŚŹĘĆŃÓŁ';
+
+            // Proper chars, at least 2 chars length, max length.
+            RegEx::ifMatches($name, '/^([\\\\A-Z0-9' . $special . ']){1,256}$/i');
+
+        } catch (Exception $exc) {
+            throw new SheetNameWrosynException($name, $exc);
+        }
+
+        // Test duplication of names of Tables in whole Xlsx.
+        foreach ($this->getXlsx()->getBook()->getSheets(false) as $sheetInBook) {
+
+            // Ignore this Sheet.
+            if ($this === $sheetInBook) {
+                continue;
+            }
+
+            // Throw.
+            if ($sheetInBook->getName() === $name) {
+                throw new SheetNameAlrexException($name);
+            }
+        }
+
+        // Save.
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
      * Getter for name.
      *
      * @since  v1.0
@@ -99,6 +214,34 @@ class Sheet extends Items
     {
 
         return $this->name;
+    }
+
+    /**
+     * Setter for book.
+     *
+     * @param Book $book Book parent object.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setBook(Book $book) : self
+    {
+
+        $this->book = $book;
+
+        return $this;
+    }
+
+    /**
+     * Getter for book.
+     *
+     * @since  v1.0
+     * @return Book
+     */
+    public function getBook() : Book
+    {
+
+        return $this->book;
     }
 
     /**
@@ -114,13 +257,57 @@ class Sheet extends Items
     }
 
     /**
-     * Getter for cells.
+     * Getter for XlWorksheet XML.
      *
      * @since  v1.0
-     * @return array
+     * @return XlRelsWorksheet
+     */
+    public function getRelsXml() : XlRelsWorksheet
+    {
+
+        return $this->xmlRels;
+    }
+
+    /**
+     * Adds new Table to XLSX.
+     *
+     * @param string       $name Name of Table.
+     * @param integer      $row  Row to start Table in.
+     * @param integer      $col  Col to start Table in.
+     * @param null|integer $id   Optional id of Table.
+     *
+     * @since  v1.0
+     * @throws TableCreationFopException When creation of Table somehow failed.
+     * @return Table
+     */
+    public function addTable(string $name, int $row, int $col, ?int $id = null) : Table
+    {
+
+        // Try to add Table to this Sheet.
+        try {
+            $table = $this->getBook()->addTable($name, $id);
+            $table->useAt($this, $row, $col);
+        } catch (Exception $exc) {
+            throw new TableCreationFopException($name, $exc);
+        }
+
+        return $table;
+    }
+
+    /**
+     * Getter for Cells.
+     *
+     * @since  v1.0
+     * @return Cell[]
      */
     public function getCells() : array
     {
+
+        ksort($this->cells);
+
+        foreach ($this->cells as $rowId => $row) {
+            ksort($this->cells[$rowId]);
+        }
 
         return $this->cells;
     }
@@ -129,7 +316,7 @@ class Sheet extends Items
      * Getter for one Cell. If it does not exists - create one instantly.
      *
      * @param integer $row Cell from which row.
-     * @param integer $col Cell from which column.
+     * @param integer $col Cell from which col.
      *
      * @since  v1.0
      * @return Cell
@@ -156,6 +343,12 @@ class Sheet extends Items
             if ($this->xlsx->getAlignToUse() !== null) {
                 $cell->getStyle()->setAlign($this->xlsx->getAlignToUse());
             }
+            if ($this->xlsx->getWrapTextToUse() !== null) {
+                $cell->getStyle()->setWrapText($this->xlsx->getWrapTextToUse());
+            }
+            if ($this->xlsx->getFormatToUse() !== null) {
+                $cell->getStyle()->setFormat($this->xlsx->getFormatToUse());
+            }
 
             // Add to index.
             $this->cells[$row][$col] = $cell;
@@ -170,9 +363,10 @@ class Sheet extends Items
      * Create cells but only to lock merged cells. If Cell already exists - will cause throws.
      *
      * @param integer $row Cell from which row.
-     * @param integer $col Cell from which column.
+     * @param integer $col Cell from which col.
      *
      * @since  v1.0
+     * @throws CellMergeConflictException When merge is trying to overwrite existing Cell.
      * @return Cell
      */
     public function getCellForMerge(int $row, int $col) : Cell
@@ -180,30 +374,32 @@ class Sheet extends Items
 
         // If it already exists - throw.
         if (isset($this->cells[$row][$col]) === true) {
-            die('cell conflict');
+            $cellRef = XlsxTools::convToCellRef($row, $col);
+            throw new CellMergeConflictException($cellRef);
         }
 
         // Add to index.
-        $this->cells[$row][$col] = new Cell($this, $row, $col, true);
+        $cell                    = new Cell($this, $row, $col, true);
+        $this->cells[$row][$col] = $cell;
 
-        // Return from index.
-        return $this->cells[$row][$col];
+        return $cell;
     }
 
     /**
-     * Delete created cell.
+     * Delete created Cell.
      *
      * @param integer $row Cell from which row.
-     * @param integer $col Cell from which column.
+     * @param integer $col Cell from which col.
      *
-     * @todo   Add check if exists.
      * @since  v1.0
      * @return self
      */
     public function deleteCell(int $row, int $col) : self
     {
 
-        unset($this->cells[$row][$col]);
+        if (isset($this->cells[$row][$col]) === true) {
+            unset($this->cells[$row][$col]);
+        }
 
         return $this;
     }
@@ -217,36 +413,56 @@ class Sheet extends Items
     public function getFirstCellRef() : string
     {
 
+        // Shortcut.
+        if (empty($this->cells) === true) {
+            return 'A1';
+        }
+
+        // Get first row ID.
         ksort($this->cells);
         $firstRowId = array_keys($this->cells)[0];
 
+        // Get first col ID.
         ksort($this->cells[$firstRowId]);
         $firstColId = array_keys($this->cells[$firstRowId])[0];
 
+        // Get first Cell.
         $firstCell = $this->cells[$firstRowId][$firstColId];
 
         return $firstCell->getRef();
     }
 
     /**
-     * Getter for ref of lass cell in Sheet (max col from max row).
+     * Getter for ref of lass cell in Sheet (max col from all rows).
      *
-     * @todo   It return poorly - have to check max col in every row not in max row only.
      * @since  v1.0
      * @return string
      */
     public function getLastCellRef() : string
     {
 
-        ksort($this->cells);
-        $lastRowId = array_reverse(array_keys($this->cells))[0];
+        // Shortcut.
+        if (empty($this->cells) === true) {
+            return 'A1';
+        }
 
-        ksort($this->cells[$lastRowId]);
-        $lastColId = array_reverse(array_keys($this->cells[$lastRowId]))[0];
+        // Lvd.
+        $lastColId = 1;
 
-        $lastCell = $this->cells[$lastRowId][$lastColId];
+        // Go thru every row looking for longest row (highest col in that row).
+        foreach ($this->cells as $lastRowId => $row) {
 
-        return $lastCell->getRef();
+            // Get last col in this row.
+            ksort($row);
+            $lastColIdHere = array_reverse(array_keys($row))[0];
+
+            // If this is bigger than last winner - use it from now on.
+            if ($lastColIdHere > $lastColId) {
+                $lastColId = $lastColIdHere;
+            }
+        }
+
+        return XlsxTools::convToCellRef($lastRowId, $lastColId);
     }
 
     /**
@@ -259,5 +475,67 @@ class Sheet extends Items
     {
 
         return $this->getFirstCellRef() . ':' . $this->getLastCellRef();
+    }
+
+    /**
+     * Getter for all Tables in this Sheet.
+     *
+     * @return Tables[]
+     */
+    public function getTables() : array
+    {
+
+        return $this->getXlsx()->getBook()->getTables($this);
+    }
+
+    /**
+     * Checks if this Sheet has any Table.
+     *
+     * @return boolean
+     */
+    public function hasTables() : bool
+    {
+
+        return $this->getXlsx()->getBook()->hasTables($this);
+    }
+
+    public function setColWidth(int $col, ?float $width = null) : self
+    {
+
+        if ($width === null) {
+            unset($this->colsWidth[$col]);
+
+            return $this;
+        }
+
+        $this->colsWidth[$col] = $width;
+
+        return $this;
+    }
+
+    public function getColsWidth() : array
+    {
+
+        return $this->colsWidth;
+    }
+
+    public function setRowHeight(int $row, ?float $height = null) : self
+    {
+
+        if ($height === null) {
+            unset($this->rowsHeight[$row]);
+
+            return $this;
+        }
+
+        $this->rowsHeight[$row] = $height;
+
+        return $this;
+    }
+
+    public function getRowHeight(int $row) : ?float
+    {
+
+        return ( $this->rowsHeight[$row] ?? null );
     }
 }

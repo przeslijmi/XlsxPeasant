@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Exceptions;
+namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtosetException;
@@ -23,9 +23,15 @@ class HorizontalAlignOtosetException extends ParamOtosetException
     public function __construct(array $possibleAligns, string $givenAlign, ?Exception $cause = null)
     {
 
+        // Define.
         $this->setCodeName('HorizontalAlignOtosetException');
         $this->addInfo('paramName', 'style horizontal align');
         $this->addInfo('range', implode(', ', $possibleAligns));
         $this->addInfo('givenAlign', $givenAlign);
+
+        // Set cause.
+        if (is_null($cause) === false) {
+            parent::__construct('HorizontalAlignOtosetException', $cause);
+        }
     }
 }

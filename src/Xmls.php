@@ -1,20 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator;
+namespace Przeslijmi\XlsxPeasant;
 
-use Przeslijmi\XlsxGenerator\Xlsx;
-use Przeslijmi\XlsxGenerator\Xmls\ContentTypes;
-use Przeslijmi\XlsxGenerator\Xmls\DocPropsApp;
-use Przeslijmi\XlsxGenerator\Xmls\DocPropsCore;
-use Przeslijmi\XlsxGenerator\Xmls\RelsRels;
-use Przeslijmi\XlsxGenerator\Xmls\XlRelsWorkbook;
-use Przeslijmi\XlsxGenerator\Xmls\XlSharedStrings;
-use Przeslijmi\XlsxGenerator\Xmls\XlStyles;
-use Przeslijmi\XlsxGenerator\Xmls\XlTheme;
-use Przeslijmi\XlsxGenerator\Xmls\XlWorkbook;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xmls\ContentTypes;
+use Przeslijmi\XlsxPeasant\Xmls\DocPropsApp;
+use Przeslijmi\XlsxPeasant\Xmls\DocPropsCore;
+use Przeslijmi\XlsxPeasant\Xmls\RelsRels;
+use Przeslijmi\XlsxPeasant\Xmls\XlRelsWorkbook;
+use Przeslijmi\XlsxPeasant\Xmls\XlSharedStrings;
+use Przeslijmi\XlsxPeasant\Xmls\XlStyles;
+use Przeslijmi\XlsxPeasant\Xmls\XlTheme;
+use Przeslijmi\XlsxPeasant\Xmls\XlWorkbook;
 
 /**
- * Collection of XML files to generate.
+ * Collection of XML files to generate (only those that are non-multiple).
+ *
+ * Multiple files (eg. tables, sheets, sheets rels) are managed by Book object.
  */
 class Xmls
 {

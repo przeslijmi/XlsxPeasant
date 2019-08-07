@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Exceptions;
+namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
@@ -21,12 +21,18 @@ class StyleLockedException extends ClassFopException
     public function __construct(?Exception $cause = null)
     {
 
+        // Lvd.
+        $hint  = 'Trying to change definition of Style but Style is locked. ';
+        $hint .= 'Release lock or don\'t try to make changes.';
+
+        // Define.
         $this->setCodeName('StyleLockedException');
         $this->addInfo('context', 'StyleLock');
-        $this->addInfo('expl', 'Trying to change definition of Style but Style is locked. Release lock or don\'t try to make changes.');
+        $this->addInfo('hint', $hint);
 
+        // Set cause.
         if (is_null($cause) === false) {
-            parent::__construct('StyleLock', $cause);
+            parent::__construct('StyleLockedException', $cause);
         }
     }
 }

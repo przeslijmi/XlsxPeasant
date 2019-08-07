@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Color;
+use Przeslijmi\XlsxPeasant\Exceptions\FillFactoryFopException;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Color;
 
 /**
  * Fill definition used in Style.
@@ -22,6 +23,7 @@ class Fill
      * Factory of Fill.
      *
      * @since  v1.0
+     * @throws FillFactoryFopException When called with wrong parameters.
      * @return Fill
      */
     public static function factory() : Fill
@@ -43,7 +45,7 @@ class Fill
             return new Fill(Color::factory($pm[0]));
         }
 
-        die('throw dsagera4f2oifjaeri');
+        throw new FillFactoryFopException($count);
     }
 
     /**

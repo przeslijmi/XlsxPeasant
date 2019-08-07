@@ -1,14 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Items\Color;
-use Przeslijmi\XlsxGenerator\Items\Fill;
-use Przeslijmi\XlsxGenerator\Items\Sheet;
-use Przeslijmi\XlsxGenerator\Items\Style;
-use Przeslijmi\XlsxGenerator\Items\ValuePart;
-use Przeslijmi\XlsxGenerator\Tools as XlsxTools;
+use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
+use Przeslijmi\XlsxPeasant\Exceptions\SetValueToMergedCellConflictException;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Items\Color;
+use Przeslijmi\XlsxPeasant\Items\Fill;
+use Przeslijmi\XlsxPeasant\Items\Sheet;
+use Przeslijmi\XlsxPeasant\Items\Style;
+use Przeslijmi\XlsxPeasant\Items\ValuePart;
+use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 
 /**
  * One Cell inside one Sheet of one Xlsx.
@@ -87,37 +89,45 @@ class Cell extends Items
      * @param integer $col    Column id of this cell (starting with 1).
      * @param boolean $merged If this cell is merged (its "almost-cell" then).
      *
-     * @since v1.0
+     * @since  v1.0
+     * @throws RefWrosynException When row or col are below 1.
      */
     public function __construct(Sheet $sheet, int $row, int $col, bool $merged = false)
     {
+
+        // Check.
+        if ($row < 1 || $col < 1) {
+            throw new RefWrosynException('Cell in Sheet', $sheet->getName(), $row, $col);
+        }
+
+        // Call Items.
+        parent::__construct($sheet->getXlsx());
 
         // Lvd.
         $this->sheet  = $sheet;
         $this->row    = $row;
         $this->col    = $col;
         $this->merged = $merged;
-
-        parent::__construct($sheet->getXlsx());
     }
 
     /**
      * Setter for value of the cell as one part.
      *
-     * @param string $valueParts Contents of the cell.
+     * @param string|integer|float $valueParts Contents of the cell.
      *
      * @since  v1.0
+     * @throws SetValueToMergedCellConflictException When trying to add value to merged Cell.
      * @return self
      */
-    public function setValue(string $valueParts) : self
+    public function setValue($valueParts) : self
     {
 
-        // @todo
+        // Throw.
         if ($this->merged === true) {
-            die('cant add valueParts to merged cell');
+            throw new SetValueToMergedCellConflictException($this->getRef());
         }
 
-        // Save as new ValuePart.
+        // Save as new ValuePart (overwrite old value parts).
         $this->valueParts = [ new ValuePart($this, $valueParts) ];
 
         return $this;
@@ -129,12 +139,18 @@ class Cell extends Items
      * @param array $parts Contents of the cell as multiple parts.
      *
      * @since  v1.0
+     * @throws SetValueToMergedCellConflictException When trying to add value to merged Cell.
      * @return self
      */
     public function setValueParts(array $parts) : self
     {
 
-        // Lvd.
+        // Throw.
+        if ($this->merged === true) {
+            throw new SetValueToMergedCellConflictException($this->getRef());
+        }
+
+        // Clear.
         $this->valueParts = [];
 
         // Add subsequent parts.
@@ -151,10 +167,51 @@ class Cell extends Items
      * @since  v1.0
      * @return array
      */
-    public function getValue() : array
+    public function getValue() : ?array
     {
 
         return $this->valueParts;
+    }
+
+    public function getSimpleValue() : ?string
+    {
+
+        if ($this->valueParts === null) {
+            return null;
+        }
+
+        $result = '';
+
+        foreach ($this->valueParts AS $part) {
+            $result .= (string) $part->getContentsAsScalar();
+        }
+
+        return $result;
+    }
+
+    public function getNumericValue() // float:integer
+    {
+
+        if (in_array($this->getValueType(), [ 'integer', 'float', 'double' ]) === true) {
+            return $this->valueParts[0]->getContents();
+        }
+
+        // var_dump($this);
+        die('adfdgdgserfw435hg ' . $this->getValueType());
+    }
+
+    public function getValueType() : string
+    {
+
+        if (count($this->valueParts) === 0) {
+            return 'string';
+        }
+
+        if (count($this->valueParts) > 1) {
+            return 'string';
+        }
+
+        return gettype($this->valueParts[0]->getContents());
     }
 
     /**
@@ -388,5 +445,21 @@ class Cell extends Items
         }
 
         return $this->style;
+    }
+
+    public function setColWidth(float $width) : self
+    {
+
+        $this->getSheet()->setColWidth($this->getCol(), $width);
+
+        return $this;
+    }
+
+    public function setRowHeight(float $height) : self
+    {
+
+        $this->getSheet()->setRowHeight($this->getRow(), $height);
+
+        return $this;
     }
 }

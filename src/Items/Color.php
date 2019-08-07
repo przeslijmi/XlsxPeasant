@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\XlsxGenerator\Items;
+namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxGenerator\Items;
-use Przeslijmi\XlsxGenerator\Xlsx;
+use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\ColorFactoryFopException;
+use Przeslijmi\XlsxPeasant\Items;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * Color definition used in Font and Fill objects.
@@ -16,7 +18,7 @@ class Color
      *
      * @var array
      */
-    private static $dictionary = [
+    public const DICTIONARY = [
         'ALICEBLUE'            => 'F0F8FF',
         'ANTIQUEWHITE'         => 'FAEBD7',
         'AQUA'                 => '00FFFF',
@@ -177,6 +179,8 @@ class Color
      * $color = Color::factory('white');
      * ```
      *
+     * @since  v1.0
+     * @throws ColorFactoryFopException When called with wrong parameters.
      * @return Color
      */
     public static function factory() : Color
@@ -195,7 +199,7 @@ class Color
             }
 
             // Given 1 param - uppercased string with 6 chars (hexadecimal value).
-            if (is_string($pm[0]) === true && strtoupper($pm[0]) === $pm[0] && strlen($pm[0]) === 6) {
+            if (is_string($pm[0]) === true && RegEx::ifMatches($pm[0], '/^([0-9A-F]){6}$/', false) === true) {
                 return ( new Color() )->set(...$pm);
             }
 
@@ -203,7 +207,7 @@ class Color
             if (is_string($pm[0]) === true) {
 
                 // Lvd.
-                $color = self::$dictionary[strtoupper($pm[0])];
+                $color = self::DICTIONARY[strtoupper($pm[0])];
 
                 return ( new Color() )->set($color);
             }
@@ -218,7 +222,7 @@ class Color
             }
         }
 
-        die('throw 8ufjoaw984el');
+        throw new ColorFactoryFopException($count);
     }
 
     /**
@@ -227,10 +231,19 @@ class Color
      * @param string $rgb Hexadecimal value of RGB, eg. AA00ED.
      *
      * @since  v1.0
+     * @throws ParamOtosetException When given RGB hex is wrong.
      * @return self
      */
     public function set(string $rgb) : self
     {
+
+        // Test.
+        try {
+            RegEx::ifMatches($rgb, '/^([0-9A-F]){6}$/');
+        } catch (Exception $exc) {
+            throw (new ParamOtosetException('color_set_rgb', $rgb))
+                ->addHint('Given color is not proper RGB hexadecimal value, eg. AA00ED.');
+        }
 
         // Set.
         $this->color = [
@@ -250,11 +263,21 @@ class Color
      * @param integer $blue  Value for blue channel.
      *
      * @since  v1.0
+     * @throws ParamOtosetException When given parameters are wrong.
      * @return self
      */
     public function setRgb(int $red, int $green = 0, int $blue = 0) : self
     {
 
+        // Test.
+        if ($red < 0 || $red > 255 || $green < 0 || $green > 255 || $blue < 0 || $blue > 255) {
+            $hint  = 'Given color is not proper - all values has to be 0 <= color <= 255. ';
+            $hint .= 'Given are red: ' . $red . ', green: ' . $green . ', blue: ' . $blue . '.';
+            throw (new ParamOtosetException('color_set_red_green_blue', $rgb))
+                ->addHint($hint);
+        }
+
+        // Set.
         $this->color = [
             str_pad(dechex($red), 2, '0', STR_PAD_LEFT),
             str_pad(dechex($green), 2, '0', STR_PAD_LEFT),

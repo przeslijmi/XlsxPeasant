@@ -4,9 +4,9 @@
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 
-namespace Przeslijmi\XlsxGenerator\Xmls;
+namespace Przeslijmi\XlsxPeasant\Xmls;
 
-use Przeslijmi\XlsxGenerator\Xml;
+use Przeslijmi\XlsxPeasant\Xml;
 
 /**
  * XML nodes for `xl\theme.xml`.
