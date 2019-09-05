@@ -125,12 +125,29 @@ class Tools
         return $result;
     }
 
+    /**
+     * Converts integer row and col numbers into Excel style cell ref (eg. A1).
+     *
+     * @param integer $row Row number starting from 1.
+     * @param integer $col Col number starting from 1.
+     *
+     * @since  v1.0
+     * @return string
+     */
     public static function convToCellRef(int $row, int $col) : string
     {
 
         return self::convNumberToRef($col) . $row;
     }
 
+    /**
+     * Converts cell ref (eg. A1) into array with integer row and col numbers.
+     *
+     * @param string $cell Cel ref, eg. A1.
+     *
+     * @since  v1.0
+     * @return string
+     */
     public static function convCellRefToNumbers(string $ref) : array
     {
 

@@ -230,7 +230,11 @@ class Xlsx
         }
 
         // Prepare all strings.
-        $stringsToAdd = [];
+        $stringsToAdd = [
+            'sheets'      => [],
+            'sheets_rels' => [],
+            'tables'      => [],
+        ];
 
         // Add Worksheets.
         foreach ($this->getBook()->getSheets() as $sheet) {

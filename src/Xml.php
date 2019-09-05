@@ -305,7 +305,7 @@ class Xml
     public function setConfigs(int $configs) : self
     {
 
-        $this->configs = GeoProgression::getProgression($configs);
+        $this->configs = GeoProgression::get($configs);
 
         return $this;
     }
