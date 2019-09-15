@@ -2,7 +2,7 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
+use Throwable;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 
 /**
@@ -14,19 +14,18 @@ class GenerationFailedException extends ClassFopException
     /**
      * Constructor.
      *
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param Throwable|null $cause Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(?Exception $cause = null)
+    public function __construct(?Throwable $cause = null)
     {
 
         // Lvd.
         $hint = 'Generation of XLSx has somehow failed. See below.';
 
         // Define.
-        $this->setCodeName('GenerationFailedException');
-        $this->addInfo('context', 'StyleLock');
+        $this->addInfo('context', 'GenerationOfXlsxFile');
         $this->addInfo('hint', $hint);
 
         // Set cause.

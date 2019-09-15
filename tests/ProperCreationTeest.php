@@ -25,7 +25,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_01_simplestTest.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_01_simplestTest.xlsx';
 
         // Create Xlsx.
         $xlsx  = new Xlsx();
@@ -48,7 +48,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri        = 'tmp/XlsxPeasant_02_colorsTest.xlsx';
+        $uri        = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_02_colorsTest.xlsx';
         $colorsKeys = array_keys(Color::DICTIONARY);
         $colorId    = -1;
 
@@ -100,7 +100,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri    = 'tmp/XlsxPeasant_03_fontsTest.xlsx';
+        $uri    = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_03_fontsTest.xlsx';
         $fonts  = [
             '',
             '',
@@ -153,7 +153,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_04_utf16Test.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_04_utf16Test.xlsx';
 
         // Create Xlsx.
         $xlsx  = new Xlsx();
@@ -225,7 +225,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_05_styles.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_05_styles.xlsx';
 
         // Create Xlsx.
         $xlsx  = new Xlsx();
@@ -344,7 +344,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_06_mergingCells.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_06_mergingCells.xlsx';
 
         // Create Xlsx.
         $xlsx  = new Xlsx();
@@ -376,7 +376,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_07_multiSheets.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_07_multiSheets.xlsx';
 
         // Create Xlsx.
         $xlsx   = new Xlsx();
@@ -405,7 +405,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
-        $uri = 'tmp/XlsxPeasant_08_tables.xlsx';
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_08_tables.xlsx';
 
         // Create Xlsx.
         $xlsx  = new Xlsx();

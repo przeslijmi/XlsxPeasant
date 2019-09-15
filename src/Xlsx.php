@@ -2,14 +2,14 @@
 
 namespace Przeslijmi\XlsxPeasant;
 
-use Exception;
 use Przeslijmi\XlsxPeasant\Exceptions\GenerationFailedException;
-use Przeslijmi\XlsxPeasant\Exceptions\WrotypeDefaultsException;
 use Przeslijmi\XlsxPeasant\Exceptions\NoZipArchiveException;
+use Przeslijmi\XlsxPeasant\Exceptions\TargetDirectoryDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileDeletionFailedException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\UnknownDefaultSettingException;
+use Przeslijmi\XlsxPeasant\Exceptions\WrotypeDefaultsException;
 use Przeslijmi\XlsxPeasant\Items\Book;
 use Przeslijmi\XlsxPeasant\Items\Collections\SharedStrings;
 use Przeslijmi\XlsxPeasant\Items\Collections\Styles;
@@ -18,6 +18,7 @@ use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Font;
 use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Xmls;
+use Throwable;
 use ZipArchive;
 
 /**
@@ -137,6 +138,57 @@ class Xlsx
     }
 
     /**
+     * Setter for `targetUri`.
+     *
+     * @param string  $targetUri Uri to which file has to be generated.
+     * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
+     *
+     * @since  v1.0
+     * @return string
+     */
+    private function setTargetUri(string $targetUri, bool $overwrite = false) : self
+    {
+
+        // Lvd.
+        $targetUri = str_replace('\\', '/', $targetUri);
+
+        // Test Uri.
+        if (file_exists($targetUri) === true && $overwrite === false) {
+            throw new TargetFileAlrexException($targetUri);
+        }
+        if (empty($targetUri) === true || is_dir($targetUri) === true) {
+            throw new TargetFileWrosynException($targetUri);
+        }
+
+        // Check if directory in which creation have to be done exists.
+        if (strrpos($targetUri, '/') !== false) {
+
+            // Lvd.
+            $directory = substr($targetUri, 0, strrpos($targetUri, '/')) . '/';
+
+            // Throw.
+            if (file_exists($directory) === false) {
+                throw new TargetDirectoryDonoexException($directory, $targetUri);
+            }
+        }
+
+        // Delete target file Uri if exists.
+        if (file_exists($targetUri) === true) {
+
+            // Throw if deletion is not possible.
+            if (@touch($targetUri, time()) === false) {
+                throw new TargetFileDeletionFailedException();
+            }
+
+            unlink($targetUri);
+        }
+
+        $this->targetUri = $targetUri;
+
+        return $this;
+    }
+
+    /**
      * Getter for Book.
      *
      * @since  v1.0
@@ -172,6 +224,12 @@ class Xlsx
         return $this->styles;
     }
 
+    /**
+     * Getter for `targetUri`.
+     *
+     * @since  v1.0
+     * @return string
+     */
     public function getTargetUri(bool $onlyDir = false) : string
     {
 
@@ -203,30 +261,11 @@ class Xlsx
     {
 
         // Save target URI because XML will need it also.
-        $this->targetUri = $targetUri;
+        $this->setTargetUri($targetUri, $overwrite);
 
         // Throw.
         if (class_exists('ZipArchive') === false) {
             throw new NoZipArchiveException();
-        }
-
-        // Test Uri.
-        if (file_exists($this->targetUri) === true && $overwrite === false) {
-            throw new TargetFileAlrexException($this->targetUri);
-        }
-        if (empty($this->targetUri) === true || is_dir($this->targetUri) === true) {
-            throw new TargetFileWrosynException($this->targetUri);
-        }
-
-        // Delete target file Uri if exists.
-        if (file_exists($this->targetUri) === true) {
-
-            // Throw if deletion is not possible.
-            if (@touch($this->targetUri, time()) === false) {
-                throw new TargetFileDeletionFailedException();
-            }
-
-            unlink($this->targetUri);
         }
 
         // Prepare all strings.
@@ -268,7 +307,7 @@ class Xlsx
 
             // Crate new ZipArchive.
             $zip = new ZipArchive();
-            $zip->open($this->targetUri, ZipArchive::CREATE);
+            $zip->open($this->getTargetUri(), ZipArchive::CREATE);
 
             // Add all files in proper order.
             $zip->addFromString('_rels/.rels', $this->xmls->getRelsRels()->toXml());
@@ -298,11 +337,14 @@ class Xlsx
             $zip->addFromString('xl/_rels/workbook.xml.rels', $this->xmls->getXlRelsWorkbook()->toXml());
             $zip->addFromString('[Content_Types].xml', $this->xmls->getContentTypes()->toXml());
 
-            // Close ZIP.
-            $zip->close();
-        } catch (Exception $e) {
-            throw new GenerationFailedException($e);
+        } catch (Throwable $thr) {
+            throw new GenerationFailedException($thr);
         }//end try
+
+        // Close ZIP.
+        if (@$zip->close() === false) {
+            throw (new GenerationFailedException())->addWarning();
+        }
     }
 
     /**

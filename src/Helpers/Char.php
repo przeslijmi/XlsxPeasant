@@ -2,7 +2,7 @@
 
 namespace Przeslijmi\XlsxPeasant\Helpers;
 
-use Exception;
+use Przeslijmi\XlsxPeasant\Exceptions\UnservedUnicodeException;
 
 /**
  * Spin-off tool to show Char of given Unicode Code Point (U+0000 to U+03FF).
@@ -11,11 +11,12 @@ class Char
 {
 
     /**
-     * Show char by decimal number (eg. 511 --> ǿ)
+     * Show char by decimal number (eg. 511 --> ǿ) from range 1 ... 1023.
      *
      * @param integer $decUnicode Unicode Code Point in decimal value.
      *
      * @since  v1.0
+     * @throws UnservedUnicodeException When call is above range 1 ... 1023.
      * @return char
      *
      * @phpcs:disable Generic.Metrics.CyclomaticComplexity
@@ -23,7 +24,7 @@ class Char
     public static function byDec(int $decUnicode) : string
     {
 
-        if ($decUnicode < hexdec('80')) {
+        if ($decUnicode > 0 && $decUnicode < hexdec('80')) {
             return chr($decUnicode);
         }
 
@@ -83,7 +84,7 @@ class Char
             return chr(hexdec('CF')) . chr(( hexdec('80') + $decUnicode - hexdec('3C0') ));
         }
 
-        throw new Exception('Unicode above U+03FF are not served.');
+        throw new UnservedUnicodeException($decUnicode);
     }
 
     /**

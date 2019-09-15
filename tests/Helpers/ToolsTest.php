@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\Sirouter;
+namespace Przeslijmi\XlsxPeasant;
 
 use PHPUnit\Framework\TestCase;
 use Przeslijmi\XlsxPeasant\Helpers\Tools;
+use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
 
 /**
  * Methods for testing XLSxPeasant Tools.
@@ -14,7 +15,7 @@ final class ToolsTest extends TestCase
     /**
      * Data provider for vector convertions tests.
      *
-     * @return array
+     * @return $arrayName = array('' => , );
      */
     public function vectorConvertionTestsDataProvider() : array
     {
@@ -115,5 +116,53 @@ final class ToolsTest extends TestCase
 
         // Tests.
         $this->assertEquals($expect, Tools::convCellsRefToNumbers($cellsRef));
+    }
+
+    /**
+     * Test if sending negative column number throws.
+     *
+     * @return void
+     */
+    public function testIfSendingNegativeColumnThrows() : void
+    {
+
+        $this->expectException(ParamOtoranException::class);
+
+        Tools::convNumberToRef(-1);
+    }
+
+    /**
+     * Test if confertion of sheet ref is working.
+     *
+     * @return void
+     *
+     * @dataProvider cellsConvertionTestsDataProvider
+     */
+    public function testSheetConvertions(
+        string $cellsRef,
+        int $firstCol,
+        int $firstRow,
+        int $lastCol,
+        int $lastRow
+    ) : void {
+
+        // Lvd.
+        $expect = [
+            'sheetName' => 'Sheet1',
+            'firstCell' => [ $firstCol, $firstRow ],
+            'lastCell'  => [ $lastCol, $lastRow ],
+        ];
+
+        // Tests.
+        $this->assertEquals($expect, Tools::explainSheetRef('Sheet1!' . $cellsRef));
+    }
+
+    public function testCreationOfUuid() : void
+    {
+
+        $this->assertEquals(38, mb_strlen(Tools::createUuid()));
+        $this->assertEquals(38, mb_strlen(Tools::createUuid(true)));
+        $this->assertEquals(36, mb_strlen(Tools::createUuid(false)));
+        $this->assertEquals(36, mb_strlen(trim(Tools::createUuid(), '{}')));
     }
 }

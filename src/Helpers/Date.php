@@ -11,18 +11,16 @@ class Date
 {
 
     /**
-     * Show char by decimal number (eg. 511 --> ǿ)
+     * Converts date from Excel integer into Y-m-d format.
      *
-     * @param integer $decUnicode Unicode Code Point in decimal value.
+     * @param integer $excel Excel's date as integer.
      *
      * @since  v1.0
-     * @return char
-     *
-     * @phpcs:disable Generic.Metrics.CyclomaticComplexity
+     * @return string
      */
     public static function decode(int $excel) : string
     {
 
-        return date('Y-m-d', mktime(0, 0, 0, 1, (-1 + $excel), 1900));
+        return date('Y-m-d', mktime(0, 0, 0, 1, ( -1 + $excel ), 1900));
     }
 }
