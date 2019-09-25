@@ -126,7 +126,7 @@ class Tools
     }
 
     /**
-     * Converts integer row and col numbers into Excel style cell ref (eg. A1).
+     * Converts integer row and col numbers into Excel style cell ref (eg. `A1`x).
      *
      * @param integer $row Row number starting from 1.
      * @param integer $col Col number starting from 1.
@@ -141,12 +141,12 @@ class Tools
     }
 
     /**
-     * Converts cell ref (eg. A1) into array with integer row and col numbers.
+     * Converts cell ref (eg. `A1`) into array with integer row [0] and col [1] numbers.
      *
-     * @param string $cell Cel ref, eg. A1.
+     * @param string $cell Cel ref, eg. `A1`.
      *
      * @since  v1.0
-     * @return string
+     * @return array
      */
     public static function convCellRefToNumbers(string $ref) : array
     {
@@ -160,9 +160,34 @@ class Tools
         ];
     }
 
+    /**
+     * Converts cells ref (eg. `A2:B4`) into explanatory array.
+     *
+     * ## Return format for `A2:B4`
+     * ```
+     * [
+     *     'firstCell' => [ 2, 1 ],
+     *     'lastCell'  => [ 4, 2 ],
+     * ]
+     * ```
+     *
+     * ## Return format for `B4`
+     * ```
+     * [
+     *     'firstCell' => [ 4, 2 ],
+     *     'lastCell'  => [ 4, 2 ],
+     * ]
+     * ```
+     *
+     * @param string $refs Cells ref (eg. `A2:B4` or just `B34`).
+     *
+     * @since  v1.0
+     * @return array
+     */
     public static function convCellsRefToNumbers(string $refs) : array
     {
 
+        // If it is range
         if (is_int(strpos($refs, ':')) === true) {
 
             list($firstCell, $lastCell) = explode(':', $refs);
@@ -173,21 +198,41 @@ class Tools
             ];
         }
 
+        // If it is just one cell.
         return [
             'firstCell' => self::convCellRefToNumbers($refs),
             'lastCell'  => self::convCellRefToNumbers($refs),
         ];
     }
 
+    /**
+     * Convers sheet ref (eg. `Sheet1!A3:B6`) into array.
+     *
+     * ## Return format for `Sheet1!A3:B6`
+     * ```
+     * [
+     *     'sheetName' => 'Sheet1',
+     *     'firstCell' => [ 3, 1 ],
+     *     'lastCell'  => [ 6, 2 ],
+     * ]
+     * ```
+     * @param string $ref Sheet ref (eg. `Sheet1!A3:B6`).
+     *
+     * @since  v1.0
+     * @return array
+     */
     public static function explainSheetRef(string $ref) : array
     {
 
+        // Take sheet name and cells ref apart.
         list($sheetName, $cellsRef) = explode('!', $ref);
 
+        // Add sheet name to result.
         $result = [
             'sheetName' => trim($sheetName, '\''),
         ];
 
+        // Add refs to result.
         $result = array_merge($result, self::convCellsRefToNumbers($cellsRef));
 
         return $result;
