@@ -75,6 +75,9 @@ class XlWorksheet extends Xml
                     'mergeCells' => [
                         '@@' => null,
                     ],
+                    'conditionalFormatting' => [
+                        '@@' => null,
+                    ],
                     'pageMargins' => [
                         '@left'   => '0.7',
                         '@right'  => '0.7',
@@ -84,6 +87,9 @@ class XlWorksheet extends Xml
                         '@footer' => '0.3',
                     ],
                     'tableParts' => [
+                        '@@' => null,
+                    ],
+                    'extLst' => [
                         '@@' => null,
                     ],
                 ],
@@ -108,6 +114,7 @@ class XlWorksheet extends Xml
         $this->prepMerges();
         $this->prepTables();
         $this->prepCols();
+        $this->prepConditionalFormats();
 
         $this->array['worksheet']['@xr:uid']                 = $this->sheet->getUuid();
         $this->array['worksheet']['@@']['dimension']['@ref'] = $this->sheet->getDimensionRef();
@@ -315,6 +322,161 @@ class XlWorksheet extends Xml
         } else {
             unset($this->array['worksheet']['@@']['cols']);
         }
+
+        return $this;
+    }
+
+    private function prepConditionalFormats() : self
+    {
+
+        // Found conditionalFormats.
+        $found    = [];
+        $cfXml    = [];
+        $cfExtLst = [];
+
+        // Find all conditional formatting in all Cells.
+        foreach ($this->sheet->getCells() as $row => $cols) {
+            foreach ($cols as $col => $cell) {
+
+                // If this is not merging Cell - don't go further.
+                if ($cell->hasStyle() === false) {
+                    continue;
+                }
+
+                // Lvd.
+                if ($cell->getStyle()->hasConditionalFormat() === false) {
+                    continue;
+                }
+
+                $format = $cell->getStyle()->getConditionalFormat();
+                $uuid   = $format->getUuid();
+
+                if (isset($found[$uuid]) === false) {
+                    $found[$uuid] = [
+                        'obj'   => $format,
+                        'cells' => [],
+                    ];
+                }
+
+                $found[$uuid]['cells'][] = $cell->getRef();
+            }
+        }
+
+        // Shortcut.
+        if (count($found) === 0) {
+            unset($this->array['worksheet']['@@']['conditionalFormatting']);
+            unset($this->array['worksheet']['@@']['extLst']);
+        }
+
+        // Conver them to XML.
+        foreach ($found as $uuid => $conditionalFormat) {
+
+            $cfXml = [
+                '@sqref' => implode(' ', $conditionalFormat['cells']),
+                '@@' => [
+                    'cfRule' => [
+                        '@priority' => '1',
+                        '@type' => 'dataBar',
+                        '@@' => [
+                            'dataBar' => [
+                                '@@' => [
+                                    'cfvo' => [
+                                        [
+                                            '@type' => 'min',
+                                        ],
+                                        [
+                                            '@type' => 'max',
+                                        ],
+                                    ],
+                                    'color' => [
+                                        [
+                                            '@rgb' => 'FF63C384',
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'extLst' => [
+                                '@@' => [
+                                    'ext' => [
+                                        '@uri' => '{B025F937-C7B1-47D3-B67F-A62EFF666E3E}',
+                                        '@xmlns:x14' => 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/main',
+                                        '@@' => [
+                                            'x14:id' => '{1D1627CC-5FDE-48EA-B398-F01261DC7DAA}',
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $cfExtLst[] = [
+                '@xmlns:xm' => 'http://schemas.microsoft.com/office/excel/2006/main',
+                '@@' => [
+                    'x14:cfRule' => [
+                        '@id' => '{1D1627CC-5FDE-48EA-B398-F01261DC7DAA}',
+                        '@type' => 'dataBar',
+                        '@@' => [
+                            'x14:dataBar' => [
+                                '@border' => '1',
+                                '@maxLength' => '100',
+                                '@minLength' => '0',
+                                '@negativeBarBorderColorSameAsPositive' => '0',
+                                '@@' => [
+                                    'x14:cfvo' => [
+                                        [
+                                            '@type' => 'autoMin'
+                                        ],
+                                        [
+                                            '@type' => 'autoMax'
+                                        ]
+                                    ],
+                                    'x14:borderColor' => [
+                                        [
+                                            '@rgb' => 'FF63C384'
+                                        ]
+                                    ],
+                                    'x14:negativeFillColor' => [
+                                        [
+                                            '@rgb' => 'FFFF0000'
+                                        ]
+                                    ],
+                                    'x14:negativeBorderColor' => [
+                                        [
+                                            '@rgb' => 'FFFF0000'
+                                        ]
+                                    ],
+                                    'x14:axisColor' => [
+                                        [
+                                            '@rgb' => 'FF000000'
+                                        ]
+                                    ],
+                                ]
+                            ]
+                        ]
+                    ],
+                    'xm:sqref' => implode(' ', $conditionalFormat['cells']),
+                ]
+            ];
+        }
+
+        $this->array['worksheet']['@@']['extLst'] = [
+            '@@' => [
+                'ext' => [
+                    '@uri' => '{78C0D931-6437-407d-A8EE-F0AAD7539E65}',
+                    '@xmlns:x14' => 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/main',
+                    '@@' => [
+                        'x14:conditionalFormattings' => [
+                            '@@' => [
+                                'x14:conditionalFormatting' => $cfExtLst,
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->array['worksheet']['@@']['conditionalFormatting'] = $cfXml;
 
         return $this;
     }

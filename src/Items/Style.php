@@ -10,6 +10,7 @@ use Przeslijmi\XlsxPeasant\Exceptions\VerticalAlignOtosetException;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 use Przeslijmi\XlsxPeasant\Items\Color;
+use Przeslijmi\XlsxPeasant\Items\ConditionalFormat;
 use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Font;
 use Przeslijmi\XlsxPeasant\Items\Format;
@@ -68,6 +69,13 @@ class Style extends Items
      * @var Format
      */
     private $format;
+
+    /**
+     * Conditional Format of this Style.
+     *
+     * @var ConditionalFormat
+     */
+    private $conditionalFormat;
 
     /**
      * If Style is locked (locked Style can't be changed).
@@ -496,6 +504,46 @@ class Style extends Items
     }
 
     /**
+     * Checks if Style has conditional format defined.
+     *
+     * @since  v1.0
+     * @return boolean
+     */
+    public function hasConditionalFormat() : bool
+    {
+
+        return ( ! is_null($this->conditionalFormat) );
+    }
+
+    /**
+     * Setter for conditional format of this Style.
+     *
+     * @param ConditionalFormat $conditionalFormat Conditional format of this Style.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setConditionalFormat(ConditionalFormat $conditionalFormat) : self
+    {
+
+        $this->conditionalFormat = $conditionalFormat;
+
+        return $this;
+    }
+
+    /**
+     * Getter for conditional format of this Style.
+     *
+     * @since  v1.0
+     * @return ConditionalFormat
+     */
+    public function getConditionalFormat() : ConditionalFormat
+    {
+
+        return $this->conditionalFormat;
+    }
+
+    /**
      * Setter for Style lock (locked Style can't be changed).
      *
      * @param boolean $lock Optional, true. Set true to set lock, false otherwise.
@@ -557,14 +605,20 @@ class Style extends Items
         if ($this->fill !== null) {
             $result .= $this->fill->getSignature();
         }
+
         if ($this->font !== null) {
             $result .= $this->font->getSignature();
         }
+
         $result .= 'hAlign:' . $this->hAlign;
         $result .= 'vAlign:' . $this->vAlign;
         $result .= 'wrapText:' . $this->wrapText;
+
         if ($this->format !== null) {
             $result .= $this->format->getSignature();
+        }
+        if ($this->conditionalFormat !== null) {
+            $result .= $this->conditionalFormat->getSignature();
         }
 
         return $result;

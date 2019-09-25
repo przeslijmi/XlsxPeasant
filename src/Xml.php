@@ -341,6 +341,8 @@ class Xml
          * ]
          * That is why name $nodeOrNodes is used. First example is an example of onenode - second
          * one is of multinodes (two nodes).
+         *
+         * You're not allowed to mix those structures in one node.
          */
 
         foreach ($nodes as $name => $nodeOrNodes) {
@@ -616,7 +618,7 @@ class Xml
     private function validateAttributeName(string $name) : void
     {
 
-        RegEx::ifMatches($name, '/^([a-z_:]){1}([a-z0-9_:\-.]){0,25}$/i');
+        RegEx::ifMatches($name, '/^([a-z_:]){1}([a-z0-9_:\-.]){0,50}$/i');
     }
 
     /**

@@ -8,6 +8,7 @@ use Przeslijmi\XlsxPeasant\Exceptions\ColumnNameWrosynException;
 use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\ConditionalFormat;
 use Przeslijmi\XlsxPeasant\Items\Format;
 use Przeslijmi\XlsxPeasant\Items\Table;
 
@@ -53,6 +54,8 @@ class Column extends Items
     private $cell;
 
     private $numFormat;
+
+    private $conditionalFormat;
 
     /**
      * Constructor.
@@ -208,6 +211,20 @@ class Column extends Items
     {
 
         return $this->numFormat;
+    }
+
+    public function setConditionalFormat(?ConditionalFormat $conditionalFormat) : self
+    {
+
+        $this->conditionalFormat = $conditionalFormat;
+
+        return $this;
+    }
+
+    public function getConditionalFormat() : ?ConditionalFormat
+    {
+
+        return $this->conditionalFormat;
     }
 
     /**

@@ -465,6 +465,11 @@ class Table extends Items
                 if (( $numFormat = $column->getFormat() ) !== null) {
                     $cell->getStyle()->setFormat($numFormat);
                 }
+
+                // Add conditional format for this Cell.
+                if (( $conditionalFormat = $column->getConditionalFormat() ) !== null) {
+                    $cell->getStyle()->setConditionalFormat($conditionalFormat);
+                }
             }
 
             // Save rows for future reference.
