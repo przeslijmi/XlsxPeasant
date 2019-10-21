@@ -25,7 +25,7 @@ class ColumnNameAlrexException extends MethodFopException
 
         // Lvd.
         $hint  = 'In Table `' . $tableName . '` you\'re trying to add second Column ';
-        $hint .= 'with the same name `' . $name . '`. ';
+        $hint .= 'with the same name `' . $columnName . '`. ';
         $hint .= 'Name of Columns has to be unique in one Table.';
 
         // Define.

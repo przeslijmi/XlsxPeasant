@@ -19,9 +19,14 @@ class HiddenFormat extends Format
     {
 
         $this->setType('hidden');
-        $this->setId();
     }
 
+    /**
+     * Return code of Format in XLSX language (syntax).
+     *
+     * @since  v1.0
+     * @return string
+     */
     public function getCode() : string
     {
 

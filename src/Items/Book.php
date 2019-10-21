@@ -3,6 +3,8 @@
 namespace Przeslijmi\XlsxPeasant\Items;
 
 use Przeslijmi\XlsxPeasant\Exceptions\NoSheetsException;
+use Przeslijmi\XlsxPeasant\Exceptions\SheetDonoexException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableDonoexException;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Sheet;
 use Przeslijmi\XlsxPeasant\Items\Table;
@@ -76,6 +78,7 @@ class Book extends Items
      * @param integer $id Id of Sheet.
      *
      * @since  v1.0
+     * @throws SheetDonoexException When Sheet with given id does not exists.
      * @return Sheet
      */
     public function getSheet(int $id) : Sheet
@@ -86,14 +89,17 @@ class Book extends Items
                 return $sheet;
             }
         }
+
+        throw new SheetDonoexException($id);
     }
 
     /**
      * Getter for one Sheet by name.
      *
-     * @param string $id Name of Sheet.
+     * @param string $name Name of Sheet.
      *
      * @since  v1.0
+     * @throws SheetDonoexException When Sheet with given id does not exists.
      * @return Sheet
      */
     public function getSheetByName(string $name) : Sheet
@@ -104,6 +110,8 @@ class Book extends Items
                 return $sheet;
             }
         }
+
+        throw new SheetDonoexException($name);
     }
 
     /**
@@ -186,15 +194,25 @@ class Book extends Items
         return $this->tables;
     }
 
+    /**
+     * Return Table object from this book identified by its name.
+     *
+     * @param string $name Name of Table.
+     *
+     * @since  v1.0
+     * @throws TableDonoexException When Table with this name does not exits.
+     * @return Table
+     */
     public function getTableByName(string $name) : Table
     {
 
+        // Try to find and return.
         foreach ($this->tables as $table) {
             if ($table->getName() === $name) {
                 return $table;
             }
         }
 
-        throw new \Exception('no table found');
+        throw new TableDonoexException($name);
     }
 }

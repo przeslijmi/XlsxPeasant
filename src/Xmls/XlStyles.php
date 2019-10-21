@@ -189,14 +189,14 @@ class XlStyles extends Xml
     {
 
         // Lvd.
-        $styles       = $this->xlsx->getStyles()->getIndex();
-        $fontsAr      = [];
-        $fillsAr      = [];
-        $numFormatsAr = [];
-        $cellXfsAr    = [];
+        $styles    = $this->xlsx->getStyles()->getIndex();
+        $fontsAr   = [];
+        $fillsAr   = [];
+        $formatsAr = [];
+        $cellXfsAr = [];
 
         // Define standard array's contents.
-        $fontsAr[]      = [
+        $fontsAr[]   = [
             '@@' => [
                 'sz' => [
                     '@val' => $this->xlsx->getDefault('fontSize'),
@@ -218,11 +218,11 @@ class XlStyles extends Xml
                 ],
             ],
         ];
-        $numFormatsAr[] = [
+        $formatsAr[] = [
             '@formatCode' => '#,##0\ &quot;zł&quot;;\-#,##0\ &quot;zł&quot;',
             '@numFmtId'   => '5',
         ];
-        $fontsAr[]      = [
+        $fontsAr[]   = [
             '@@' => [
                 'sz' => [
                     '@val' => $this->xlsx->getDefault('fontSize'),
@@ -241,28 +241,28 @@ class XlStyles extends Xml
                 ],
             ],
         ];
-        $fillsAr[]      = [
+        $fillsAr[]   = [
             '@@' => [
                 'patternFill' => [
                     '@patternType' => 'none',
                 ],
             ],
         ];
-        $fillsAr[]      = [
+        $fillsAr[]   = [
             '@@' => [
                 'patternFill' => [
                     '@patternType' => 'gray125',
                 ],
             ],
         ];
-        $cellXfsAr[]    = [
+        $cellXfsAr[] = [
             '@borderId' => 0,
             '@fillId'   => 0,
             '@fontId'   => 0,
             '@numFmtId' => 0,
             '@xfId'     => 0,
         ];
-        $cellXfsAr[]    = [
+        $cellXfsAr[] = [
             '@applyFont' => 1,
             '@borderId'  => 0,
             '@fillId'    => 0,
@@ -345,20 +345,20 @@ class XlStyles extends Xml
             // Define Style's Format.
             if ($style->hasFormat() === true) {
 
-                $numFormatsAr[] = [
+                $formatsAr[] = [
                     '@formatCode' => $style->getFormat()->getCode(),
-                    '@numFmtId'   => $style->getFormat()->getId(),
+                    '@numFmtId'   => $style->getFormat()->getIdForXlsx($this->xlsx),
                 ];
 
-                $cellXf['@numFmtId']          = $style->getFormat()->getId();
+                $cellXf['@numFmtId']          = $style->getFormat()->getIdForXlsx($this->xlsx);
                 $cellXf['@applyNumberFormat'] = 1;
             }
 
             $cellXfsAr[] = $cellXf;
         }//end foreach
 
-        $this->array['styleSheet']['@@']['numFmts']['@count']       = count($numFormatsAr);
-        $this->array['styleSheet']['@@']['numFmts']['@@']['numFmt'] = $numFormatsAr;
+        $this->array['styleSheet']['@@']['numFmts']['@count']       = count($formatsAr);
+        $this->array['styleSheet']['@@']['numFmts']['@@']['numFmt'] = $formatsAr;
 
         $this->array['styleSheet']['@@']['fonts']['@count']     = count($fontsAr);
         $this->array['styleSheet']['@@']['fonts']['@@']['font'] = $fontsAr;

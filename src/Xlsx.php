@@ -16,6 +16,7 @@ use Przeslijmi\XlsxPeasant\Items\Collections\Styles;
 use Przeslijmi\XlsxPeasant\Items\Color;
 use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\Format;
 use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Xmls;
 use Throwable;
@@ -86,16 +87,25 @@ class Xlsx
     /**
      * Which wrap text is going to be used when creating new Cell objects (eg. `LC`).
      *
-     * @var bool
+     * @var boolean
      */
     private $useWrapText;
 
     /**
      * Which number fromat is going to be used when creating new Cell objects).
      *
-     * @var NumberFormat
+     * @var Format
      */
     private $useFormat;
+
+    /**
+     * Array of registered formats for this XLSX.
+     *
+     * @var Format[]
+     */
+    private $registeredFormats = [
+        0
+    ];
 
     /**
      * Array with default values for this document.
@@ -144,7 +154,13 @@ class Xlsx
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
      * @since  v1.0
+     * @throws TargetFileAlrexException          When targetUri exists but overwriting is forbidden.
+     * @throws TargetFileWrosynException         When targetUri is written wrong (eg. is empty).
+     * @throws TargetDirectoryDonoexException    When targetUri directory does not exists.
+     * @throws TargetFileDeletionFailedException When overwriting failed (file is open?).
      * @return string
+     *
+     * @phpcs:disable Generic.PHP.NoSilencedErrors
      */
     private function setTargetUri(string $targetUri, bool $overwrite = false) : self
     {
@@ -227,6 +243,8 @@ class Xlsx
     /**
      * Getter for `targetUri`.
      *
+     * @param boolean $onlyDir Optional, false. If set to true - only dir - not full target URI will be returned.
+     *
      * @since  v1.0
      * @return string
      */
@@ -248,11 +266,9 @@ class Xlsx
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
      * @since  v1.0
-     * @throws NoZipArchiveException             When ZipArchive class does not exists.
-     * @throws TargetFileAlrexException          When targetUri exists but overwriting is forbidden.
-     * @throws TargetFileWrosynException         When targetUri is written wrong (eg. is empty).
-     * @throws TargetFileDeletionFailedException When overwriting failed (file is open?).
-     * @throws GenerationFailedException         When somehow generation failed.
+     * @throws NoZipArchiveException     When ZipArchive class does not exists.
+     * @throws GenerationFailedException When somehow generation failed.
+     * @throws GenerationFailedException When closing ZIP failed.
      * @return void
      *
      * @phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged
@@ -299,8 +315,7 @@ class Xlsx
                     'text' => $table->getXml()->toXml(),
                 ];
             }
-        }
-
+        }//end foreach
 
         // Create ZIP.
         try {
@@ -490,15 +505,15 @@ class Xlsx
     /**
      * Setter for `useFormat`.
      *
-     * @param Format $numFormat Number format to use in new Cells (eg. LC, RB).
+     * @param Format $format Number format to use in new Cells (eg. LC, RB).
      *
      * @since  v1.0
      * @return self
      */
-    public function useFormat(?Format $numFormat) : self
+    public function useFormat(?Format $format) : self
     {
 
-        $this->useFormat = $numFormat;
+        $this->useFormat = $format;
 
         return $this;
     }
@@ -513,6 +528,34 @@ class Xlsx
     {
 
         return $this->useFormat;
+    }
+
+    /**
+     * Return id of Format unique for given XLSX - while this format can be also used in other XLSX.
+     *
+     * @param Format $format Format Item object.
+     *
+     * @since  v1.0
+     * @return integer
+     */
+    public function registerFormatsId(Format $format) : int
+    {
+
+        // Get class id - to find for it in rgisteredFormats array.
+        $splId = spl_object_id($format);
+
+        // If it not exists - add it.
+        if (( $id = array_search($splId, $this->registeredFormats) ) === false) {
+
+            // Add.
+            $this->registeredFormats[] = $splId;
+
+            // Calc new id (it as added at the end so if array has 5 elements after adding
+            // new id is [0, 1, 2, 3, 4] ... 4; ie. `5 - 1`).
+            $id = ( count($this->registeredFormats) - 1 );
+        }
+
+        return $id;
     }
 
     /**
@@ -600,6 +643,12 @@ class Xlsx
         return $this;
     }
 
+    /**
+     * Getter for default font.
+     *
+     * @since  v1.0
+     * @return Font
+     */
     public function getDefaultFont() : Font
     {
 

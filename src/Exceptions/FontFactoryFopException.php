@@ -14,7 +14,8 @@ class FontFactoryFopException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param integer        $paramCount Number of parameters given to factory.
+     * @param Exception|null $cause      Exception that caused the problem.
      *
      * @since v1.0
      */

@@ -27,7 +27,7 @@ class ColorFactoryFopException extends MethodFopException
 
         // Define.
         $this->setCodeName('ColorFactoryFopException');
-        $this->addInfo('paramCount', $paramCount);
+        $this->addInfo('paramCount', (string) $paramCount);
         $this->addInfo('hint', $hint);
 
         // Set cause.

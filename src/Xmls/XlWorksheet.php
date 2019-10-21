@@ -326,6 +326,12 @@ class XlWorksheet extends Xml
         return $this;
     }
 
+    /**
+     * Preparation of `conditionalFormatting` and `extLst` nodes - or deleting them.
+     *
+     * @since  v1.0
+     * @return self
+     */
     private function prepConditionalFormats() : self
     {
 
@@ -359,16 +365,18 @@ class XlWorksheet extends Xml
                 }
 
                 $found[$uuid]['cells'][] = $cell->getRef();
-            }
-        }
+            }//end foreach
+        }//end foreach
 
         // Shortcut.
         if (count($found) === 0) {
             unset($this->array['worksheet']['@@']['conditionalFormatting']);
             unset($this->array['worksheet']['@@']['extLst']);
+
+            return $this;
         }
 
-        // Conver them to XML.
+        // Convert them to XML.
         foreach ($found as $uuid => $conditionalFormat) {
 
             $cfXml = [
@@ -459,8 +467,9 @@ class XlWorksheet extends Xml
                     'xm:sqref' => implode(' ', $conditionalFormat['cells']),
                 ]
             ];
-        }
+        }//end foreach
 
+        // Finally add `extLst` to XML structure.
         $this->array['worksheet']['@@']['extLst'] = [
             '@@' => [
                 'ext' => [
@@ -476,6 +485,8 @@ class XlWorksheet extends Xml
                 ]
             ]
         ];
+
+        // Finally add `conditionalFormatting` to XML structure.
         $this->array['worksheet']['@@']['conditionalFormatting'] = $cfXml;
 
         return $this;

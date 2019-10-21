@@ -1,13 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Przeslijmi\Sirouter;
+namespace Przeslijmi\XlsxPeasant;
 
 use PHPUnit\Framework\TestCase;
 use Przeslijmi\XlsxPeasant\Helpers\Char;
 use Przeslijmi\XlsxPeasant\Items\Color;
-use Przeslijmi\XlsxPeasant\Items\Style;
+use Przeslijmi\XlsxPeasant\Items\ConditionalFormat\DataBar;
 use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\Format\DateFormat;
+use Przeslijmi\XlsxPeasant\Items\Format\HiddenFormat;
+use Przeslijmi\XlsxPeasant\Items\Format\NumFormat;
+use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
@@ -324,9 +328,31 @@ final class ProperCreationTest extends TestCase
         );
         $sheet->getCell(21, 1)->setValue('Courier New, 15, black, bold, italic, underline; Fill 68;114;196.');
 
+        // Show use of Format.
+        $xlsx->useDefaults();
+        $xlsx->useFill(new Fill(Color::factory('DDDDDD')));
+        $sheet->getCell(23, 1)->setValue('Formats');
+        $xlsx->useFill(null);
+        $sheet->getCell(24, 1)->setValue('date:');
+        $sheet->getCell(25, 1)->setValue('unit:');
+        $sheet->getCell(26, 1)->setValue('currency:');
+        $sheet->getCell(27, 1)->setValue('percentage:');
+        $sheet->getCell(28, 1)->setValue('hidden:');
+        $xlsx->useFormat(new DateFormat());
+        $sheet->getCell(24, 2)->setValue(43466);
+        $xlsx->useFormat(new NumFormat(0, 0, 'szt.'));
+        $sheet->getCell(25, 2)->setValue(10);
+        $xlsx->useFormat(new NumFormat(2, 0, 'zł'));
+        $sheet->getCell(26, 2)->setValue(19.99);
+        $xlsx->useFormat(new NumFormat(2, 0, '%'));
+        $sheet->getCell(27, 2)->setValue(34.78);
+        $xlsx->useFormat(new HiddenFormat());
+        $sheet->getCell(28, 2)->setValue('hidden');
+        $xlsx->useFormat(null);
+
         // Show use of standard settings.
         $xlsx->useDefaults();
-        $sheet->getCell(22, 1)->setValue('This Cell is as defaults show.');
+        $sheet->getCell(30, 1)->setValue('This Cell is as defaults show.');
 
         // Generate.
         $xlsx->generate($uri, true);
@@ -415,63 +441,83 @@ final class ProperCreationTest extends TestCase
         $data1 = [
             [
                 'first name' => 'Jacob',
-                'surname' => 'Rampling',
+                'surname'    => 'Rampling',
                 'department' => 'Training',
-                'age' => '28',
+                'age'        => 28,
+                'exam'       => 43461,
+                'readiness'  => 3,
             ],
             [
                 'first name' => 'Edward',
-                'surname' => 'Welch',
+                'surname'    => 'Welch',
                 'department' => 'Sales',
-                'age' => '27',
+                'age'        => 27,
+                'exam'       => 43462,
+                'readiness'  => 3,
             ],
             [
                 'first name' => 'Diane',
-                'surname' => 'Knox',
+                'surname'    => 'Knox',
                 'department' => 'Research and Development',
-                'age' => '29',
+                'age'        => 29,
+                'exam'       => 43463,
+                'readiness'  => 2,
             ],
             [
                 'first name' => 'Claire',
-                'surname' => 'Wallace',
+                'surname'    => 'Wallace',
                 'department' => 'Research and Development',
-                'age' => '26',
+                'age'        => 26,
+                'exam'       => 43464,
+                'readiness'  => 1,
             ],
             [
                 'first name' => 'Anne',
-                'surname' => 'Bailey',
+                'surname'    => 'Bailey',
                 'department' => 'Research and Development',
-                'age' => '27',
+                'age'        => 27,
+                'exam'       => 43465,
+                'readiness'  => 3,
             ],
             [
                 'first name' => 'Owen',
-                'surname' => 'Lawrence',
+                'surname'    => 'Lawrence',
                 'department' => 'Services',
-                'age' => '28',
+                'age'        => 28,
+                'exam'       => 43466,
+                'readiness'  => 4,
             ],
             [
                 'first name' => 'Joshua',
-                'surname' => 'Manning',
+                'surname'    => 'Manning',
                 'department' => 'Sales',
-                'age' => '32',
+                'age'        => 32,
+                'exam'       => 43467,
+                'readiness'  => 2,
             ],
             [
                 'first name' => 'Adam',
-                'surname' => 'Blake',
+                'surname'    => 'Blake',
                 'department' => 'Services',
-                'age' => '25',
+                'age'        => 25,
+                'exam'       => 43468,
+                'readiness'  => 2,
             ],
             [
                 'first name' => 'Anne',
-                'surname' => 'White',
+                'surname'    => 'White',
                 'department' => 'Services',
-                'age' => '26',
+                'age'        => 26,
+                'exam'       => 43469,
+                'readiness'  => 1,
             ],
             [
                 'first name' => 'Julia',
-                'surname' => 'Paterson',
+                'surname'    => 'Paterson',
                 'department' => 'Services',
-                'age' => '28',
+                'age'        => 28,
+                'exam'       => 43460,
+                'readiness'  => 1,
             ],
         ];
 
@@ -497,11 +543,21 @@ final class ProperCreationTest extends TestCase
 
         // Add table 1.
         $table1 = $sheet->addTable('Workers', 1, 1);
-        $table1->addColumns([ 'first name', 'surname', 'department', 'age' ]);
+        $table1->addColumns([
+            'first name',
+            'surname',
+            'department',
+            'age',
+            'exam',
+            'readiness',
+        ]);
+        $table1->getColumnByName('exam')->setFormat(new DateFormat());
+        $table1->getColumnByName('age')->setFormat(new NumFormat(0, 0, 'ys'));
+        $table1->getColumnByName('readiness')->setConditionalFormat(new DataBar());
         $table1->addData($data1);
 
         // Add table 2.
-        $table2 = $sheet->addTable('Dep.Phones', 2, 7);
+        $table2 = $sheet->addTable('Dep.Phones', 2, 8);
         $table2->addColumns([ 'department', 'phone' ]);
         $table2->addData($data2);
 

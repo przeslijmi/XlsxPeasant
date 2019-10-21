@@ -2,7 +2,9 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
+use Exception;
 use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\ColumnIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnNameWrosynException;
 use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
@@ -53,8 +55,18 @@ class Column extends Items
      */
     private $cell;
 
-    private $numFormat;
+    /**
+     * Which Format is used in this Table Column.
+     *
+     * @var Format
+     */
+    private $format;
 
+    /**
+     * Which Conditional Format is used in this Table Column.
+     *
+     * @var ConditionalFormat
+     */
     private $conditionalFormat;
 
     /**
@@ -182,14 +194,9 @@ class Column extends Items
         // Test duplication of names of Tables in whole Xlsx.
         foreach ($this->getTable()->getColumns(false) as $columnInTable) {
 
-            // Ignore this Column.
-            if ($this === $columnInTable) {
-                continue;
-            }
-
             // Throw.
             if ($columnInTable->getName() === $name) {
-                throw new ColumnNameAlrexException($name);
+                throw new ColumnNameAlrexException($this->getTable()->getName(), $name);
             }
         }
 
@@ -199,20 +206,42 @@ class Column extends Items
         return $this;
     }
 
-    public function setFormat(?Format $numFormat) : self
+    /**
+     * Setter for Format object.
+     *
+     * @param Format $format Format object to use in this Table Column.
+     *
+     * @since  v1.0
+     * @return null|Format
+     */
+    public function setFormat(?Format $format) : self
     {
 
-        $this->numFormat = $numFormat;
+        $this->format = $format;
 
         return $this;
     }
 
+    /**
+     * Getter for Format object for this Table Column - if is defined.
+     *
+     * @since  v1.0
+     * @return null|Format
+     */
     public function getFormat() : ?Format
     {
 
-        return $this->numFormat;
+        return $this->format;
     }
 
+    /**
+     * Setter for Conditional Format object..
+     *
+     * @param ConditionalFormat $conditionalFormat ConditionalFormat object to use in this Table Column.
+     *
+     * @since  v1.0
+     * @return null|ConditionalFormat
+     */
     public function setConditionalFormat(?ConditionalFormat $conditionalFormat) : self
     {
 
@@ -221,6 +250,12 @@ class Column extends Items
         return $this;
     }
 
+    /**
+     * Getter for Conditional Format object for this Table Column - if is defined.
+     *
+     * @since  v1.0
+     * @return null|ConditionalFormat
+     */
     public function getConditionalFormat() : ?ConditionalFormat
     {
 

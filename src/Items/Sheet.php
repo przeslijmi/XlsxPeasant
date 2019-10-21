@@ -5,15 +5,16 @@ namespace Przeslijmi\XlsxPeasant\Items;
 use Exception;
 use Przeslijmi\Sivalidator\RegEx;
 use Przeslijmi\XlsxPeasant\Exceptions\CellMergeConflictException;
+use Przeslijmi\XlsxPeasant\Exceptions\SheetIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\SheetNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\SheetNameWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreaoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
+use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Book;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 use Przeslijmi\XlsxPeasant\Items\Table;
-use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Xlsx;
 use Przeslijmi\XlsxPeasant\Xmls\XlRelsWorksheet;
 use Przeslijmi\XlsxPeasant\Xmls\XlWorksheet;
@@ -112,7 +113,7 @@ class Sheet extends Items
      * @throws SheetIdOtoranException When ID is below 1.
      * @return self
      */
-    public function setId(?int $id = null) : self
+    private function setId(?int $id = null) : self
     {
 
         // Find id if not given.
@@ -174,7 +175,7 @@ class Sheet extends Items
             // Lvd.
             $special = '\\!\\@\\#\\$\\%\\^\\&\\(\\)\\_\\+\\-\\=\\{\\}\\|\\"\\;\\.\\,\\ \\<\\>';
 
-            // @todo
+            // Add polish accented letters.
             $special .= 'ążśźęćńółĄŻŚŹĘĆŃÓŁ';
 
             // Proper chars, at least 2 chars length, max length.
@@ -186,11 +187,6 @@ class Sheet extends Items
 
         // Test duplication of names of Tables in whole Xlsx.
         foreach ($this->getXlsx()->getBook()->getSheets(false) as $sheetInBook) {
-
-            // Ignore this Sheet.
-            if ($this === $sheetInBook) {
-                continue;
-            }
 
             // Throw.
             if ($sheetInBook->getName() === $name) {
@@ -499,40 +495,90 @@ class Sheet extends Items
         return $this->getXlsx()->getBook()->hasTables($this);
     }
 
+    /**
+     * Setter for column width.
+     *
+     * @param integer    $col   For which column width is to be set.
+     * @param null|float $width Desired width or null to make width default.
+     *
+     * @since  v1.0
+     * @return self
+     */
     public function setColWidth(int $col, ?float $width = null) : self
     {
 
+        // Set defualt col width.
         if ($width === null) {
             unset($this->colsWidth[$col]);
 
             return $this;
         }
 
+        // Define given col width.
         $this->colsWidth[$col] = $width;
 
         return $this;
     }
 
+    /**
+     * Getter for all defined witdth for all cols.
+     *
+     * @since  v1.0
+     * @return float[] Array with width of subsequent rows (key is row id).
+     */
     public function getColsWidth() : array
     {
 
         return $this->colsWidth;
     }
 
+    /**
+     * Getter for witdth of given col.
+     *
+     * @param integer $col For which column width has to be returned.
+     *
+     * @since  v1.0
+     * @return null|float Float as col width or null if width for given col has not been defined.
+     */
+    public function getColWidth(int $col) : ?float
+    {
+
+        return ( $this->colsWidth[$col] ?? null );
+    }
+
+    /**
+     * Setter for row height.
+     *
+     * @param integer    $row    For which row height is to be set.
+     * @param null|float $height Desired height or null to make height default.
+     *
+     * @since  v1.0
+     * @return self
+     */
     public function setRowHeight(int $row, ?float $height = null) : self
     {
 
+        // Set defualt col width.
         if ($height === null) {
             unset($this->rowsHeight[$row]);
 
             return $this;
         }
 
+        // Define given col width.
         $this->rowsHeight[$row] = $height;
 
         return $this;
     }
 
+    /**
+     * Getter for row height.
+     *
+     * @param integer $row For which row height has to be returned.
+     *
+     * @since  v1.0
+     * @return null|float Float as row height or null if height for given row has not been defined.
+     */
     public function getRowHeight(int $row) : ?float
     {
 

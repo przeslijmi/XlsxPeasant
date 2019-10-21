@@ -24,7 +24,7 @@ class TargetDirectoryDonoexException extends DirDonoexException
     {
 
         // Lvd.
-        $hint  = 'File URI to generate XLSx has to be located in existing directory.';
+        $hint = 'File URI to generate XLSx has to be located in existing directory.';
 
         // Define.
         $this->addInfo('context', 'generatingXlsxFile');

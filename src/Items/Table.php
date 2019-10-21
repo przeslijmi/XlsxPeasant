@@ -4,10 +4,12 @@ namespace Przeslijmi\XlsxPeasant\Items;
 
 use Exception;
 use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\ColumnDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\NoColumnsInTableException;
 use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableChangeColumnForbiddenException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableNameWrosynException;
 use Przeslijmi\XlsxPeasant\Items;
@@ -173,11 +175,6 @@ class Table extends Items
 
         // Test duplication of names of Tables in whole Xlsx.
         foreach ($this->getXlsx()->getBook()->getTables() as $tableInBook) {
-
-            // Ignore this table.
-            if (spl_object_hash($this) === spl_object_hash($tableInBook)) {
-                continue;
-            }
 
             // Throw.
             if ($tableInBook->getName() === $name) {
@@ -462,15 +459,15 @@ class Table extends Items
                 $cell->setValue($value);
 
                 // Add number format for this Cell.
-                if (( $numFormat = $column->getFormat() ) !== null) {
-                    $cell->getStyle()->setFormat($numFormat);
+                if (( $format = $column->getFormat() ) !== null) {
+                    $cell->getStyle()->setFormat($format);
                 }
 
                 // Add conditional format for this Cell.
                 if (( $conditionalFormat = $column->getConditionalFormat() ) !== null) {
                     $cell->getStyle()->setConditionalFormat($conditionalFormat);
                 }
-            }
+            }//end foreach
 
             // Save rows for future reference.
             $this->rows[] = $row;
@@ -479,15 +476,48 @@ class Table extends Items
         return $this;
     }
 
+    /**
+     * Set contents (data) for table (deleting previous content).
+     *
+     * ## Usage example
+     * ```
+     * $table->setData([
+     *     [
+     *         'name' => 'John',
+     *         'age' => 28,
+     *         'department' => 'AID',
+     *     ],
+     *     [
+     *         'name' => 'Johnny',
+     *         'age' => 22,
+     *         'department' => 'SFD',
+     *     ],
+     * ]);
+     * ```
+     *
+     * @param array $rows See example.
+     *
+     * @since  v1.0
+     * @return self
+     */
     public function setData(array $rows) : self
     {
 
+        // Delete current contents.
         $this->rows = [];
+
+        // Add new contents.
         $this->addData($rows);
 
         return $this;
     }
 
+    /**
+     * Getter for all rows of data of table.
+     *
+     * @since  v1.0
+     * @return array
+     */
     public function getData() : array
     {
 

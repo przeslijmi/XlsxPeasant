@@ -43,6 +43,16 @@ class Items
         return $this->xlsx;
     }
 
+    /**
+     * Looks for spare id in collection of Items.
+     *
+     * @param Items[] $arrayOfItems Array of items.
+     * @param integer $start        Id to be returned when Items[] is empty.
+     *
+     * @since  v1.0
+     * @throws LookingForSpareIdLoopOtoranException When more 10000 tryes failed.
+     * @return integer
+     */
     protected function findSpareId(array $arrayOfItems, int $start = 1) : int
     {
 
@@ -68,8 +78,8 @@ class Items
 
             return $i;
 
-        } while ($i < 1000);
+        } while ($i < 10000);
 
-        throw new Exception('AA');
+        throw new LookingForSpareIdLoopOtoranException();
     }
 }

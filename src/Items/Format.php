@@ -2,8 +2,10 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
+use Przeslijmi\XlsxPeasant\Xlsx;
+
 /**
- * Num format definition used in Style.
+ * Value format definition used in Style.
  */
 abstract class Format
 {
@@ -16,44 +18,21 @@ abstract class Format
     private $type;
 
     /**
-     * Setter for id.
+     * Getter for id of this format registered/used in given xlsx.
      *
-     * @param integer $id Id of NumFormat.
+     * It is different approach than in other Items because Format when is created is not connected
+     * with exact given sheet. This connection is created later - on XML generation. It is when XLSX
+     * file is set for this Format, id is calculated and therefore it can be returned.
      *
-     * @since  v1.0
-     * @throws SheetIdOtoranException When ID is below 1.
-     * @return self
-     */
-    public function setId(?int $id = null) : self
-    {
-
-        // Find id if not given.
-        if ($id === null) {
-            // $id = $this->findSpareId($this->getXlsx()->getBook()->getSheets(false));
-            $id = rand(100, 999);
-        }
-
-        // Check.
-        // if ($id < 1) {
-        //     throw new SheetIdOtoranException($id);
-        // }
-
-        // Set.
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Getter for id.
+     * @param Xlsx $xlsx For which Xlsx id has to be given (one Format can be used in multiple Xlsx).
      *
      * @since  v1.0
      * @return integer
      */
-    public function getId() : int
+    public function getIdForXlsx(Xlsx $xlsx) : int
     {
 
-        return $this->id;
+        return $xlsx->registerFormatsId($this);
     }
 
     /**

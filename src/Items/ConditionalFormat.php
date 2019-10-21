@@ -10,14 +10,29 @@ use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 abstract class ConditionalFormat
 {
 
+    /**
+     * UUID of Conditional Format object.
+     *
+     * @var string
+     */
     private $uuid;
 
+    /**
+     * Constructor.
+     *
+     * @since v1.0
+     */
     public function __construct()
     {
 
         $this->uuid = XlsxTools::createUuid();
     }
 
+    /**
+     * Getter for UUID.
+     *
+     * @return string
+     */
     public function getUuid()
     {
 

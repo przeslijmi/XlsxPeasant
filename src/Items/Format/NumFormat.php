@@ -47,7 +47,6 @@ class NumFormat extends Format
         $this->setDecimalPlaces($decimalPlaces);
         $this->setLeadingZeros($leadingZeros);
         $this->setUnit($unit);
-        $this->setId();
     }
 
     /**
@@ -134,6 +133,12 @@ class NumFormat extends Format
         return $this->unit;
     }
 
+    /**
+     * Return code of Format in XLSX language (syntax).
+     *
+     * @since  v1.0
+     * @return string
+     */
     public function getCode() : string
     {
 

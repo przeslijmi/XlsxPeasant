@@ -71,13 +71,6 @@ class XlWorkbook extends Xml
                             ],
                         ],
                     ],
-                    // 'xr:revisionPtr' => [
-                    //     '@revIDLastSave' => '0',
-                    //     '@documentId' => '8_{A31A1446-E08E-47BC-8584-29124A2247F2}',
-                    //     '@xr6:coauthVersionLast' => '43',
-                    //     '@xr6:coauthVersionMax' => '43',
-                    //     '@xr10:uidLastSave' => '{00000000-0000-0000-0000-000000000000}',
-                    // ],
                     'bookViews' => [
                         '@@' => [
                             'workbookView' => [

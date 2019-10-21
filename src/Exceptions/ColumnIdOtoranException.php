@@ -14,8 +14,9 @@ class ColumnIdOtoranException extends ParamOtoranException
     /**
      * Constructor.
      *
-     * @param integer        $id    Given wrong id.
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param string         $tableName Name of table in which Columns are present.
+     * @param integer        $id        Given wrong id.
+     * @param Exception|null $cause     Exception that caused the problem.
      *
      * @since v1.0
      */
@@ -30,7 +31,7 @@ class ColumnIdOtoranException extends ParamOtoranException
         $this->setCodeName('ColumnIdOtoranException');
         $this->addInfo('paramName', 'columnId');
         $this->addInfo('range', '>=1');
-        $this->addInfo('actualValue', $id);
+        $this->addInfo('actualValue', (string) $id);
         $this->addInfo('hint', $hint);
 
         // Set cause.

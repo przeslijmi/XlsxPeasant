@@ -244,6 +244,8 @@ class Reader
      * @since  v1.0
      * @throws MethodFopException If unpacking failed somehow.
      * @return self
+     *
+     * @phpcs:disable Generic.PHP.NoSilencedErrors
      */
     private function unpack() : self
     {

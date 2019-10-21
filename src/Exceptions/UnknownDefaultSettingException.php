@@ -14,10 +14,9 @@ class UnknownDefaultSettingException extends ParamOtosetException
     /**
      * Constructor.
      *
-     * @param string         $defaultsName Name of the parameter with error.
-     * @param array          $range        Possible values that can be given.
-     * @param string         $actualValue  Actually given value.
-     * @param Exception|null $cause        Exception that caused the problem.
+     * @param string         $actualValue Actually given value.
+     * @param array          $range       Possible values that can be given.
+     * @param Exception|null $cause       Exception that caused the problem.
      *
      * @since v1.0
      */

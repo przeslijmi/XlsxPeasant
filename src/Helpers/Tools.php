@@ -41,7 +41,6 @@ class Tools
      *
      * @param integer $number Number to be converted (larger than zero).
      *
-     * @todo   Output string longer than 2 letters is outside of XLSx limits.
      * @since  v1.0
      * @throws ParamOtoranException When called number is lower than 1.
      * @return string
@@ -143,7 +142,7 @@ class Tools
     /**
      * Converts cell ref (eg. `A1`) into array with integer row [0] and col [1] numbers.
      *
-     * @param string $cell Cel ref, eg. `A1`.
+     * @param string $ref Cell ref, eg. `A1`.
      *
      * @since  v1.0
      * @return array
@@ -187,7 +186,7 @@ class Tools
     public static function convCellsRefToNumbers(string $refs) : array
     {
 
-        // If it is range
+        // If it is range?
         if (is_int(strpos($refs, ':')) === true) {
 
             list($firstCell, $lastCell) = explode(':', $refs);
@@ -216,6 +215,7 @@ class Tools
      *     'lastCell'  => [ 6, 2 ],
      * ]
      * ```
+     *
      * @param string $ref Sheet ref (eg. `Sheet1!A3:B6`).
      *
      * @since  v1.0

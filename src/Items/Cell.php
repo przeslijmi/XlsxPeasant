@@ -2,15 +2,16 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
+use Przeslijmi\XlsxPeasant\Exceptions\CellValueWrotype;
 use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\SetValueToMergedCellConflictException;
+use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Color;
 use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Sheet;
 use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Items\ValuePart;
-use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 
 /**
  * One Cell inside one Sheet of one Xlsx.
@@ -44,7 +45,7 @@ class Cell extends Items
      *
      * @var ValuePart[]
      */
-    private $valueParts;
+    private $valueParts = [];
 
     /**
      * If this cell is hidden because it is overriden by other merging cell.
@@ -165,41 +166,58 @@ class Cell extends Items
      * Getter for all parts of value.
      *
      * @since  v1.0
-     * @return array
+     * @return ValuePart[]
      */
-    public function getValue() : ?array
+    public function getValue() : array
     {
 
         return $this->valueParts;
     }
 
+    /**
+     * Getter for value of cell - all parts imploded to a string.
+     *
+     * @since  v1.0
+     * @return null|string
+     */
     public function getSimpleValue() : ?string
     {
 
-        if ($this->valueParts === null) {
-            return null;
-        }
-
+        // Lvd.
         $result = '';
 
-        foreach ($this->valueParts AS $part) {
+        // Create result from all parts.
+        foreach ($this->valueParts as $part) {
             $result .= (string) $part->getContentsAsScalar();
         }
 
         return $result;
     }
 
-    public function getNumericValue() // float:integer
+    /**
+     * Return numeric value of Cell if its contents is integer or float.
+     *
+     * @since  v1.0
+     * @throws CellValueWrotype If Cell is not numeric.
+     * @return integer|float
+     */
+    public function getNumericValue()
     {
 
-        if (in_array($this->getValueType(), [ 'integer', 'float', 'double' ]) === true) {
-            return $this->valueParts[0]->getContents();
+        // Check.
+        if (in_array($this->getValueType(), [ 'integer', 'float', 'double' ]) === false) {
+            throw new CellValueWrotype($this);
         }
 
-        // var_dump($this);
-        die('adfdgdgserfw435hg ' . $this->getValueType());
+        return $this->valueParts[0]->getContents();
     }
 
+    /**
+     * Return type of value this call has (string or integer, etc.).
+     *
+     * @since  v1.0
+     * @return string Value from `gettype()` function.
+     */
     public function getValueType() : string
     {
 
@@ -347,7 +365,7 @@ class Cell extends Items
         // Delete old merged cells.
         if ($this->isMerging() === true) {
 
-            // Go through every cell of merge-block and add "blid" cell..
+            // Go through every cell of merge-block and add "blind" cell..
             for ($r = $this->row; $r < ( $this->row + $rows ); ++$r) {
                 for ($c = $this->col; $c < ( $this->col + $cols ); ++$c) {
 
@@ -362,7 +380,7 @@ class Cell extends Items
             }
         }
 
-        // Go through every cell of merge-block and add "blid" cell..
+        // Go through every cell of merge-block and add "blind" cell..
         for ($r = $this->row; $r < ( $this->row + $rows ); ++$r) {
             for ($c = $this->col; $c < ( $this->col + $cols ); ++$c) {
 
@@ -447,7 +465,15 @@ class Cell extends Items
         return $this->style;
     }
 
-    public function setColWidth(float $width) : self
+    /**
+     * Setter for this Cell's Column width.
+     *
+     * @param null|float $width This Cell's Column width.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setColWidth(?float $width = null) : self
     {
 
         $this->getSheet()->setColWidth($this->getCol(), $width);
@@ -455,11 +481,41 @@ class Cell extends Items
         return $this;
     }
 
-    public function setRowHeight(float $height) : self
+    /**
+     * Getter for this Cell's Column width (if set - otherwise null).
+     *
+     * @return null|float
+     */
+    public function getColWidth() : ?float
+    {
+
+        return $this->getSheet()->getColWidth($this->getCol());
+    }
+
+    /**
+     * Setter for this Cell's Row height.
+     *
+     * @param null|float $height This Cell's Row height.
+     *
+     * @since  v1.0
+     * @return self
+     */
+    public function setRowHeight(?float $height = null) : self
     {
 
         $this->getSheet()->setRowHeight($this->getRow(), $height);
 
         return $this;
+    }
+
+    /**
+     * Getter for this Cell's Row height (if set - otherwise null).
+     *
+     * @return null|float
+     */
+    public function getRowHeight() : ?float
+    {
+
+        return $this->getSheet()->getRowHeight($this->getRow());
     }
 }

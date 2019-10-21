@@ -29,7 +29,7 @@ class TableIdOtoranException extends ParamOtoranException
         $this->setCodeName('TableIdOtoranException');
         $this->addInfo('paramName', 'tableId');
         $this->addInfo('range', '>=1');
-        $this->addInfo('actualValue', $id);
+        $this->addInfo('actualValue', (string) $id);
         $this->addInfo('hint', $hint);
 
         // Set cause.

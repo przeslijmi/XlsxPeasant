@@ -14,14 +14,16 @@ class RefWrosynException extends ParamOtoranException
     /**
      * Constructor.
      *
-     * @param array          $possibleAligns Possible values that can be given.
-     * @param string         $givenAlign     Actually given value.
-     * @param Exception|null $cause          Exception that caused the problem.
+     * @param string         $context  During what operation, what is the nature of the error.
+     * @param string         $name     Percise name of the context (sheet name, table name, etc.).
+     * @param integer        $givenRow Id of row.
+     * @param integer        $givenCol Id of column.
+     * @param Exception|null $cause    Exception that caused the problem.
      *
      * @since v1.0
      */
     public function __construct(
-        string $what,
+        string $context,
         string $name,
         int $givenRow,
         int $givenCol,
@@ -34,7 +36,7 @@ class RefWrosynException extends ParamOtoranException
 
         // Define hint.
         $hint  = 'Given REF in Excel is wrong, has to be in (row, col) format with (>=1, >=1) rules. ';
-        $hint .= 'While adding ' . $what . ' named `' . $name . '` REF (' . $givenRow . ', ' . $givenCol . ')';
+        $hint .= 'While adding ' . $context . ' named `' . $name . '` REF (' . $givenRow . ', ' . $givenCol . ')';
         $hint .= ' is given.';
 
         // Define.

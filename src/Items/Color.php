@@ -2,8 +2,12 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
+use Exception;
+use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
+use Przeslijmi\Sexceptions\Exceptions\ParamWrosynException;
 use Przeslijmi\Sivalidator\RegEx;
 use Przeslijmi\XlsxPeasant\Exceptions\ColorFactoryFopException;
+use Przeslijmi\XlsxPeasant\Exceptions\ColorNameOtoset;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Xlsx;
 
@@ -180,6 +184,7 @@ class Color
      * ```
      *
      * @since  v1.0
+     * @throws ColorNameOtoset When color name donoex in dictionary.
      * @throws ColorFactoryFopException When called with wrong parameters.
      * @return Color
      */
@@ -207,7 +212,15 @@ class Color
             if (is_string($pm[0]) === true) {
 
                 // Lvd.
-                $color = self::DICTIONARY[strtoupper($pm[0])];
+                $colorName = strtoupper($pm[0]);
+
+                // Throw.
+                if (isset(self::DICTIONARY[$colorName]) === false) {
+                    throw new ColorNameOtoset($colorName);
+                }
+
+                // Lvd.
+                $color = self::DICTIONARY[$colorName];
 
                 return ( new Color() )->set($color);
             }
@@ -231,7 +244,7 @@ class Color
      * @param string $rgb Hexadecimal value of RGB, eg. AA00ED.
      *
      * @since  v1.0
-     * @throws ParamOtosetException When given RGB hex is wrong.
+     * @throws ParamWrosynException When given RGB hex is wrong.
      * @return self
      */
     public function set(string $rgb) : self
@@ -241,7 +254,7 @@ class Color
         try {
             RegEx::ifMatches($rgb, '/^([0-9A-F]){6}$/');
         } catch (Exception $exc) {
-            throw (new ParamOtosetException('color_set_rgb', $rgb))
+            throw (new ParamWrosynException('color_set_rgb', $rgb))
                 ->addHint('Given color is not proper RGB hexadecimal value, eg. AA00ED.');
         }
 
@@ -263,18 +276,19 @@ class Color
      * @param integer $blue  Value for blue channel.
      *
      * @since  v1.0
-     * @throws ParamOtosetException When given parameters are wrong.
+     * @throws ParamOtoranException When red, blue or green parameters is out of range.
      * @return self
      */
     public function setRgb(int $red, int $green = 0, int $blue = 0) : self
     {
 
         // Test.
-        if ($red < 0 || $red > 255 || $green < 0 || $green > 255 || $blue < 0 || $blue > 255) {
-            $hint  = 'Given color is not proper - all values has to be 0 <= color <= 255. ';
-            $hint .= 'Given are red: ' . $red . ', green: ' . $green . ', blue: ' . $blue . '.';
-            throw (new ParamOtosetException('color_set_red_green_blue', $rgb))
-                ->addHint($hint);
+        if ($red < 0 || $red > 255) {
+            throw new ParamOtoranException('color_set_red', '0 ... 255', (string) $red);
+        } elseif ($green < 0 || $green > 255) {
+            throw new ParamOtoranException('color_set_green', '0 ... 255', (string) $green);
+        } elseif ($blue < 0 || $blue > 255) {
+            throw new ParamOtoranException('color_set_blue', '0 ... 255', (string) $blue);
         }
 
         // Set.

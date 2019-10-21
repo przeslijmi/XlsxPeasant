@@ -137,6 +137,12 @@ class ValuePart
         return $this->contents;
     }
 
+    /**
+     * Getter for contents of this part but only as scalar.
+     *
+     * @since  v1.0
+     * @return string|integer|float
+     */
     public function getContentsAsScalar()
     {
 
