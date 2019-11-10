@@ -115,6 +115,26 @@ class Book extends Items
     }
 
     /**
+     * Checks if there is Sheet by name.
+     *
+     * @param string $name Name of Sheet.
+     *
+     * @since  v1.0
+     * @return boolean
+     */
+    public function hasSheetByName(string $name) : bool
+    {
+
+        foreach ($this->sheets as $sheet) {
+            if ($sheet->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Adds new Table to XLSX.
      *
      * @param string       $name Name of Table.
@@ -214,5 +234,30 @@ class Book extends Items
         }
 
         throw new TableDonoexException($name);
+    }
+
+    /**
+     * Checks if there is Table by name.
+     *
+     * @param string     $name  Name of Table.
+     * @param null|Sheet $sheet Optional Sheet to narrow searching only to Tables from given Sheet.
+     *
+     * @since  v1.0
+     * @return boolean
+     */
+    public function hasTableByName(string $name, ?Sheet $sheet = null) : bool
+    {
+
+        // Lvd.
+        $tables = $this->getTables($sheet);
+
+        // Try to find and return.
+        foreach ($tables as $table) {
+            if ($table->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
