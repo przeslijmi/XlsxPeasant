@@ -6,13 +6,17 @@ use PHPUnit\Framework\TestCase;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
 use Przeslijmi\Sexceptions\Exceptions\ParamWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\CellMergeConflictException;
-use Przeslijmi\XlsxPeasant\Exceptions\CellValueWrotype;
+use Przeslijmi\XlsxPeasant\Exceptions\CellValueWrotypeException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColorFactoryFopException;
-use Przeslijmi\XlsxPeasant\Exceptions\ColorNameOtoset;
+use Przeslijmi\XlsxPeasant\Exceptions\ColorNameOtosetException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\ColumnNameWrosynException;
+use Przeslijmi\XlsxPeasant\Exceptions\FillFactoryFopException;
+use Przeslijmi\XlsxPeasant\Exceptions\FontFactoryFopException;
+use Przeslijmi\XlsxPeasant\Exceptions\HorizontalAlignOtosetException;
+use Przeslijmi\XlsxPeasant\Exceptions\LookingForSpareIdLoopOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\NoColumnsInTableException;
 use Przeslijmi\XlsxPeasant\Exceptions\NoSheetsException;
 use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
@@ -21,13 +25,19 @@ use Przeslijmi\XlsxPeasant\Exceptions\SheetDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\SheetIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\SheetNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\SheetNameWrosynException;
+use Przeslijmi\XlsxPeasant\Exceptions\StyleLockedException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableChangeColumnForbiddenException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableDonoexException;
+use Przeslijmi\XlsxPeasant\Exceptions\VerticalAlignOtosetException;
 use Przeslijmi\XlsxPeasant\Items\Book;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 use Przeslijmi\XlsxPeasant\Items\Color;
 use Przeslijmi\XlsxPeasant\Items\Column;
+use Przeslijmi\XlsxPeasant\Items\Font;
+use Przeslijmi\XlsxPeasant\Items\Fill;
 use Przeslijmi\XlsxPeasant\Items\Sheet;
+use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Items\Table;
 use Przeslijmi\XlsxPeasant\Xlsx;
 
@@ -66,6 +76,8 @@ final class ItemsTest extends TestCase
         $this->assertEquals(1, count($book->getSheets()));
         $this->assertEquals($sheet, $book->getSheet($sheet->getId()));
         $this->assertEquals($sheet, $book->getSheetByName($sheet->getName()));
+        $this->assertTrue($book->hasSheetByName($sheet->getName()));
+        $this->assertFalse($book->hasSheetByName('Nonexisting sheet'));
         $this->assertEquals($book, $sheet->getBook());
         $this->assertEquals(38, strlen($sheet->getUuid()));
 
@@ -154,6 +166,8 @@ final class ItemsTest extends TestCase
         $this->assertEquals('Test', $table->getName());
         $this->assertEquals($table, $sheet->getTables()[0]);
         $this->assertEquals($table, $book->getTableByName('Test'));
+        $this->assertTrue($book->hasTableByName('Test'));
+        $this->assertFalse($book->hasTableByName('Test Wrong'));
         $this->assertTrue($sheet->hasTables());
         $this->assertTrue($book->hasTables());
         $this->assertTrue($book->hasTables($sheet));
@@ -202,6 +216,26 @@ final class ItemsTest extends TestCase
      */
     public function testIfDefiningTablesWorks() : void
     {
+
+        // Lvd.
+        $data = [
+            0 => [
+                'Column2' => 'test for row 0 column 2',
+                'Column3' => 'test for row 0 column 3',
+            ],
+            1 => [
+                'Column2' => 'test for row 1 column 2',
+                'Column3' => 'test for row 1 column 3',
+            ],
+            2 => [
+                'Column2' => 'test for row 2 column 2',
+                'Column3' => 'test for row 2 column 3',
+            ],
+            3 => [
+                'Column2' => 'test for row 3 column 2',
+                'Column3' => 'test for row 3 column 3',
+            ],
+        ];
 
         // Create Xlsx.
         $xlsx  = new Xlsx();
@@ -259,6 +293,81 @@ final class ItemsTest extends TestCase
         try {
             $table->addColumn('Column1');
         } catch (ColumnNameAlrexException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Add data.
+        $table->setData([ $data[0] ]);
+        $table->setData([ $data[1], $data[2] ]);
+        $table->addData([ $data[3] ]);
+
+        // Test.
+        $this->assertEquals([ $data[1], $data[2], $data[3] ], $table->getData());
+    }
+
+    /**
+     * Test if adding Columns to Table with rows works.
+     *
+     * @return void
+     */
+    public function testIfAddingTableColumnsAfterRowsThrows() : void
+    {
+
+        // Create Xlsx.
+        $xlsx  = new Xlsx();
+        $book  = $xlsx->getBook();
+        $sheet = $book->addSheet('Tables Test');
+        $table = $sheet->addTable('Table.Test', 1, 1);
+
+        // Add column and data.
+        $table->addColumn('Column1', 1);
+        $table->addData([
+            [
+                'Column1' => 'test',
+            ],
+            [
+                'Column1' => 'test',
+            ],
+        ]);
+
+        // Try to add new column.
+        try {
+            $table->addColumn('Column2', 2);
+        } catch (TableChangeColumnForbiddenException $exc) {
+            $this->assertTrue(true);
+        }
+    }
+
+    /**
+     * Test if adding data to nonexisting Column throws.
+     *
+     * @return void
+     */
+    public function testIfAddingDataToNonexistingColumnThrows() : void
+    {
+
+        // Create Xlsx.
+        $xlsx  = new Xlsx();
+        $book  = $xlsx->getBook();
+        $sheet = $book->addSheet('Tables Test');
+        $table = $sheet->addTable('Table.Test', 1, 1);
+
+        // Add column.
+        $table->addColumn('Column1', 1);
+
+        // Try to add data to nonexisting column.
+        try {
+            $table->addData([
+                [
+                    'Column1' => 'test',
+                    'Column2' => 'test',
+                ],
+                [
+                    'Column1' => 'test',
+                    'Column2' => 'test',
+                ],
+            ]);
+        } catch (ColumnDonoexException $exc) {
             $this->assertTrue(true);
         }
     }
@@ -331,7 +440,7 @@ final class ItemsTest extends TestCase
         // Try to get numeric value of non-numeric cell.
         try {
             $cell1->getNumericValue();
-        } catch (CellValueWrotype $exc) {
+        } catch (CellValueWrotypeException $exc) {
             $this->assertTrue(true);
         }
     }
@@ -388,7 +497,7 @@ final class ItemsTest extends TestCase
     public function testIfWrongColorThrows1() : void
     {
 
-        $this->expectException(ColorNameOtoset::class);
+        $this->expectException(ColorNameOtosetException::class);
 
         // Create color.
         Color::factory('what?');
@@ -437,5 +546,170 @@ final class ItemsTest extends TestCase
 
         // Create color.
         ( new Color() )->setRgb(255, 255, 1000);
+    }
+
+    public function testIfChangingLockedStyleThrows() : void
+    {
+
+        // Create xlsx.
+        $xlsx = new Xlsx();
+
+        // Create style.
+        $style = new Style($xlsx);
+        $style->setFill(Color::factory(68, 114, 196));
+        $style->setFont(Font::factory('Courier New', '15 black bold italic underline'));
+        $style->setLock(true);
+
+        // Test.
+        $this->expectException(StyleLockedException::class);
+
+        // Change locked style.
+        $style->setFill(Color::factory(0, 0, 0));
+    }
+
+    public function testIfSettingAlignWorks() : void
+    {
+
+        // Create xlsx.
+        $xlsx = new Xlsx();
+
+        // Create style.
+        $style = new Style($xlsx);
+
+        // Define proper aligns.
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('center')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('C')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('c')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('middle')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('M')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'center' ], $style->setValign('m')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'top' ], $style->setValign('top')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'top' ], $style->setValign('T')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'top' ], $style->setValign('t')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'bottom' ], $style->setValign('bottom')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'bottom' ], $style->setValign('B')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => 'bottom' ], $style->setValign('b')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => null ], $style->setValign(null)->getAlign());
+
+        // Define proper aligns.
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('center')->getAlign());
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('C')->getAlign());
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('c')->getAlign());
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('middle')->getAlign());
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('M')->getAlign());
+        $this->assertEquals([ 'h' => 'center', 'v' => null ], $style->setHalign('m')->getAlign());
+        $this->assertEquals([ 'h' => 'left', 'v' => null ], $style->setHalign('left')->getAlign());
+        $this->assertEquals([ 'h' => 'left', 'v' => null ], $style->setHalign('L')->getAlign());
+        $this->assertEquals([ 'h' => 'left', 'v' => null ], $style->setHalign('l')->getAlign());
+        $this->assertEquals([ 'h' => 'right', 'v' => null ], $style->setHalign('right')->getAlign());
+        $this->assertEquals([ 'h' => 'right', 'v' => null ], $style->setHalign('R')->getAlign());
+        $this->assertEquals([ 'h' => 'right', 'v' => null ], $style->setHalign('r')->getAlign());
+        $this->assertEquals([ 'h' => null, 'v' => null ], $style->setHalign(null)->getAlign());
+
+        // Define inproper aligns.
+        try {
+            $style->setValign('wrong');
+        } catch (VerticalAlignOtosetException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Define inproper aligns.
+        try {
+            $style->setHalign('wrong');
+        } catch (HorizontalAlignOtosetException $exc) {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testIfFontFactoryWorks() : void
+    {
+
+        // Create font - first way.
+        $font1 = Font::factory('Arial', '15 orange bold italic underline');
+
+        // Test.
+        $this->assertEquals('Arial', $font1->getName());
+        $this->assertEquals(15, $font1->getSize());
+        $this->assertEquals(Color::factory('orange')->get(), $font1->getColor()->get());
+        $this->assertTrue($font1->isBold());
+        $this->assertTrue($font1->isItalic());
+        $this->assertTrue($font1->isUnderline());
+
+        // Create font - second way.
+        $font2 = Font::factory($font1);
+
+        // Test.
+        $this->assertEquals($font1, $font2);
+
+        // Create font - thrid way.
+        $font3 = Font::factory('Times');
+
+        // Test.
+        $this->assertEquals('Times', $font3->getName());
+        $this->assertFalse($font3->hasSize());
+        $this->assertFalse($font3->hasColor());
+        $this->assertFalse($font3->hasBold());
+        $this->assertFalse($font3->hasItalic());
+        $this->assertFalse($font3->hasUnderline());
+
+        // Fourth way - wrong way.
+        try {
+            Font::factory('Times', '13', 'bold');
+        } catch (FontFactoryFopException $exc) {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testIfFillFactoryWorks() : void
+    {
+
+        // Create font - first way.
+        $fill1 = Fill::factory('orange');
+
+        // Test.
+        $this->assertEquals(Color::factory('orange')->get(), $fill1->getColor()->get());
+
+        // Create fill - second way.
+        $fill2 = Fill::factory($fill1);
+
+        // Test.
+        $this->assertEquals($fill1, $fill2);
+
+        // Third way - wrong way.
+        try {
+            Fill::factory('green', 'light');
+        } catch (FillFactoryFopException $exc) {
+            $this->assertTrue(true);
+        }
+    }
+
+    public function testIfFindingSpareIdThrowsAfterOtoranLoop() : void
+    {
+
+        // Create xlsx.
+        $xlsx = new Xlsx();
+        $book  = $xlsx->getBook();
+        $sheet = $book->addSheet('Tables Test');
+        $collection = [];
+
+
+        $class = new class() {
+            public function setId($id) {
+                $this->id = $id;
+            }
+            public function getId() {
+                return $this->id;
+            }
+        };
+
+        for ($i = 1; $i <= 20; ++$i) {
+
+            $item = new $class;
+            $item->setId($i);
+            $collection[] = $item;
+        }
+
+        $this->expectException(LookingForSpareIdLoopOtoranException::class);
+        $sheet->findSpareId($collection, 1, 10);
     }
 }

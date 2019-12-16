@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\FileAlrexException;
+use Throwable;
 
 /**
  * Target file URI is somehow corrupted.
@@ -15,11 +15,11 @@ class TargetFileWrosynException extends FileAlrexException
      * Constructor.
      *
      * @param string         $fileUri Uri of file.
-     * @param Exception|null $cause   Exception that caused problem.
+     * @param Throwable|null $cause   Throwable that caused problem.
      *
      * @since v1.0
      */
-    public function __construct(string $fileUri, ?Exception $cause = null)
+    public function __construct(string $fileUri, ?Throwable $cause = null)
     {
 
         // Lvd.

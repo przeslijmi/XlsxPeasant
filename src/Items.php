@@ -2,6 +2,7 @@
 
 namespace Przeslijmi\XlsxPeasant;
 
+use Przeslijmi\XlsxPeasant\Exceptions\LookingForSpareIdLoopOtoranException;
 use Przeslijmi\XlsxPeasant\Xlsx;
 use Przeslijmi\XlsxPeasant\Xmls;
 
@@ -48,12 +49,13 @@ class Items
      *
      * @param Items[] $arrayOfItems Array of items.
      * @param integer $start        Id to be returned when Items[] is empty.
+     * @param integer $limit        Optional, 10000. When to break searching.
      *
      * @since  v1.0
-     * @throws LookingForSpareIdLoopOtoranException When more 10000 tryes failed.
+     * @throws LookingForSpareIdLoopOtoranException When more than $limit tryes failed.
      * @return integer
      */
-    protected function findSpareId(array $arrayOfItems, int $start = 1) : int
+    public function findSpareId(array $arrayOfItems, int $start = 1, int $limit = 10000) : int
     {
 
         // Shortcut.
@@ -78,8 +80,8 @@ class Items
 
             return $i;
 
-        } while ($i < 10000);
+        } while ($i < $limit);
 
-        throw new LookingForSpareIdLoopOtoranException();
+        throw new LookingForSpareIdLoopOtoranException($limit);
     }
 }

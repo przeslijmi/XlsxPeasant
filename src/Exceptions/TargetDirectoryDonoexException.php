@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Throwable;
 use Przeslijmi\Sexceptions\Exceptions\DirDonoexException;
+use Throwable;
 
 /**
  * Target directory not exists - have to be created.

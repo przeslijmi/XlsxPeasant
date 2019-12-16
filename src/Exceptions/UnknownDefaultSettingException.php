@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtosetException;
+use Throwable;
 
 /**
  * Generation ox XLSx file has failed.
@@ -16,11 +16,11 @@ class UnknownDefaultSettingException extends ParamOtosetException
      *
      * @param string         $actualValue Actually given value.
      * @param array          $range       Possible values that can be given.
-     * @param Exception|null $cause       Exception that caused the problem.
+     * @param Throwable|null $cause       Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(string $actualValue, array $range, ?Exception $cause = null)
+    public function __construct(string $actualValue, array $range, ?Throwable $cause = null)
     {
 
         // Lvd.

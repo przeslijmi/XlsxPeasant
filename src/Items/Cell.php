@@ -2,7 +2,7 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
-use Przeslijmi\XlsxPeasant\Exceptions\CellValueWrotype;
+use Przeslijmi\XlsxPeasant\Exceptions\CellValueWrotypeException;
 use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\SetValueToMergedCellConflictException;
 use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
@@ -198,7 +198,7 @@ class Cell extends Items
      * Return numeric value of Cell if its contents is integer or float.
      *
      * @since  v1.0
-     * @throws CellValueWrotype If Cell is not numeric.
+     * @throws CellValueWrotypeException If Cell is not numeric.
      * @return integer|float
      */
     public function getNumericValue()
@@ -206,7 +206,7 @@ class Cell extends Items
 
         // Check.
         if (in_array($this->getValueType(), [ 'integer', 'float', 'double' ]) === false) {
-            throw new CellValueWrotype($this);
+            throw new CellValueWrotypeException($this);
         }
 
         return $this->valueParts[0]->getContents();

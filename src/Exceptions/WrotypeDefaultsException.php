@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamWrotypeException;
+use Throwable;
 
 /**
  * While setting defaults wront type of value has been used for particular setting.
@@ -17,7 +17,7 @@ class WrotypeDefaultsException extends ParamWrotypeException
      * @param string         $defaultsName Name of the parameter with error.
      * @param string         $typeExpected What type should be given.
      * @param string         $actualType   Actually given type.
-     * @param Exception|null $cause        Exception that caused the problem.
+     * @param Throwable|null $cause        Throwable that caused the problem.
      *
      * @since v1.0
      */
@@ -25,7 +25,7 @@ class WrotypeDefaultsException extends ParamWrotypeException
         string $defaultsName,
         string $typeExpected,
         string $actualType,
-        ?Exception $cause = null
+        ?Throwable $cause = null
     ) {
 
         // Lvd.

@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Throwable;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
+use Throwable;
 
 /**
  * Generation ox XLSx file has failed.

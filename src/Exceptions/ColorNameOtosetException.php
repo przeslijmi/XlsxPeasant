@@ -2,14 +2,13 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ValueOtosetException;
 use Przeslijmi\XlsxPeasant\Items\Color;
 
 /**
  * Color name is unknown (out of set).
  */
-class ColorNameOtoset extends ValueOtosetException
+class ColorNameOtosetException extends ValueOtosetException
 {
 
     /**

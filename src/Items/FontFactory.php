@@ -2,6 +2,7 @@
 
 namespace Przeslijmi\XlsxPeasant\Items;
 
+use Przeslijmi\XlsxPeasant\Exceptions\FontFactoryFopException;
 use Przeslijmi\XlsxPeasant\Items\Font;
 
 /**
@@ -23,7 +24,7 @@ class FontFactory
      * @param null|string      $param2 Optional Font variant definition.
      *
      * @since  v1.0
-     * @throws FontFactoryFop When called with wrong parameters.
+     * @throws FontFactoryFopException When called with wrong parameters.
      * @return Font
      *
      * @phpcs:disable Zend.NamingConventions.ValidVariableName.ContainsNumbers
@@ -46,8 +47,12 @@ class FontFactory
 
             // Given 1 param - a string - assuming this is font name.
             if (is_string($pm[0]) === true) {
+
+                // Define.
                 $font = new Font();
                 $font->setName($pm[0]);
+
+                return $font;
             }
         }
 
@@ -56,7 +61,7 @@ class FontFactory
             return self::makeVariant($pm[0], $pm[1]);
         }
 
-        throw new FontFactoryFop($count);
+        throw new FontFactoryFopException($count);
     }
 
     /**

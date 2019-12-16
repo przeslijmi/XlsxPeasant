@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Throwable;
 
 /**
  * Font factory can work only on one or two params. Another combination is given.
@@ -15,11 +15,11 @@ class FontFactoryFopException extends MethodFopException
      * Constructor.
      *
      * @param integer        $paramCount Number of parameters given to factory.
-     * @param Exception|null $cause      Exception that caused the problem.
+     * @param Throwable|null $cause      Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(int $paramCount, ?Exception $cause = null)
+    public function __construct(int $paramCount, ?Throwable $cause = null)
     {
 
         // Lvd.
@@ -27,7 +27,7 @@ class FontFactoryFopException extends MethodFopException
 
         // Define.
         $this->setCodeName('FontFactoryFopException');
-        $this->addInfo('paramCount', $paramCount);
+        $this->addInfo('paramCount', (string) $paramCount);
         $this->addInfo('hint', $hint);
 
         // Set cause.

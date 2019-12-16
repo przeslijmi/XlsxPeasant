@@ -140,6 +140,9 @@ class Style extends Items
     public function setFill() : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         // Save fill.
         $this->fill = Fill::factory(...func_get_args());
 
@@ -181,6 +184,9 @@ class Style extends Items
     public function setFont(?Font $font = null) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         // Creates Font object (if needed).
         if ($font === null) {
             $font = new Font($this->xlsx);
@@ -215,6 +221,9 @@ class Style extends Items
     public function setFontName(string $name) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         // Create font if there is no present.
         if ($this->font === null) {
             $this->setFont();
@@ -237,6 +246,9 @@ class Style extends Items
     public function setFontSize(int $size) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         // Create font if there is no present.
         if ($this->font === null) {
             $this->setFont();
@@ -256,6 +268,9 @@ class Style extends Items
      */
     public function setFontColor() : self
     {
+
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
 
         // Create font if there is no present.
         if ($this->font === null) {
@@ -305,6 +320,9 @@ class Style extends Items
     public function setAlign(string $align) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         // RegEx test.
         RegEx::ifMatches($align, '/^(L|C|M|R){1}(T|C|M|B)?$/');
 
@@ -335,8 +353,9 @@ class Style extends Items
         $this->testLock();
 
         // Short way.
-        if (empty(trim($align)) === true) {
+        if (empty(trim((string) $align)) === true) {
             $this->hAlign = null;
+            return $this;
         }
 
         // Lvd.
@@ -355,7 +374,7 @@ class Style extends Items
             $this->hAlign = 'right';
         } else {
 
-            $allPossible = array_merge($possible['center'], $possible['top'], $possible['bottom']);
+            $allPossible = array_merge($possible['center'], $possible['left'], $possible['right']);
             throw new HorizontalAlignOtosetException($allPossible, $align);
         }
 
@@ -371,15 +390,16 @@ class Style extends Items
      * @throws VerticalAlignOtosetException On wrong vertical align.
      * @return self
      */
-    public function setValign(string $align) : self
+    public function setValign(?string $align = null) : self
     {
 
         // Test if Style is locked (throw if it is).
         $this->testLock();
 
         // Short way.
-        if (empty(trim($align)) === true) {
+        if (empty(trim((string) $align)) === true) {
             $this->vAlign = null;
+            return $this;
         }
 
         // Lvd.
@@ -446,6 +466,9 @@ class Style extends Items
     public function setWrapText(bool $wrapText) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         $this->wrapText = $wrapText;
 
         return $this;
@@ -486,6 +509,9 @@ class Style extends Items
     public function setFormat(Format $format) : self
     {
 
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
+
         $this->format = $format;
 
         return $this;
@@ -525,6 +551,9 @@ class Style extends Items
      */
     public function setConditionalFormat(ConditionalFormat $conditionalFormat) : self
     {
+
+        // Test if Style is locked (throw if it is).
+        $this->testLock();
 
         $this->conditionalFormat = $conditionalFormat;
 

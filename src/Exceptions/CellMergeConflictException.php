@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Throwable;
 
 /**
  * User is trying to merge over cells that are already used/defined.
@@ -15,11 +15,11 @@ class CellMergeConflictException extends MethodFopException
      * Constructor.
      *
      * @param string         $cellRef Refs of Cell.
-     * @param Exception|null $cause   Exception that caused the problem.
+     * @param Throwable|null $cause   Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(string $cellRef, ?Exception $cause = null)
+    public function __construct(string $cellRef, ?Throwable $cause = null)
     {
 
         // Lvd.

@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
+use Throwable;
 
 /**
  * Sheet ID is out of range (below 1).
@@ -15,11 +15,11 @@ class SheetIdOtoranException extends ParamOtoranException
      * Constructor.
      *
      * @param integer        $id    Given wrong id.
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param Throwable|null $cause Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(int $id, ?Exception $cause = null)
+    public function __construct(int $id, ?Throwable $cause = null)
     {
 
         // Lvd.

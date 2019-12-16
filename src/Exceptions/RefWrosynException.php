@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
+use Throwable;
 
 /**
  * Parameter's given value is out of set (enum - not out of range [i .... j]).
@@ -18,7 +18,7 @@ class RefWrosynException extends ParamOtoranException
      * @param string         $name     Percise name of the context (sheet name, table name, etc.).
      * @param integer        $givenRow Id of row.
      * @param integer        $givenCol Id of column.
-     * @param Exception|null $cause    Exception that caused the problem.
+     * @param Throwable|null $cause    Throwable that caused the problem.
      *
      * @since v1.0
      */
@@ -27,7 +27,7 @@ class RefWrosynException extends ParamOtoranException
         string $name,
         int $givenRow,
         int $givenCol,
-        ?Exception $cause = null
+        ?Throwable $cause = null
     ) {
 
         // Lvd.

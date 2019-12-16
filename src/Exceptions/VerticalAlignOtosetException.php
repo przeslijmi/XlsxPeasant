@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtosetException;
+use Throwable;
 
 /**
  * Parameter's given value is out of set (enum - not out of range [i .... j]).
@@ -16,11 +16,11 @@ class VerticalAlignOtosetException extends ParamOtosetException
      *
      * @param array          $possibleAligns Possible values that can be given.
      * @param string         $givenAlign     Actually given value.
-     * @param Exception|null $cause          Exception that caused the problem.
+     * @param Throwable|null $cause          Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(array $possibleAligns, string $givenAlign, ?Exception $cause = null)
+    public function __construct(array $possibleAligns, string $givenAlign, ?Throwable $cause = null)
     {
 
         // Define.

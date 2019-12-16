@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ParamWrosynException;
+use Throwable;
 
 /**
  * Generation ox XLSx file has failed.
@@ -15,11 +15,11 @@ class TableNameWrosynException extends ParamWrosynException
      * Constructor.
      *
      * @param string         $name  Name of table that is wrong.
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param Throwable|null $cause Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(string $name, ?Exception $cause = null)
+    public function __construct(string $name, ?Throwable $cause = null)
     {
 
         // Lvd.

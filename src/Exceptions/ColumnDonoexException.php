@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ObjectDonoexException;
+use Throwable;
 
 /**
  * Can't find Column by given ID or name.
@@ -16,11 +16,11 @@ class ColumnDonoexException extends ObjectDonoexException
      *
      * @param string         $tableName Name of Table in which Column is searched for and missing.
      * @param integer|string $idOrName  Id or name of Column.
-     * @param Exception|null $cause     Exception that caused the problem.
+     * @param Throwable|null $cause     Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(string $tableName, $idOrName, ?Exception $cause = null)
+    public function __construct(string $tableName, $idOrName, ?Throwable $cause = null)
     {
 
         // Lvd.

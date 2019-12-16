@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ClassDonoexException;
+use Throwable;
 
 /**
  * No ZipArchive class is present - unable to do the job.
@@ -14,11 +14,11 @@ class NoZipArchiveException extends ClassDonoexException
     /**
      * Constructor.
      *
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param Throwable|null $cause Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(?Exception $cause = null)
+    public function __construct(?Throwable $cause = null)
     {
 
         // Lvd.

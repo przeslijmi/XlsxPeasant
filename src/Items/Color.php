@@ -7,7 +7,7 @@ use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
 use Przeslijmi\Sexceptions\Exceptions\ParamWrosynException;
 use Przeslijmi\Sivalidator\RegEx;
 use Przeslijmi\XlsxPeasant\Exceptions\ColorFactoryFopException;
-use Przeslijmi\XlsxPeasant\Exceptions\ColorNameOtoset;
+use Przeslijmi\XlsxPeasant\Exceptions\ColorNameOtosetException;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Xlsx;
 
@@ -184,7 +184,7 @@ class Color
      * ```
      *
      * @since  v1.0
-     * @throws ColorNameOtoset When color name donoex in dictionary.
+     * @throws ColorNameOtosetException When color name donoex in dictionary.
      * @throws ColorFactoryFopException When called with wrong parameters.
      * @return Color
      */
@@ -216,7 +216,7 @@ class Color
 
                 // Throw.
                 if (isset(self::DICTIONARY[$colorName]) === false) {
-                    throw new ColorNameOtoset($colorName);
+                    throw new ColorNameOtosetException($colorName);
                 }
 
                 // Lvd.

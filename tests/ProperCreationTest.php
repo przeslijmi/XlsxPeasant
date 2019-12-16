@@ -326,33 +326,74 @@ final class ProperCreationTest extends TestCase
                 ->setFill(Color::factory(68, 114, 196))
                 ->setFont(Font::factory('Courier New', '15 black bold italic underline'))
         );
-        $sheet->getCell(21, 1)->setValue('Courier New, 15, black, bold, italic, underline; Fill 68;114;196.');
+        $sheet->getCell(21, 1)->setValue('Courier New, 15, black, bold, italic, underline; Fill 68:114:196.');
+        $xlsx->useStyle(
+            ( new Style($xlsx) )
+                ->setFontName('Courier New')
+        );
+        $sheet->getCell(22, 1)->setValue('Courier New');
+        $xlsx->useStyle(
+            ( new Style($xlsx) )
+                ->setFontSize(19)
+        );
+        $sheet->getCell(22, 2)->setValue('19');
+        $xlsx->useStyle(
+            ( new Style($xlsx) )
+                ->setFontColor(Color::factory('green'))
+        );
+        $sheet->getCell(22, 3)->setValue('green');
 
         // Show use of Format.
         $xlsx->useDefaults();
         $xlsx->useFill(new Fill(Color::factory('DDDDDD')));
-        $sheet->getCell(23, 1)->setValue('Formats');
+        $sheet->getCell(24, 1)->setValue('Formats');
         $xlsx->useFill(null);
-        $sheet->getCell(24, 1)->setValue('date:');
-        $sheet->getCell(25, 1)->setValue('unit:');
-        $sheet->getCell(26, 1)->setValue('currency:');
-        $sheet->getCell(27, 1)->setValue('percentage:');
-        $sheet->getCell(28, 1)->setValue('hidden:');
+        $sheet->getCell(25, 1)->setValue('date:');
+        $sheet->getCell(26, 1)->setValue('unit:');
+        $sheet->getCell(27, 1)->setValue('currency:');
+        $sheet->getCell(28, 1)->setValue('percentage:');
+        $sheet->getCell(29, 1)->setValue('hidden:');
         $xlsx->useFormat(new DateFormat());
-        $sheet->getCell(24, 2)->setValue(43466);
+        $sheet->getCell(25, 2)->setValue(43466);
         $xlsx->useFormat(new NumFormat(0, 0, 'szt.'));
-        $sheet->getCell(25, 2)->setValue(10);
+        $sheet->getCell(26, 2)->setValue(10);
         $xlsx->useFormat(new NumFormat(2, 0, 'zł'));
-        $sheet->getCell(26, 2)->setValue(19.99);
+        $sheet->getCell(27, 2)->setValue(19.99);
         $xlsx->useFormat(new NumFormat(2, 0, '%'));
-        $sheet->getCell(27, 2)->setValue(34.78);
+        $sheet->getCell(28, 2)->setValue(34.78);
         $xlsx->useFormat(new HiddenFormat());
-        $sheet->getCell(28, 2)->setValue('hidden');
+        $sheet->getCell(29, 2)->setValue('hidden');
         $xlsx->useFormat(null);
+
+        // Show use of multistyled cells.
+        $xlsx->useDefaults();
+        $xlsx->useFill(new Fill(Color::factory('DDDDDD')));
+        $sheet->getCell(31, 1)->setValue('Multipart cells');
+        $xlsx->useFill(null);
+        $sheet->getCell(32, 1)->setValueParts([
+            [ 'default ' ],
+            [ 'and now bold in one cell', Font::factory(null, 'bold') ]
+        ]);
+        $xlsx->useFont(Font::factory(null, '10'));
+        $sheet->getCell(33, 1)->setValueParts([
+            [ 'small ' ],
+            [ 'and now totaly different in one cell', Font::factory('Arial', 'orange 20 bold italic underline') ]
+        ]);
+        $xlsx->useFont(null);
+        $xlsx->useFont(Font::factory(null, 'italic'));
+        $sheet->getCell(34, 1)->setValueParts([
+            [ 'italic ' ],
+            [ 'and now also bold in one cell', Font::factory(null, 'bold') ]
+        ]);
+        $sheet->getCell(35, 1)->setValueParts([
+            [ 'two parts ' ],
+            [ 'no font diff' ]
+        ]);
+        $xlsx->useFont(null);
 
         // Show use of standard settings.
         $xlsx->useDefaults();
-        $sheet->getCell(30, 1)->setValue('This Cell is as defaults show.');
+        $sheet->getCell(37, 1)->setValue('This Cell is as defaults show.');
 
         // Generate.
         $xlsx->generate($uri, true);
@@ -559,7 +600,7 @@ final class ProperCreationTest extends TestCase
         // Add table 2.
         $table2 = $sheet->addTable('Dep.Phones', 2, 8);
         $table2->addColumns([ 'department', 'phone' ]);
-        $table2->addData($data2);
+        $table2->setData($data2);
 
         // Generate.
         $xlsx->generate($uri, true);

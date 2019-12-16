@@ -2,8 +2,8 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Throwable;
 
 /**
  * User is trying to add Sheet with name that is already taken in this Book.
@@ -15,11 +15,11 @@ class SheetNameAlrexException extends MethodFopException
      * Constructor.
      *
      * @param string         $name  Name of Sheet that is duplicated.
-     * @param Exception|null $cause Exception that caused the problem.
+     * @param Throwable|null $cause Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct(string $name, ?Exception $cause = null)
+    public function __construct(string $name, ?Throwable $cause = null)
     {
 
         // Lvd.

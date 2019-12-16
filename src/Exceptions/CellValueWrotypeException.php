@@ -2,14 +2,13 @@
 
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ValueWrotypeException;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 
 /**
  * Cell value is in wrong type to perform operation.
  */
-class CellValueWrotype extends ValueWrotypeException
+class CellValueWrotypeException extends ValueWrotypeException
 {
 
     /**
