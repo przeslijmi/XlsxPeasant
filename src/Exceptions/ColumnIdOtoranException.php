@@ -28,7 +28,6 @@ class ColumnIdOtoranException extends ParamOtoranException
         $hint .= 'Has to be >=1, `' . $id . '` given.';
 
         // Define.
-        $this->setCodeName('ColumnIdOtoranException');
         $this->addInfo('paramName', 'columnId');
         $this->addInfo('range', '>=1');
         $this->addInfo('actualValue', (string) $id);

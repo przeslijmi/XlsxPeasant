@@ -66,7 +66,7 @@ class XlWorkbook extends XmlFile
         // If node for this sheet number does not exists.
         if ($node === null) {
             throw (new ObjectDonoexException('XlsxSheet'))
-                ->addInfo('number', $number)
+                ->addInfo('number', (string) $number)
                 ->addObjectInfos($this->getReader());
         }
 

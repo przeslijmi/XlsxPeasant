@@ -2,8 +2,9 @@
 
 namespace Przeslijmi\XlsxPeasant\Reader;
 
-use Przeslijmi\XlsxPeasant\Reader;
 use DOMDocument;
+use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Przeslijmi\XlsxPeasant\Reader;
 
 /**
  * Parent object for each XML inside read XLSX file.
@@ -76,16 +77,10 @@ abstract class XmlFile
      * @param string $fileUri Uri of XML file.
      *
      * @since  v1.0
-     * @throws FileDonoexException When file does not exists.
      * @return self
      */
-    public function setFileUri(string $fileUri) : self
+    private function setFileUri(string $fileUri) : self
     {
-
-        // Throw.
-        if (file_exists($fileUri) === false) {
-            throw new FileDonoexException('XmlFileAsPartOfXlsxArchive', $fileUri);
-        }
 
         // Save.
         $this->fileUri = $fileUri;
@@ -126,13 +121,25 @@ abstract class XmlFile
      * @param string $relsFileUri URI of rels file inside unpacked XLSX file.
      *
      * @version v1.0
+     * @throws  MethodFopException When creating DOM from given file fails.
      * @return  self
+     *
+     * @phpcs:disable Generic.PHP.NoSilencedErrors
      */
     public function addRels(string $relsFileUri) : self
     {
 
+        // Create rels.
         $this->rels = new DOMDocument();
-        $this->rels->loadXML(file_get_contents($relsFileUri));
+
+        // Read them in.
+        $success = @$this->rels->loadXML(file_get_contents($relsFileUri));
+
+        // Throw.
+        if (empty($success) === true) {
+            throw (new MethodFopException('creatingDomFromXmlRels'))
+                ->addWarning();
+        }
 
         return $this;
     }

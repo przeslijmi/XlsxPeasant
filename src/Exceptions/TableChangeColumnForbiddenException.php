@@ -27,7 +27,6 @@ class TableChangeColumnForbiddenException extends MethodFopException
         $hint .= 'Delete data, add/change colums, insert data.';
 
         // Define.
-        $this->setCodeName('TableChangeColumnForbiddenException');
         $this->addInfo('tableName', $name);
         $this->addInfo('hint', $hint);
 

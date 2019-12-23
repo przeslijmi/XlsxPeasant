@@ -29,7 +29,6 @@ class ColumnNameAlrexException extends MethodFopException
         $hint .= 'Name of Columns has to be unique in one Table.';
 
         // Define.
-        $this->setCodeName('ColumnNameAlrexException');
         $this->addInfo('tableName', $tableName);
         $this->addInfo('columnName', $columnName);
         $this->addInfo('hint', $hint);

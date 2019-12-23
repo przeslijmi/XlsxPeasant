@@ -33,7 +33,6 @@ class WrotypeDefaultsException extends ParamWrotypeException
         $hint .= 'Expected type is `' . $typeExpected . '`.';
 
         // Define.
-        $this->setCodeName('WrotypeDefaultsException');
         $this->addInfo('paramName', $defaultsName);
         $this->addInfo('typeExpected', $typeExpected);
         $this->addInfo('actualType', $actualType);

@@ -26,7 +26,6 @@ class TableDonoexException extends ObjectDonoexException
         $hint = 'Trying to get Table by name - but Table with this name does not exists.';
 
         // Define.
-        $this->setCodeName('TableDonoexException');
         $this->addInfo('tableName', $name);
         $this->addInfo('context', 'GetXlsxTableByName');
         $this->addInfo('hint', $hint);

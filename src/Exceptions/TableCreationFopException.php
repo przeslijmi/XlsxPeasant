@@ -26,7 +26,6 @@ class TableCreationFopException extends MethodFopException
         $hint = 'Creation of Table `' . $name . '` failed. See below for details.';
 
         // Define.
-        $this->setCodeName('TableCreationFopException');
         $this->addInfo('name', $name);
         $this->addInfo('hint', $hint);
 

@@ -27,7 +27,6 @@ class CellMergeConflictException extends MethodFopException
         $hint .= 'Delete used Cell or move merge.';
 
         // Define.
-        $this->setCodeName('CellMergeConflictException');
         $this->addInfo('cellRef', $cellRef);
         $this->addInfo('hint', $hint);
 

@@ -27,7 +27,6 @@ class TableNameAlrexException extends MethodFopException
         $hint .= 'Name of tables are unique in the entire XLSX.';
 
         // Define.
-        $this->setCodeName('TableNameAlrexException');
         $this->addInfo('name', $name);
         $this->addInfo('hint', $hint);
 

@@ -2,17 +2,18 @@
 
 namespace Przeslijmi\XlsxPeasant;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 use Przeslijmi\Sexceptions\Exceptions\DirIsEmptyException;
 use Przeslijmi\Sexceptions\Exceptions\FileDonoexException;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Przeslijmi\Sexceptions\Exceptions\ObjectDonoexException;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlSharedStrings;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlTable;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlWorkbook;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlWorksheet;
 use Przeslijmi\XlsxPeasant\Xlsx;
+use Throwable;
 use XMLReader;
 use ZipArchive;
 
@@ -116,8 +117,8 @@ class Reader
             $this->xlsxFileUri = $xlsxFileUri;
             $this->unzipUri    = sys_get_temp_dir() . '\\_stolem_xlsxReader\\' . rand(10000, 99999) . '\\';
 
-        } catch (Exception $exc) {
-            throw new ClassFopException('creatingXlsxReader', $exc);
+        } catch (Throwable $thr) {
+            throw new ClassFopException('creatingXlsxReader', $thr);
         }
     }
 
@@ -134,16 +135,16 @@ class Reader
         // Call to unpack ZIP file (makes `$this->allFiles` nonempty).
         try {
             $this->unpack();
-        } catch (Exception $exc) {
-            throw (new ClassFopException('unpackingXlsxSheet', $exc))
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('unpackingXlsxSheet', $thr))
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
 
         // Call to open all unpacked XML files and create readeable objects from them.
         try {
             $this->readXmlFilesIntoObjects();
-        } catch (Exception $exc) {
-            throw (new ClassFopException('readingXmlsFromXlxsFileIntoObjects', $exc))
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('readingXmlsFromXlxsFileIntoObjects', $thr))
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
 
@@ -156,8 +157,8 @@ class Reader
             // Fill up.
             $this->createXlsx();
 
-        } catch (Exception $exc) {
-            throw (new ClassFopException('creatingXlsxFromReader', $exc))
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('creatingXlsxFromReader', $thr))
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
 
@@ -254,20 +255,13 @@ class Reader
         $zip = new ZipArchive();
 
         // Try to open file.
-        if (false === @$zip->open($this->xlsxFileUri)) {
-            throw (new MethodFopException('openZipArchive'))
-                ->addWarning()->addInfo('xlsxFileUri', $this->xlsxFileUri);
-        }
+        $open    = @$zip->open($this->xlsxFileUri);
+        $extract = @$zip->extractTo($this->unzipUri);
+        $close   = @$zip->close();
 
-        // Try to extract data.
-        if (false === @$zip->extractTo($this->unzipUri)) {
-            throw (new MethodFopException('extractZipArchive'))
-                ->addWarning()->addInfo('xlsxFileUri', $this->xlsxFileUri);
-        }
-
-        // Try to close zip archive data.
-        if (false === $zip->close()) {
-            throw (new MethodFopException('closingZipArchive'))
+        // Throw if needed.
+        if (empty(min($open, $extract, $close)) === true) {
+            throw (new MethodFopException('openExtractOrClosingZipArchiveFailed'))
                 ->addWarning()->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
 
@@ -351,11 +345,14 @@ class Reader
             $table->setData($tableXml->getData());
 
             // Save which cells has been read by this table.
-            $cellsReadByTables = array_merge($cellsReadByTables, $tableXml->getCellsRead());
+            $cellsReadByTables[$sheet->getId()] = array_merge(
+                ( $cellsReadByTables[$sheet->getId()] ?? [] ),
+                $tableXml->getCellsRead()
+            );
         }//end foreach
 
         // Read cells from sheets - but only those that were not read by tables already.
-        // List of these is stored in $this->cellsReadByTables.
+        // List of these is stored in $this->cellsReadByTables[for_sheet_id].
         foreach ($this->getXlWorksheets() as $sheetXml) {
 
             // Lvd.
@@ -372,7 +369,7 @@ class Reader
                 for ($c = $dims['firstCell'][1]; $c <= $dims['lastCell'][1]; ++$c) {
 
                     // If this was already read - ignore it.
-                    if (in_array([ $r, $c ], $cellsReadByTables) === true) {
+                    if (in_array([ $r, $c ], ( $cellsReadByTables[$sheet->getId()] ?? [] )) === true) {
                         continue;
                     }
 
@@ -455,17 +452,10 @@ class Reader
      * @param string $fileUri File URI of XML SharedStrings file unpacked from XLSX.
      *
      * @since  v1.0
-     * @throws MethodFopException When there already is SharedString defined.
      * @return self
      */
     private function setXlSharedStrings(string $fileUri) : self
     {
-
-        // Only one SharedStrings per XLSx file is allowed.
-        if ($this->xlSharedStrings !== null) {
-            throw (new MethodFopException('moreThenOneSharedStringsInXlsxFile'))
-                ->addInfo('xlsxFileUri', $this->xlsxFileUri);
-        }
 
         // Save.
         $this->xlSharedStrings = new XlSharedStrings($fileUri, $this);
@@ -479,17 +469,10 @@ class Reader
      * @param string $fileUri File URI of XML Workbook file unpacked from XLSX.
      *
      * @since  v1.0
-     * @throws MethodFopException If there already is Workbook.
      * @return self
      */
     private function setXlWorkbook(string $fileUri) : self
     {
-
-        // Only one Workbook per XLSx file is allowed.
-        if ($this->xlWorkbook !== null) {
-            throw (new MethodFopException('moreThenOneWorkbookInXlsxFile'))
-                ->addInfo('xlsxFileUri', $this->xlsxFileUri);
-        }
 
         // Save.
         $this->xlWorkbook = new XlWorkbook($fileUri, $this);

@@ -66,6 +66,9 @@ final class ToolsTest extends TestCase
     /**
      * Test if convertion from number to ref and opposit work.
      *
+     * @param integer $number Number to ba changed to letter (eg. 2).
+     * @param string  $ref    Letter corresponding with this number (eg. B) - ie. expected.
+     *
      * @return void
      *
      * @dataProvider vectorConvertionTestsDataProvider
@@ -81,6 +84,10 @@ final class ToolsTest extends TestCase
     /**
      * Test if confertion of cell refs are working.
      *
+     * @param integer $col Id of column of cell (starting from 1).
+     * @param integer $row Id of row of cell (starting from 1).
+     * @param string  $ref Id of row for first cell (starting from 1).
+     *
      * @return void
      *
      * @dataProvider cellConvertionTestsDataProvider
@@ -95,6 +102,12 @@ final class ToolsTest extends TestCase
 
     /**
      * Test if confertion of cell refs are working.
+     *
+     * @param string  $cellsRef Ref of many cells (eg. A8:B3).
+     * @param integer $firstCol Id of column for first cell (starting from 1).
+     * @param integer $firstRow Id of row for first cell (starting from 1).
+     * @param integer $lastCol  Id of column for last cell (starting from 1).
+     * @param integer $lastRow  Id of row for last cell (starting from 1).
      *
      * @return void
      *
@@ -134,6 +147,12 @@ final class ToolsTest extends TestCase
     /**
      * Test if confertion of sheet ref is working.
      *
+     * @param string  $cellsRef Ref of many cells (eg. A8:B3).
+     * @param integer $firstCol Id of column for first cell (starting from 1).
+     * @param integer $firstRow Id of row for first cell (starting from 1).
+     * @param integer $lastCol  Id of column for last cell (starting from 1).
+     * @param integer $lastRow  Id of row for last cell (starting from 1).
+     *
      * @return void
      *
      * @dataProvider cellsConvertionTestsDataProvider
@@ -157,6 +176,11 @@ final class ToolsTest extends TestCase
         $this->assertEquals($expect, Tools::explainSheetRef('Sheet1!' . $cellsRef));
     }
 
+    /**
+     * Test creation of UUIDs.
+     *
+     * @return void
+     */
     public function testCreationOfUuid() : void
     {
 

@@ -27,7 +27,6 @@ class SheetNameAlrexException extends MethodFopException
         $hint .= 'Name of Sheets are unique in the entire XLSX.';
 
         // Define.
-        $this->setCodeName('SheetNameAlrexException');
         $this->addInfo('name', $name);
         $this->addInfo('hint', $hint);
 

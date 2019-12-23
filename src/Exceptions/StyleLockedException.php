@@ -26,7 +26,6 @@ class StyleLockedException extends ClassFopException
         $hint .= 'Release lock or don\'t try to make changes.';
 
         // Define.
-        $this->setCodeName('StyleLockedException');
         $this->addInfo('context', 'StyleLock');
         $this->addInfo('hint', $hint);
 

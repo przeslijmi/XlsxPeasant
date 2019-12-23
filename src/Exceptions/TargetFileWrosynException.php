@@ -27,7 +27,6 @@ class TargetFileWrosynException extends FileAlrexException
         $hint .= 'Change target URI.';
 
         // Define.
-        $this->setCodeName('TargetFileWrosynException');
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('fileName', $fileUri);
         $this->addInfo('hint', $hint);

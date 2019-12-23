@@ -25,7 +25,6 @@ class NoZipArchiveException extends ClassDonoexException
         $hint = 'ZipArchive PHP class is needed to use this tool.';
 
         // Define.
-        $this->setCodeName('NoZipArchiveException');
         $this->addInfo('context', 'startingXlsxPeasant');
         $this->addInfo('hint', $hint);
 

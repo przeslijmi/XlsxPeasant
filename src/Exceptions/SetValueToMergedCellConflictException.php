@@ -26,7 +26,6 @@ class SetValueToMergedCellConflictException extends MethodFopException
         $hint = 'Adding value to Cell ' . $cellRef . ' is forbidden because this is merged Cell. ';
 
         // Define.
-        $this->setCodeName('SetValueToMergedCellConflictException');
         $this->addInfo('cellRef', $cellRef);
         $this->addInfo('hint', $hint);
 

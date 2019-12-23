@@ -4,6 +4,9 @@ namespace Przeslijmi\XlsxPeasant;
 
 use Przeslijmi\Sivalidator\GeoProgression;
 use Przeslijmi\Sivalidator\RegEx;
+use Przeslijmi\XlsxPeasant\Exceptions\XmlNodeNameWrosynException;
+use Przeslijmi\XlsxPeasant\Exceptions\XmlNodeValueWrotypeException;
+use Przeslijmi\XlsxPeasant\Exceptions\XmlSpacingOtoranException;
 
 /**
  * Converter from PHP Array to XML (string).
@@ -151,7 +154,7 @@ class Xml
      *
      * @var string
      */
-    private $header;
+    private $header = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 
     /**
      * Which new line is used.
@@ -250,6 +253,7 @@ class Xml
      * @param integer $spaces How many spaces use on indentation (4 by default).
      *
      * @since  v1.0
+     * @throws XmlSpacingOtoranException When given spacing is below 0 ar above 10.
      * @return self
      */
     public function setSpaces(int $spaces) : self
@@ -257,7 +261,7 @@ class Xml
 
         // Check.
         if ($spaces < 0 || $spaces > 10) {
-            die('Throw otoran 398498347');
+            throw new XmlSpacingOtoranException($spaces);
         }
 
         // Save.
@@ -316,14 +320,14 @@ class Xml
      * @param array $nodes Set of nodes.
      *
      * @since  v1.0
+     * @throws XmlNodeNameWrosynException If node name has wrong syntax.
      * @return string
      */
     private function nodesToXml(array $nodes) : string
     {
 
         // Lvd.
-        $result     = '';
-        $thisIsNode = true;
+        $result = '';
 
         /*
          * At this point it is unclear whether it is onenode structure, eg.:
@@ -347,6 +351,9 @@ class Xml
 
         foreach ($nodes as $name => $nodeOrNodes) {
 
+            // Lvd.
+            $thisIsNode = true;
+
             // Empty option, ie. `$nodes` was
             // for eg. an array: [ 'aaa' => [] ] (blah blah blah blah blah blah).
             if (is_array($nodeOrNodes) === true && empty($nodeOrNodes) === true) {
@@ -361,7 +368,7 @@ class Xml
 
                 // Throw if insted of 'aaa' or 'bbb' non-scalar is given.
                 if (is_scalar($nodeOrNodes) === false) {
-                    die('throw 0934w9fj349 in ' . $name);
+                    throw new XmlNodeNameWrosynException((string) $name);
                 }
 
                 // Save it (and stringify it).
@@ -422,6 +429,7 @@ class Xml
      * @param null|scalar|array $node Contents of node.
      *
      * @since  v1.0
+     * @throws XmlNodeValueWrotypeException If node value is in wrong type.
      * @return string
      */
     private function nodeToXml(string $name, $node) : string
@@ -439,7 +447,7 @@ class Xml
             && is_array($node) === false
             && is_null($node) === false
         ) {
-            die('Throw er89u93795274' . gettype($node));
+            throw new XmlNodeValueWrotypeException(gettype($node));
         }
 
         // Check if node name is proper.

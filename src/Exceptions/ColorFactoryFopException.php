@@ -26,7 +26,6 @@ class ColorFactoryFopException extends MethodFopException
         $hint = 'ColorFactory has been called with too many or wrong parameters.';
 
         // Define.
-        $this->setCodeName('ColorFactoryFopException');
         $this->addInfo('paramCount', (string) $paramCount);
         $this->addInfo('hint', $hint);
 

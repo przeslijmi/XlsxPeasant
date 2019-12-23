@@ -28,7 +28,6 @@ class TableNameWrosynException extends ParamWrosynException
         $hint .= '(eg R1C1, A1:B7, A$200, etc.). Name has to be max 255 characters long.';
 
         // Define.
-        $this->setCodeName('TableNameWrosynException');
         $this->addInfo('paramName', 'tableName');
         $this->addInfo('actualValue', $name);
         $this->addInfo('hint', $hint);

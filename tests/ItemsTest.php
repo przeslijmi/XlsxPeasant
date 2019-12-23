@@ -202,7 +202,7 @@ final class ItemsTest extends TestCase
         }
 
         // Get nonexisting Table.
-         try {
+        try {
             $book->getTableByName('Test Nonexisting');
         } catch (TableDonoexException $exc) {
             $this->assertTrue(true);
@@ -494,6 +494,11 @@ final class ItemsTest extends TestCase
         }
     }
 
+    /**
+     * Test if wrong color throws (1).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrows1() : void
     {
 
@@ -503,6 +508,11 @@ final class ItemsTest extends TestCase
         Color::factory('what?');
     }
 
+    /**
+     * Test if wrong color throws (2).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrows2() : void
     {
 
@@ -512,6 +522,11 @@ final class ItemsTest extends TestCase
         Color::factory(15, 15);
     }
 
+    /**
+     * Test if wrong color throws (3).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrows3() : void
     {
 
@@ -521,6 +536,11 @@ final class ItemsTest extends TestCase
         ( new Color() )->set('GGGGGG');
     }
 
+    /**
+     * Test if wrong color throws (red).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrowsRed() : void
     {
 
@@ -530,6 +550,11 @@ final class ItemsTest extends TestCase
         ( new Color() )->setRgb(1000, 255, 255);
     }
 
+    /**
+     * Test if wrong color throws (green).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrowsGreen() : void
     {
 
@@ -539,6 +564,11 @@ final class ItemsTest extends TestCase
         ( new Color() )->setRgb(255, 1000, 255);
     }
 
+    /**
+     * Test if wrong color throws (blue).
+     *
+     * @return void
+     */
     public function testIfWrongColorThrowsBlue() : void
     {
 
@@ -548,6 +578,11 @@ final class ItemsTest extends TestCase
         ( new Color() )->setRgb(255, 255, 1000);
     }
 
+    /**
+     * Test if changing locked style throws.
+     *
+     * @return void
+     */
     public function testIfChangingLockedStyleThrows() : void
     {
 
@@ -567,6 +602,11 @@ final class ItemsTest extends TestCase
         $style->setFill(Color::factory(0, 0, 0));
     }
 
+    /**
+     * Test if setting aligns works.
+     *
+     * @return void
+     */
     public function testIfSettingAlignWorks() : void
     {
 
@@ -621,6 +661,11 @@ final class ItemsTest extends TestCase
         }
     }
 
+    /**
+     * Test if font factory works.
+     *
+     * @return void
+     */
     public function testIfFontFactoryWorks() : void
     {
 
@@ -660,6 +705,11 @@ final class ItemsTest extends TestCase
         }
     }
 
+    /**
+     * Test if fill factory works.
+     *
+     * @return void
+     */
     public function testIfFillFactoryWorks() : void
     {
 
@@ -683,33 +733,65 @@ final class ItemsTest extends TestCase
         }
     }
 
+    /**
+     * Test if trying to get spare ID will throw on too many loops.
+     *
+     * @return void
+     */
     public function testIfFindingSpareIdThrowsAfterOtoranLoop() : void
     {
 
         // Create xlsx.
-        $xlsx = new Xlsx();
+        $xlsx  = new Xlsx();
         $book  = $xlsx->getBook();
         $sheet = $book->addSheet('Tables Test');
+
+        // Create collection.
         $collection = [];
 
-
+        // Define anonymous class to be used for collection.
         $class = new class() {
-            public function setId($id) {
+
+            /**
+             * Sets id for object.
+             *
+             * @param integer $id Id for object.
+             *
+             * @return void
+             */
+            public function setId(int $id) : void
+            {
+
                 $this->id = $id;
             }
-            public function getId() {
+
+            /**
+             * Gets id of object.
+             *
+             * @return integer.
+             */
+            public function getId() : int
+            {
+
                 return $this->id;
             }
         };
 
+        // Create collection with 20 items.
         for ($i = 1; $i <= 20; ++$i) {
 
-            $item = new $class;
+            // Create item.
+            $item = new $class();
             $item->setId($i);
+
+            // Add it to collection.
             $collection[] = $item;
         }
 
+        // Preapre.
         $this->expectException(LookingForSpareIdLoopOtoranException::class);
+
+        // Call.
         $sheet->findSpareId($collection, 1, 10);
     }
 }

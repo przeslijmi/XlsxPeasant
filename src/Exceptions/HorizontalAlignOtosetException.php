@@ -24,7 +24,6 @@ class HorizontalAlignOtosetException extends ParamOtosetException
     {
 
         // Define.
-        $this->setCodeName('HorizontalAlignOtosetException');
         $this->addInfo('paramName', 'style horizontal align');
         $this->addInfo('range', implode(', ', $possibleAligns));
         $this->addInfo('givenAlign', $givenAlign);

@@ -40,7 +40,6 @@ class RefWrosynException extends ParamOtoranException
         $hint .= ' is given.';
 
         // Define.
-        $this->setCodeName('RefWrosynException');
         $this->addInfo('paramName', 'cellRef');
         $this->addInfo('range', $range);
         $this->addInfo('actualValue', $actualValue);

@@ -192,7 +192,7 @@ final class ProperCreationTest extends TestCase
                 'col'  => $c,
                 'char' => $char,
             ];
-        }
+        }//end for
 
         // Define style for titles.
         $xlsx->useAlign('CM');
@@ -393,7 +393,9 @@ final class ProperCreationTest extends TestCase
 
         // Show use of standard settings.
         $xlsx->useDefaults();
-        $sheet->getCell(37, 1)->setValue('This Cell is as defaults show.');
+        $sheet->setRowHeight(37, 34.00);
+        $sheet->setColWidth(1, 22.00);
+        $sheet->getCell(37, 1)->setValue('This Cell is as defaults show but row has more height.');
 
         // Generate.
         $xlsx->generate($uri, true);

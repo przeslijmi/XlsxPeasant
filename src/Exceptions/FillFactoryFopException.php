@@ -26,7 +26,6 @@ class FillFactoryFopException extends MethodFopException
         $hint = 'FillFactory has been called with too many or wrong parameters.';
 
         // Define.
-        $this->setCodeName('FillFactoryFopException');
         $this->addInfo('paramCount', (string) $paramCount);
         $this->addInfo('hint', $hint);
 

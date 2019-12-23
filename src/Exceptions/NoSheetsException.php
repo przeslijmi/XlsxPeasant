@@ -26,7 +26,6 @@ class NoSheetsException extends ClassFopException
         $hint .= '`$xlsx->getBook()->addSheet(\'name\');`';
 
         // Define.
-        $this->setCodeName('NoSheetsException');
         $this->addInfo('context', 'XlsxGeneration');
         $this->addInfo('hint', $hint);
 

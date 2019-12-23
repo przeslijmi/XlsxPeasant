@@ -27,7 +27,6 @@ class TargetFileAlrexException extends FileAlrexException
         $hint .= 'Change target URI or allow overwriting.';
 
         // Define.
-        $this->setCodeName('TargetFileAlrexException');
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('fileName', $fileUri);
         $this->addInfo('hint', $hint);

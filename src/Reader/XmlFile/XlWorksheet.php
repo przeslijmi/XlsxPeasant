@@ -2,11 +2,11 @@
 
 namespace Przeslijmi\XlsxPeasant\Reader\XmlFile;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Reader;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile;
+use Throwable;
 
 /**
  * Worksheet XML file as object.
@@ -57,8 +57,8 @@ class XlWorksheet extends XmlFile
             $this->setName();
             $this->setRels();
 
-        } catch (Exception $exc) {
-            throw (new ClassFopException('creatingReaderWorksheet', $exc))
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('creatingReaderWorksheet', $thr))
                 ->addObjectInfos($reader);
         }
     }
@@ -111,6 +111,11 @@ class XlWorksheet extends XmlFile
      */
     public function doYouUseTable(int $tableNumber) : bool
     {
+
+        // If this sheet has no table at all - it will not have any rels.
+        if ($this->rels === null) {
+            return false;
+        }
 
         // Lvd.
         $searchFor = '../tables/table' . $tableNumber . '.xml';
@@ -166,9 +171,9 @@ class XlWorksheet extends XmlFile
             // Finally - this is normal cell.
             return $cell->getElementsByTagName('v')->item(0)->nodeValue;
 
-        } catch (Exception $exc) {
-            throw (new ClassFopException('gettingValueOfCell', $exc))
-                ->addInfo('row', $row)->addInfo('col', $col);
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('gettingValueOfCell', $thr))
+                ->addInfo('row', (string) $row)->addInfo('col', (string) $col);
         }//end try
     }
 

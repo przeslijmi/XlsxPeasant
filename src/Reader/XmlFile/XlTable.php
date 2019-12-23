@@ -2,7 +2,6 @@
 
 namespace Przeslijmi\XlsxPeasant\Reader\XmlFile;
 
-use Exception;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 use Przeslijmi\Sexceptions\Exceptions\KeyDonoexException;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
@@ -11,6 +10,7 @@ use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Reader;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile;
 use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlWorksheet;
+use Throwable;
 
 /**
  * Table XML file as object.
@@ -83,8 +83,8 @@ class XlTable extends XmlFile
             $this->setColumns();
             $this->setXlWorksheet();
 
-        } catch (Exception $exc) {
-            throw (new ClassFopException('creatingReaderTable', $exc))
+        } catch (Throwable $thr) {
+            throw (new ClassFopException('creatingReaderTable', $thr))
                 ->addObjectInfos($reader);
         }
     }
@@ -242,8 +242,8 @@ class XlTable extends XmlFile
         // Throw.
         try {
             throw new KeyDonoexException('columnsInXlsx', array_keys($this->columns), (string) $number);
-        } catch (Exception $exc) {
-            throw (new ObjectDonoexException('columnInXlsxFile', $exc))
+        } catch (Throwable $thr) {
+            throw (new ObjectDonoexException('columnInXlsxFile', $thr))
                 ->addInfo('tableName', $this->name)
                 ->addInfo('columnNumber', (string) $number)
                 ->addObjectInfos($this->getReader());
@@ -322,8 +322,8 @@ class XlTable extends XmlFile
                     $this->cellsRead[] = [ $r, $c ];
                 }
             }//end for
-        } catch (Exception $exc) {
-            throw (new MethodFopException('readDataFromXlsxTable', $exc))
+        } catch (Throwable $thr) {
+            throw (new MethodFopException('readDataFromXlsxTable', $thr))
                 ->addInfo('tableName', $this->name)
                 ->addObjectInfos($this->getReader());
         }//end try
@@ -404,6 +404,7 @@ class XlTable extends XmlFile
 
         // Try to find which worksheet has this Table.
         foreach ($this->getReader()->getXlWorksheets() as $xlWorksheet) {
+
             if ($xlWorksheet->doYouUseTable($this->getNumber()) === true) {
 
                 // Save.

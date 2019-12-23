@@ -24,7 +24,6 @@ class VerticalAlignOtosetException extends ParamOtosetException
     {
 
         // Define.
-        $this->setCodeName('VerticalAlignOtosetException');
         $this->addInfo('paramName', 'style vertical align');
         $this->addInfo('range', implode(', ', $possibleAligns));
         $this->addInfo('givenAlign', $givenAlign);

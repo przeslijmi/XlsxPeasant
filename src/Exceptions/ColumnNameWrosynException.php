@@ -26,7 +26,6 @@ class ColumnNameWrosynException extends ParamWrosynException
         $hint = 'Name of Column has to be max 255 characters long.';
 
         // Define.
-        $this->setCodeName('ColumnNameWrosynException');
         $this->addInfo('paramName', 'columnName');
         $this->addInfo('actualValue', $name);
         $this->addInfo('hint', $hint);

@@ -26,7 +26,6 @@ class TableIdOtoranException extends ParamOtoranException
         $hint = 'Proposed Table ID is wrong. Has to be >=1, `' . $id . '` given.';
 
         // Define.
-        $this->setCodeName('TableIdOtoranException');
         $this->addInfo('paramName', 'tableId');
         $this->addInfo('range', '>=1');
         $this->addInfo('actualValue', (string) $id);

@@ -26,7 +26,6 @@ class SheetIdOtoranException extends ParamOtoranException
         $hint = 'Proposed Sheet ID is wrong. Has to be >=1, `' . $id . '` given.';
 
         // Define.
-        $this->setCodeName('SheetIdOtoranException');
         $this->addInfo('paramName', 'tableId');
         $this->addInfo('range', '>=1');
         $this->addInfo('actualValue', (string) $id);

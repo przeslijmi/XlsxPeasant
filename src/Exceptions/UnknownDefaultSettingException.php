@@ -28,7 +28,6 @@ class UnknownDefaultSettingException extends ParamOtosetException
         $hint .= ' Possible are: ' . implode(', ', $range) . '.';
 
         // Define.
-        $this->setCodeName('UnknownDefaultSettingException');
         $this->addInfo('paramName', 'defaultsName');
         $this->addInfo('range', implode(', ', $range));
         $this->addInfo('actualValue', $actualValue);

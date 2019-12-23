@@ -3,7 +3,7 @@
 # Builder bash App by @przeslijmi.
 #
 # @author  przeslijmi@gmail.com
-# @version v1.1
+# @version v2.1
 #
 # # Usage
 # After filling up settings in LVD section call in bash:
@@ -12,12 +12,8 @@
 # bash build.sh -help
 # ```
 
-# Lvd.
-PHPCS_PATH="c:/Dev/php/phpcs-3.4.0-dev/bin/phpcs"
-PHPUNITPHAR_PATH="c:/Dev/php/phpunit-8.4.2/phpunit-8.4.2.phar"
-SAMIPHAR_PATH="c:/Dev/php/sami/sami.phar"
-ZIP_PACKER_PATH="c:/Program Files/7-Zip/7z.exe"
-DOCS_PATH="c:/Dev/"
+# Include configs
+. build.sh.config
 
 # Function to show all help.
 function showHelp() {
@@ -53,7 +49,7 @@ function callPhpCodeSniffing() {
   echo "";
 
   # Call PHP code sniffer.
-  php $PHPCS_PATH --standard=$DIR/phpcs.xml --report-file=$DIR/.phpcs.txt $DIR/src
+  php $PHPCS_PATH --standard=$DIR/phpcs.xml --report-file=$DIR/.phpcs.txt $DIR/src $DIR/tests
 
   # Check if there were any errors.
   PHPCS_REPORT_SIZE=$(stat -c%s "$DIR/.phpcs.txt")
