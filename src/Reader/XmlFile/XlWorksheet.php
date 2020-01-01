@@ -36,6 +36,13 @@ class XlWorksheet extends XmlFile
     private $name;
 
     /**
+     * Cache of row nodes.
+     *
+     * @var array
+     */
+    private $rowNodesCache;
+
+    /**
      * Constructor.
      *
      * @param string $fileUri Uri of XML file.
@@ -175,6 +182,8 @@ class XlWorksheet extends XmlFile
             throw (new ClassFopException('gettingValueOfCell', $thr))
                 ->addInfo('row', (string) $row)->addInfo('col', (string) $col);
         }//end try
+
+        return null;
     }
 
     /**
@@ -221,8 +230,22 @@ class XlWorksheet extends XmlFile
     public function getRowNode(int $row) : ?object
     {
 
+        // Fast lane.
+        if (isset($this->rowNodesCache[$row]) === true) {
+            return $this->rowNodesCache[$row];
+        }
+
+        // Scan and return.
         foreach ($this->contents->getElementsByTagName('row') as $rowNode) {
             if ((int) $rowNode->getAttribute('r') === $row) {
+
+                // Save to cache.
+                $this->rowNodesCache[$row] = $rowNode;
+
+                // Delete from set.
+                $rowNode->parentNode->removeChild($rowNode);
+
+                // Return.
                 return $rowNode;
             }
         }

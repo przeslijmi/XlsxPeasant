@@ -3,6 +3,7 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
+use Przeslijmi\XlsxPeasant\Helpers\Tools;
 use Throwable;
 
 /**
@@ -23,11 +24,14 @@ class CellMergeConflictException extends MethodFopException
     {
 
         // Lvd.
-        $hint  = 'Merging is trying to overwrite cell ' . $cellRef . ' which is forbidden. ';
-        $hint .= 'Delete used Cell or move merge.';
+        $hint   = 'Merging is trying to overwrite cell ' . $cellRef . ' which is forbidden. ';
+        $hint  .= 'Delete used Cell or move merge.';
+        $colRef = preg_replace('/([^A-Z])/', '', $cellRef);
 
         // Define.
         $this->addInfo('cellRef', $cellRef);
+        $this->addInfo('colRef', $colRef);
+        $this->addInfo('col', (string) Tools::convRefToNumber($colRef));
         $this->addInfo('hint', $hint);
 
         // Set cause.

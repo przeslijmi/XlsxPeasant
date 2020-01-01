@@ -263,6 +263,21 @@ class Column extends Items
     }
 
     /**
+     * Sets width of this Column.
+     *
+     * @param null|float $width Optional float to be set. If not given original width is restored.
+     *
+     * @return self
+     */
+    public function setWidth(?float $width = null) : self
+    {
+
+        $this->cell->setColWidth($width);
+
+        return $this;
+    }
+
+    /**
      * Return row and col id for this Column.
      *
      * @since  v1.0
