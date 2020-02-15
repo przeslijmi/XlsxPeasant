@@ -192,7 +192,10 @@ class Xlsx
         if (file_exists($targetUri) === true) {
 
             // Throw if deletion is not possible.
-            if (@touch($targetUri, time()) === false) {
+            if (@touch($targetUri, time()) === false
+                || ($fh = @fopen($targetUri, 'r+')) === false
+                || @flock($fh, LOCK_EX|LOCK_NB) === false
+            ) {
                 throw new TargetFileDeletionFailedException();
             }
 

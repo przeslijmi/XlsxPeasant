@@ -25,7 +25,12 @@ final class ToolsTest extends TestCase
             [ 15, 'O' ],
             [ 26, 'Z' ],
             [ 27, 'AA' ],
+            [ 52, 'AZ' ],
+            [ 53, 'BA' ],
+            [ 78, 'BZ' ],
+            [ 79, 'CA' ],
             [ 700, 'ZX' ],
+            [ 702, 'ZZ' ],
         ];
     }
 

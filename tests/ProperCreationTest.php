@@ -3,6 +3,10 @@
 namespace Przeslijmi\XlsxPeasant;
 
 use PHPUnit\Framework\TestCase;
+use Przeslijmi\XlsxPeasant\Exceptions\TargetDirectoryDonoexException;
+use Przeslijmi\XlsxPeasant\Exceptions\TargetFileAlrexException;
+use Przeslijmi\XlsxPeasant\Exceptions\TargetFileDeletionFailedException;
+use Przeslijmi\XlsxPeasant\Exceptions\TargetFileWrosynException;
 use Przeslijmi\XlsxPeasant\Helpers\Char;
 use Przeslijmi\XlsxPeasant\Items\Color;
 use Przeslijmi\XlsxPeasant\Items\ConditionalFormat\DataBar;
@@ -21,6 +25,64 @@ final class ProperCreationTest extends TestCase
 {
 
     /**
+     * Test if generating into nonexisting folder will throw.
+     *
+     * @return void
+     */
+    public function testIfCreatingToNonexistingDirThrows() : void
+    {
+
+        // Prepare.
+        $this->expectException(TargetDirectoryDonoexException::class);
+
+        // Non-existing dir.
+        $dir = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'nonExisting/nonExisting/';
+
+        // Try to generate.
+        $xlsx  = new Xlsx();
+        $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+        $sheet->getCell(1, 1)->setValue('Hello World!');
+        $xlsx->generate($dir, true);
+    }
+
+    /**
+     * Test if generating onto used file will throw.
+     *
+     * @return void
+     */
+    public function testIfCreatingOntoUsedFileThrows() : void
+    {
+
+        // Lvd.
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'tempFile.xlsx';
+
+        // Generate simplest file.
+        $xlsx  = new Xlsx();
+        $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+        $sheet->getCell(1, 1)->setValue('Hello World!');
+        $xlsx->generate($uri, true);
+
+        // Open this file to lock it.
+        $fh = fopen($uri, 'r+');
+        flock($fh, LOCK_EX|LOCK_NB);
+
+        // Try to generate again to the same file.
+        try {
+            $xlsx  = new Xlsx();
+            $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+            $sheet->getCell(1, 1)->setValue('Hello World!');
+            $xlsx->generate($uri, true);
+        } catch (TargetFileDeletionFailedException $exc) {
+            $this->assertTrue(true);
+        } finally {
+
+            // Delete file.
+            flock($fh, LOCK_UN);
+            unlink($uri);
+        }
+    }
+
+    /**
      * Test if Simplest XLSx can be generated.
      *
      * @return void
@@ -29,6 +91,7 @@ final class ProperCreationTest extends TestCase
     {
 
         // Lvd.
+        $dir = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY;
         $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'XlsxPeasant_01_simplestTest.xlsx';
 
         // Create Xlsx.
@@ -41,6 +104,26 @@ final class ProperCreationTest extends TestCase
 
         // Test.
         $this->assertTrue(file_exists($uri));
+
+        // Create Xlsx again and check if throws on non-overwrite command.
+        try {
+            $xlsx  = new Xlsx();
+            $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+            $sheet->getCell(1, 1)->setValue('Hello World!');
+            $xlsx->generate($uri, false);
+        } catch (TargetFileAlrexException $sexc) {
+            $this->assertTrue(true);
+        }
+
+        // Create Xlsx again and check if throws on wrong directory.
+        try {
+            $xlsx  = new Xlsx();
+            $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+            $sheet->getCell(1, 1)->setValue('Hello World!');
+            $xlsx->generate($dir, true);
+        } catch (TargetFileWrosynException $sexc) {
+            $this->assertTrue(true);
+        }
     }
 
     /**

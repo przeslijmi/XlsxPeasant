@@ -49,9 +49,9 @@ class Tools
     {
 
         // Throw.
-        if ($number < 1) {
-            throw (new ParamOtoranException('cellNumber', '>=1', (string) $number))
-                ->addHint('You\'re trying to reach to cell which has wrong number. It has to be more than zero');
+        if ($number < 1 || $number > 702) {
+            throw (new ParamOtoranException('cellNumber', '>=1 && <=702', (string) $number))
+                ->addHint('You\'re trying to reach to cell which has wrong number. It has to be more than zero and less then 702 (ZZ).');
         }
 
         // Lvd.
@@ -59,8 +59,15 @@ class Tools
 
         // Prepare for looping.
         if ($number > 26) {
+
             $upperPart = (int) floor($number / 26);
             $number   -= ( $upperPart * 26 );
+
+            // Correction for transition places (between *Z and *A).
+            if ($number === 0) {
+                $number = 26;
+                --$upperPart;
+            }
 
             // Go in loop if higher than 26.
             $letters .= self::convNumberToRef($upperPart);

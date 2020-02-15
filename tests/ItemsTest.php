@@ -29,13 +29,15 @@ use Przeslijmi\XlsxPeasant\Exceptions\StyleLockedException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableChangeColumnForbiddenException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableDonoexException;
+use Przeslijmi\XlsxPeasant\Exceptions\UnknownDefaultSettingException;
 use Przeslijmi\XlsxPeasant\Exceptions\VerticalAlignOtosetException;
+use Przeslijmi\XlsxPeasant\Exceptions\WrotypeDefaultsException;
 use Przeslijmi\XlsxPeasant\Items\Book;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 use Przeslijmi\XlsxPeasant\Items\Color;
 use Przeslijmi\XlsxPeasant\Items\Column;
-use Przeslijmi\XlsxPeasant\Items\Font;
 use Przeslijmi\XlsxPeasant\Items\Fill;
+use Przeslijmi\XlsxPeasant\Items\Font;
 use Przeslijmi\XlsxPeasant\Items\Sheet;
 use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Items\Table;
@@ -205,6 +207,60 @@ final class ItemsTest extends TestCase
         try {
             $book->getTableByName('Test Nonexisting');
         } catch (TableDonoexException $exc) {
+            $this->assertTrue(true);
+        }
+    }
+
+    /**
+     * Test if defining wrong defaults throws.
+     *
+     * @return void
+     */
+    public function testIfDefiningWrongDefaultsThrows() : void
+    {
+
+        // Lvd.
+        $xlsx = new Xlsx();
+
+        // Test 1.
+        try {
+            $xlsx->setDefault('unknownDefinition', true);
+        } catch (UnknownDefaultSettingException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Test 2.
+        try {
+            $xlsx->setDefault('fontSize', false);
+        } catch (WrotypeDefaultsException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Test 3.
+        try {
+            $xlsx->setDefault('fontColor', false);
+        } catch (WrotypeDefaultsException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Test 4.
+        try {
+            $xlsx->setDefault('fontName', false);
+        } catch (WrotypeDefaultsException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Test 5.
+        try {
+            $xlsx->setDefault('fontColor', $this);
+        } catch (WrotypeDefaultsException $exc) {
+            $this->assertTrue(true);
+        }
+
+        // Test 6.
+        try {
+            $xlsx->getDefault('unknownDefinition', true);
+        } catch (UnknownDefaultSettingException $exc) {
             $this->assertTrue(true);
         }
     }
