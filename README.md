@@ -3,13 +3,17 @@
 Tool that creates XML files, and packs them into ZIP archive (using `ZipArchive` class).
 
 ## Table of contents
-1. [Usage examples](#usage-examples)
 
-## Usage examples
+1. [Hello world](#a)
+1. [Default settings](#a)
+  1. [Default fill color](#a)
+  1. [Default font](#a)
+  1. [Default cell align](#a)
+  1. [Default default format](#a)
+
+## Hello world
 
 All usage examples are defined in `tests/ProperCreationTest.php`. Ready, generated example files are located in `examples/` folder.
-
-### Creating simple XMLS (Hello World)
 
 ```php
 // Create instance.
@@ -25,7 +29,7 @@ $sheet->getCell(1, 1)->setValue('Hello World!');
 $xlsx->generate($uri, true);
 ```
 
-### Default settings
+## Default settings
 
 After creating instance you can define default settings.
 
@@ -48,7 +52,7 @@ $xlsx->useDefaults();
 
 which is a synonim to above 5 statements.
 
-#### Default fill color
+### Default fill color
 
 You have to send `Fill` object. See color declaration for more info.
 
@@ -57,7 +61,7 @@ $xlsx->useFill(Fill::factory('red'));
 $xlsx->useFill(new Fill(Color::factory('red')));
 ```
 
-#### Default font
+### Default font
 
 In first param font name is defined. Second param is a string of definitions or `Color` object.
 
@@ -78,7 +82,7 @@ $xlsx->useFont(Font::factory('Arial'));
 $xlsx->useFont(Font::factory(null, '20 bold'));
 ```
 
-#### Default cell align
+### Default cell align
 
 You define cell align by giving two chars, separated by nothing, with:
 - first char defining horizontal align [L, C, R],
@@ -89,7 +93,7 @@ $xlsx->useAlign('CM');
 $xlsx->useAlign('LT');
 ```
 
-#### Default default format
+### Default default format
 
 Format sets how the values are presented in cell. It can be numerical format, date format, hidden
 format, etc.
