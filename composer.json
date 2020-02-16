@@ -10,6 +10,12 @@
       "email": "przeslijmi@gmail.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/przeslijmi/sexceptions"
+    }
+  ],
   "require": {
     "php" : "^7.3",
     "przeslijmi/sexceptions": "~1.0"
