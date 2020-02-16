@@ -43,7 +43,7 @@ final class ReaderTest extends TestCase
     {
 
         // Read Xlsx.
-        $xlsx = new Reader('vendor/przeslijmi/xlsxpeasant/examples/ReaderTest.xlsx');
+        $xlsx = new Reader('examples/ReaderTest.xlsx');
         $book = $xlsx->readIn()->getBook();
 
         // Get Sheets.
