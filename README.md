@@ -20,6 +20,8 @@ Tool has a full support for UTF-16 characters.
    1. [Style](#style)
    1. [Design defaults](#design-defaults)
 1. [Tables](#tables)
+1. [Generating file](#generating-file)
+1. [Reading XLSX files](#reading-xlsx-file)
 
 ## Hello world
 
@@ -380,3 +382,37 @@ $table->getColumnByName('phone')->setFormat(new NumFormat(0, 0, ''));
 $table->addData($data1);
 ```
 
+## Generating file
+
+While generating file you can decide if generator is to overwrite previously generated file or not
+(depending on second parameter of `->generate()` method).
+
+**BE AWARE** Tool can generate only to current machine.
+
+```php
+$xlsx->generate($uri, true);
+$xlsx->generate($uri, false);
+```
+
+**BE AWARE** Overwriting works only if file is currently unused and reachable.
+
+## Reading XLSX files
+
+XlsxPeasant is capable of also reading XLSX files, however **it can only read data** - not formats, styles or other definitions.
+
+```php
+// Create instance.
+$xlsx = new Reader($uri);
+$book = $xlsx->readIn()->getBook();
+
+// Get sheet to read cells.
+$sheet     = $book->getSheetByName('Sheet1');
+$cellValue = $sheet->getCell(1, 1)->getSimpleValue();
+
+// Get Table to read Table data.
+$tableData = $book->getTableByName('Table1')->getData();
+```
+
+`$tableData` is just a pure one dimensional array with keys (table columns names) and values (rows simple values for this columns).
+
+**BE AWARE** Reading large `XLSX` files can reach beyond 30 s PHP execution time limit.
