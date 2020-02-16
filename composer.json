@@ -17,19 +17,25 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/przeslijmi/Sivalidator"
+      "url": "https://github.com/przeslijmi/sivalidator"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/Fleshgrinder/php-uuid"
     }
   ],
   "require": {
     "php" : "^7.3",
+    "fleshgrinder/uuid": "dev-php-7.1",
     "przeslijmi/sexceptions": "~1.0",
     "przeslijmi/Sivalidator": "~2.0"
   },
   "autoload": {
     "psr-4": {
       "Przeslijmi\\XlsxPeasant\\": "src/",
+      "Fleshgrinder\\PhpUuid\\": "vendor/fleshgrinder/php-uuid/src/",
       "Przeslijmi\\Sexceptions\\": "vendor/przeslijmi/sexceptions/src/",
-      "Przeslijmi\\Sivalidator\\": "vendor/przeslijmi/Sivalidator/src/"
+      "Przeslijmi\\Sivalidator\\": "vendor/przeslijmi/sivalidator/src/"
     }
   }
 }
