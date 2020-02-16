@@ -2,6 +2,9 @@
 
 Tool that creates XML files, and packs them into ZIP archive (using `ZipArchive` class).
 
+## Table of contents
+1. [Usage examples](#usage-examples)
+
 ## Usage examples
 
 All usage examples are defined in `tests/ProperCreationTest.php`. Ready, generated example files are located in `examples/` folder.
