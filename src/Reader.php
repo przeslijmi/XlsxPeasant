@@ -262,6 +262,17 @@ class Reader
         $extract = @$zip->extractTo($this->unzipUri);
         $close   = @$zip->close();
 
+        var_dump($this->unzipUri);
+
+        $dh = opendir($this->unzipUri);
+        var_dump($dh);
+        while ($entry = readdir($dh)) {
+            var_dump($entry);
+        }
+        var_dump('empty dir');
+        // glob($this->unzipUri . '/*.*');
+        die;
+
         // Throw if needed.
         if (empty(min($open, $extract, $close)) === true) {
             throw (new MethodFopException('openExtractOrClosingZipArchiveFailed'))
