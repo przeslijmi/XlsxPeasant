@@ -140,7 +140,7 @@ class Reader
             $this->unpack();
         } catch (Throwable $thr) {
             var_dump($thr);
-            die;R
+            die;
             throw (new ClassFopException('unpackingXlsxSheet', $thr))
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
