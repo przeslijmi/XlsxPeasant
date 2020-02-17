@@ -44,20 +44,21 @@ final class ReaderTest extends TestCase
 
         // Read Xlsx.
         $xlsx = new Reader('examples/ReaderTest.xlsx');
+        $book = $xlsx->readIn()->getBook();
 
         try {
-            $book = $xlsx->readIn()->getBook();
+
+            // Get Sheets.
+            $sheet1 = $book->getSheetByName('Sheet1');
+            $sheet2 = $book->getSheetByName('Sheet2');
+
+            // Get Table.
+            $tableData = $book->getTableByName('Table1')->getData();
+
         } catch (\Throwable $thr) {
             var_dump($thr);
             die;
         }
-
-        // Get Sheets.
-        $sheet1 = $book->getSheetByName('Sheet1');
-        $sheet2 = $book->getSheetByName('Sheet2');
-
-        // Get Table.
-        $tableData = $book->getTableByName('Table1')->getData();
 
         // Define proper data.
         $properData = [
