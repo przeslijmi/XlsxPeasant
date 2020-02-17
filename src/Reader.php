@@ -213,7 +213,7 @@ class Reader
     public function getXlWorksheets() : array
     {
 
-        return $this->xlWorksheet;
+        return $this->xlWorksheets;
     }
 
     /**
@@ -495,7 +495,7 @@ class Reader
     {
 
         // Add new Worksheet.
-        $this->xlWorksheet[] = new XlWorksheet($fileUri, $this);
+        $this->xlWorksheets[] = new XlWorksheet($fileUri, $this);
 
         return $this;
     }
