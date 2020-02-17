@@ -263,13 +263,18 @@ class Reader
         $close   = @$zip->close();
 
         var_dump($this->unzipUri);
-
         $dh = opendir($this->unzipUri);
         var_dump($dh);
         while ($entry = readdir($dh)) {
             var_dump($entry);
         }
-        var_dump('empty dir');
+
+        var_dump($this->unzipUri . '/xl)';
+        $dh = opendir($this->unzipUri . '/xl');
+        var_dump($dh);
+        while ($entry = readdir($dh)) {
+            var_dump($entry);
+        }
         // glob($this->unzipUri . '/*.*');
         die;
 
