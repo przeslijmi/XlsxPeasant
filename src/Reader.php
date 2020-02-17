@@ -262,6 +262,7 @@ class Reader
         $extract = @$zip->extractTo($this->unzipUri);
         $close   = @$zip->close();
 
+
         var_dump($this->unzipUri);
         $dh = opendir($this->unzipUri);
         var_dump($dh);
