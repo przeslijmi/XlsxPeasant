@@ -48,6 +48,11 @@ final class ReaderTest extends TestCase
 
         try {
 
+            var_dump($book->getSheets());
+            foreach ($book->getSheets() as $sheet) {
+                var_dump($sheet->getName());
+            }
+
             // Get Sheets.
             $sheet1 = $book->getSheetByName('Sheet1');
             $sheet2 = $book->getSheetByName('Sheet2');
