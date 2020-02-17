@@ -20,13 +20,13 @@
       "url": "https://github.com/przeslijmi/sivalidator"
     },
     {
-        "type": "vcs",
-        "url": "https://github.com/Fleshgrinder/php-uuid"
+      "type": "vcs",
+      "url": "https://github.com/Fleshgrinder/php-uuid"
     }
   ],
   "require": {
     "php" : "^7.3",
-    "fleshgrinder/uuid": "dev-php-7.1",
+    "fleshgrinder/uuid": "php-7.1",
     "przeslijmi/sexceptions": "~1.0",
     "przeslijmi/sivalidator": "~2.0"
   },
