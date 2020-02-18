@@ -270,7 +270,7 @@ class Reader
             var_dump($entry);
         }
 
-        var_dump($this->unzipUri . '/xl)';
+        var_dump($this->unzipUri . '/xl');
         $dh = opendir($this->unzipUri . '/xl');
         var_dump($dh);
         while ($entry = readdir($dh)) {
