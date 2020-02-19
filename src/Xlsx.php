@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant;
 
 use Przeslijmi\XlsxPeasant\Exceptions\GenerationFailedException;
-use Przeslijmi\XlsxPeasant\Exceptions\NoZipArchiveException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetDirectoryDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileDeletionFailedException;
@@ -269,7 +268,6 @@ class Xlsx
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
      * @since  v1.0
-     * @throws NoZipArchiveException     When ZipArchive class does not exists.
      * @throws GenerationFailedException When somehow generation failed.
      * @throws GenerationFailedException When closing ZIP failed.
      * @return void
@@ -282,11 +280,6 @@ class Xlsx
         // Save target URI because XML will need it also.
         $this->setTargetUri($targetUri, $overwrite);
 
-        // Throw.
-        if (class_exists('ZipArchive') === false) {
-            throw new NoZipArchiveException();
-        }
-
         // Prepare all strings.
         $stringsToAdd = [
             'sheets'      => [],
@@ -294,34 +287,34 @@ class Xlsx
             'tables'      => [],
         ];
 
-        // Add Worksheets.
-        foreach ($this->getBook()->getSheets() as $sheet) {
-
-            // Add Sheet.
-            $stringsToAdd['sheets'][$sheet->getId()] = [
-                'file' => 'xl/worksheets/sheet' . $sheet->getId() . '.xml',
-                'text' => $sheet->getXml()->toXml(),
-            ];
-
-            // Add Tables for this Sheet.
-            if ($sheet->hasTables() === true) {
-                $stringsToAdd['sheets_rels'][$sheet->getId()] = [
-                    'file' => 'xl/worksheets/_rels/sheet' . $sheet->getId() . '.xml.rels',
-                    'text' => $sheet->getRelsXml()->toXml(),
-                ];
-            }
-
-            // Add Tables.
-            foreach ($this->getBook()->getTables() as $table) {
-                $stringsToAdd['tables'][$table->getId()] = [
-                    'file' => 'xl/tables/table' . $table->getId() . '.xml',
-                    'text' => $table->getXml()->toXml(),
-                ];
-            }
-        }//end foreach
-
         // Create ZIP.
         try {
+
+            // Add Worksheets.
+            foreach ($this->getBook()->getSheets() as $sheet) {
+
+                // Add Sheet.
+                $stringsToAdd['sheets'][$sheet->getId()] = [
+                    'file' => 'xl/worksheets/sheet' . $sheet->getId() . '.xml',
+                    'text' => $sheet->getXml()->toXml(),
+                ];
+
+                // Add Tables for this Sheet.
+                if ($sheet->hasTables() === true) {
+                    $stringsToAdd['sheets_rels'][$sheet->getId()] = [
+                        'file' => 'xl/worksheets/_rels/sheet' . $sheet->getId() . '.xml.rels',
+                        'text' => $sheet->getRelsXml()->toXml(),
+                    ];
+                }
+
+                // Add Tables.
+                foreach ($this->getBook()->getTables() as $table) {
+                    $stringsToAdd['tables'][$table->getId()] = [
+                        'file' => 'xl/tables/table' . $table->getId() . '.xml',
+                        'text' => $table->getXml()->toXml(),
+                    ];
+                }
+            }//end foreach
 
             // Crate new ZipArchive.
             $zip = new ZipArchive();
@@ -360,9 +353,7 @@ class Xlsx
         }//end try
 
         // Close ZIP.
-        if (@$zip->close() === false) {
-            throw (new GenerationFailedException())->addWarning();
-        }
+        @$zip->close();
     }
 
     /**

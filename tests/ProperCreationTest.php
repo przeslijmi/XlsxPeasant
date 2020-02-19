@@ -3,6 +3,7 @@
 namespace Przeslijmi\XlsxPeasant;
 
 use PHPUnit\Framework\TestCase;
+use Przeslijmi\XlsxPeasant\Exceptions\GenerationFailedException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetDirectoryDonoexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TargetFileDeletionFailedException;
@@ -692,5 +693,21 @@ final class ProperCreationTest extends TestCase
 
         // Test.
         $this->assertTrue(file_exists($uri));
+    }
+
+    /**
+     * Tests if generating wrong declared XLSX will throw.
+     *
+     * @return void
+     */
+    public function testIfGeneratingMisdeclaredXlsxThrows() : void
+    {
+
+        // Prepare.
+        $this->expectException(GenerationFailedException::class);
+
+        // Create Xlsx.
+        $xlsx = new Xlsx();
+        $xlsx->generate('greatUri.xlsx');
     }
 }

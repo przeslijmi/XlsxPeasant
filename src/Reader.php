@@ -115,10 +115,7 @@ class Reader
 
             // Save.
             $this->xlsxFileUri = $xlsxFileUri;
-            $this->unzipUri    = ''
-                . rtrim(sys_get_temp_dir(), '/\\/')
-                . '/_stolem_xlsxReader/'
-                . rand(10000, 99999);
+            $this->unzipUri    = 'examples/.temp/unpack_' . rand(10000, 99999);
 
         } catch (Throwable $thr) {
             throw new ClassFopException('creatingXlsxReader', $thr);
@@ -261,23 +258,6 @@ class Reader
         $open    = @$zip->open($this->xlsxFileUri);
         $extract = @$zip->extractTo($this->unzipUri);
         $close   = @$zip->close();
-
-
-        var_dump($this->unzipUri);
-        $dh = opendir($this->unzipUri);
-        var_dump($dh);
-        while ($entry = readdir($dh)) {
-            var_dump($entry);
-        }
-
-        var_dump($this->unzipUri . '/xl');
-        $dh = opendir($this->unzipUri . '/xl');
-        var_dump($dh);
-        while ($entry = readdir($dh)) {
-            var_dump($entry);
-        }
-        // glob($this->unzipUri . '/*.*');
-        die;
 
         // Throw if needed.
         if (empty(min($open, $extract, $close)) === true) {
@@ -428,19 +408,23 @@ class Reader
     private function getFilesRecursively(?string $dir = null) : array
     {
 
+        // Lvd.
+        $sep     = '/';
+        $results = [];
+
         // If no dir given take from instance.
         if (is_null($dir) === true) {
             $dir = $this->unzipUri;
         }
 
+        // Cut off last sep.
+        $dir = str_replace('\\', '/', $dir);
+        $dir = rtrim($dir, '/');
+
         // If no files are present - empty main dir after unpacking.
         if ($dir === $this->unzipUri && count(scandir($dir)) <= 2) {
             throw new DirIsEmptyException('tempDirWithUnpackedXlsx', $dir);
         }
-
-        // Lvd.
-        $sep     = '\\';
-        $results = [];
 
         // Scan directory to find for filex.
         foreach (scandir($dir) as $name) {

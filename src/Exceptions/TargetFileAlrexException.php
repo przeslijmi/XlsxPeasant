@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\FileAlrexException;
-use Throwable;
 
 /**
  * Target file is taken but overwriting is forbidden.
@@ -14,12 +13,11 @@ class TargetFileAlrexException extends FileAlrexException
     /**
      * Constructor.
      *
-     * @param string         $fileUri Uri of file that can not be taken.
-     * @param Throwable|null $cause   Throwable that caused problem.
+     * @param string $fileUri Uri of file that can not be taken.
      *
      * @since v1.0
      */
-    public function __construct(string $fileUri, ?Throwable $cause = null)
+    public function __construct(string $fileUri)
     {
 
         // Lvd.
@@ -30,10 +28,5 @@ class TargetFileAlrexException extends FileAlrexException
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('fileName', $fileUri);
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('TargetFileAlrexExceptionOnGeneratingXlsxFile', $fileUri, $cause);
-        }
     }
 }

@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\ObjectDonoexException;
-use Throwable;
 
 /**
  * Can't find Column by given ID or name.
@@ -20,7 +19,7 @@ class ColumnDonoexException extends ObjectDonoexException
      *
      * @since v1.0
      */
-    public function __construct(string $tableName, $idOrName, ?Throwable $cause = null)
+    public function __construct(string $tableName, $idOrName)
     {
 
         // Lvd.
@@ -35,10 +34,5 @@ class ColumnDonoexException extends ObjectDonoexException
         $this->addInfo('columnIdOrName', (string) $idOrName);
         $this->addInfo('context', 'GetXlsxTableColumn');
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('ColumnDonoexException', $cause);
-        }
     }
 }

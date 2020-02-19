@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
-use Throwable;
 
 /**
  * Parameter's given value is out of set (enum - not out of range [i .... j]).
@@ -14,11 +13,10 @@ class RefWrosynException extends ParamOtoranException
     /**
      * Constructor.
      *
-     * @param string         $context  During what operation, what is the nature of the error.
-     * @param string         $name     Percise name of the context (sheet name, table name, etc.).
-     * @param integer        $givenRow Id of row.
-     * @param integer        $givenCol Id of column.
-     * @param Throwable|null $cause    Throwable that caused the problem.
+     * @param string  $context  During what operation, what is the nature of the error.
+     * @param string  $name     Percise name of the context (sheet name, table name, etc.).
+     * @param integer $givenRow Id of row.
+     * @param integer $givenCol Id of column.
      *
      * @since v1.0
      */
@@ -26,8 +24,7 @@ class RefWrosynException extends ParamOtoranException
         string $context,
         string $name,
         int $givenRow,
-        int $givenCol,
-        ?Throwable $cause = null
+        int $givenCol
     ) {
 
         // Lvd.
@@ -44,10 +41,5 @@ class RefWrosynException extends ParamOtoranException
         $this->addInfo('range', $range);
         $this->addInfo('actualValue', $actualValue);
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('cellRef', $range, $actualValue, $cause);
-        }
     }
 }

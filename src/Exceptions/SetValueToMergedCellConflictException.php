@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
-use Throwable;
 
 /**
  * User is trying to set value to Cell that is merged.
@@ -14,12 +13,11 @@ class SetValueToMergedCellConflictException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param string         $cellRef Refs of Cell.
-     * @param Throwable|null $cause   Throwable that caused the problem.
+     * @param string $cellRef Refs of Cell.
      *
      * @since v1.0
      */
-    public function __construct(string $cellRef, ?Throwable $cause = null)
+    public function __construct(string $cellRef)
     {
 
         // Lvd.
@@ -28,10 +26,5 @@ class SetValueToMergedCellConflictException extends MethodFopException
         // Define.
         $this->addInfo('cellRef', $cellRef);
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('SetValueToMergedCellConflictException', $cause);
-        }
     }
 }

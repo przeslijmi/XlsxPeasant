@@ -346,8 +346,8 @@ class XlWorksheet extends XmlFile
 
         // Lvd.
         $namePart    = 'sheet' . $this->number . '.xml';
-        $xmlFileUri  = str_replace('/', '\\', $this->getFileUri());
-        $relsFileUri = str_replace($namePart, '_rels\\' . $namePart . '.rels', $xmlFileUri);
+        $xmlFileUri  = str_replace('\\', '/', $this->getFileUri());
+        $relsFileUri = str_replace($namePart, '_rels/' . $namePart . '.rels', $xmlFileUri);
 
         // If it exists add rels file to this sheet.
         if (file_exists($relsFileUri) === true) {

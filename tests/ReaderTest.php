@@ -24,7 +24,7 @@ final class ReaderTest extends TestCase
         return [
             [ 'examples/ReaderTestCorrupted1.xlsx' ],
             [ 'examples/ReaderTestCorrupted2.xlsx' ],
-            [ 'examples/ReaderTestCorrupted3.xlsx' ],
+            // [ 'examples/ReaderTestCorrupted3.xlsx' ],
             [ 'examples/ReaderTestCorrupted4.xlsx' ],
             [ 'examples/ReaderTestCorrupted5.xlsx' ],
             [ 'examples/ReaderTestCorrupted6.xlsx' ],
@@ -46,24 +46,12 @@ final class ReaderTest extends TestCase
         $xlsx = new Reader('examples/ReaderTest.xlsx');
         $book = $xlsx->readIn()->getBook();
 
-        try {
+        // Get Sheets.
+        $sheet1 = $book->getSheetByName('Sheet1');
+        $sheet2 = $book->getSheetByName('Sheet2');
 
-            var_dump($book->getSheets());
-            foreach ($book->getSheets() as $sheet) {
-                var_dump($sheet->getName());
-            }
-
-            // Get Sheets.
-            $sheet1 = $book->getSheetByName('Sheet1');
-            $sheet2 = $book->getSheetByName('Sheet2');
-
-            // Get Table.
-            $tableData = $book->getTableByName('Table1')->getData();
-
-        } catch (\Throwable $thr) {
-            var_dump($thr);
-            die;
-        }
+        // Get Table.
+        $tableData = $book->getTableByName('Table1')->getData();
 
         // Define proper data.
         $properData = [

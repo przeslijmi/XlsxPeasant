@@ -308,12 +308,15 @@ final class ItemsTest extends TestCase
 
         // Add columns.
         $column = $table->addColumn('Column1', 1);
+        $column->setWidth(20.00);
         $table->addColumns([ 'Column2', 'Column3' ]);
 
         // Test.
         $this->assertInstanceOf(Column::class, $column);
         $this->assertEquals($column, $table->getColumnByName('Column1'));
         $this->assertEquals($column, $table->getColumnById(1));
+        $this->assertEquals('Column1', $column->getName());
+        $this->assertEquals(20.00, $column->getWidth());
         $this->assertEquals(3, $table->countColumns());
         $this->assertEquals(38, strlen($column->getUuid()));
 

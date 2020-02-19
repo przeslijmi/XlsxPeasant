@@ -278,6 +278,17 @@ class Column extends Items
     }
 
     /**
+     * Gets width of this Column.
+     *
+     * @return null|float
+     */
+    public function getWidth(?float $width = null) : ?float
+    {
+
+        return $this->cell->getColWidth();
+    }
+
+    /**
      * Return row and col id for this Column.
      *
      * @since  v1.0

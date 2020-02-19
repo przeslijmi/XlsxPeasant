@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\ObjectDonoexException;
-use Throwable;
 
 /**
  * Can't find sheet by given ID or name.
@@ -15,11 +14,10 @@ class SheetDonoexException extends ObjectDonoexException
      * Constructor.
      *
      * @param integer|string $idOrName Id or name of Sheet.
-     * @param Throwable|null $cause    Throwable that caused the problem.
      *
      * @since v1.0
      */
-    public function __construct($idOrName, ?Throwable $cause = null)
+    public function __construct($idOrName)
     {
 
         // Lvd.
@@ -33,10 +31,5 @@ class SheetDonoexException extends ObjectDonoexException
         $this->addInfo('sheetIdOrName', (string) $idOrName);
         $this->addInfo('context', 'GetXlsxSheet');
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('SheetDonoexException', $cause);
-        }
     }
 }

@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
-use Throwable;
 
 /**
  * Generation ox XLSx file has failed.
@@ -14,11 +13,9 @@ class TargetFileDeletionFailedException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param Throwable|null $cause Throwable that caused the problem.
-     *
      * @since v1.0
      */
-    public function __construct(?Throwable $cause = null)
+    public function __construct()
     {
 
         // Lvd.
@@ -27,10 +24,5 @@ class TargetFileDeletionFailedException extends MethodFopException
 
         // Define.
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('TargetFileDeletionFailedException', $cause);
-        }
     }
 }

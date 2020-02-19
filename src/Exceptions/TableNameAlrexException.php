@@ -14,12 +14,11 @@ class TableNameAlrexException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param string         $name  Name of table that is duplicated.
-     * @param Throwable|null $cause Throwable that caused the problem.
+     * @param string $name Name of table that is duplicated.
      *
      * @since v1.0
      */
-    public function __construct(string $name, ?Throwable $cause = null)
+    public function __construct(string $name)
     {
 
         // Lvd.
@@ -29,10 +28,5 @@ class TableNameAlrexException extends MethodFopException
         // Define.
         $this->addInfo('name', $name);
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('TableNameAlrexException', $cause);
-        }
     }
 }

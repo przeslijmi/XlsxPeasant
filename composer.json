@@ -26,6 +26,7 @@
   ],
   "require": {
     "php" : "^7.3",
+    "ext-zip": "*",
     "fleshgrinder/uuid": "dev-php-7.1",
     "przeslijmi/sexceptions": "~1.0",
     "przeslijmi/sivalidator": "~2.0"

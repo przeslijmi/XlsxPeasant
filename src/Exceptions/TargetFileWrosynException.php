@@ -3,7 +3,6 @@
 namespace Przeslijmi\XlsxPeasant\Exceptions;
 
 use Przeslijmi\Sexceptions\Exceptions\FileAlrexException;
-use Throwable;
 
 /**
  * Target file URI is somehow corrupted.
@@ -14,12 +13,11 @@ class TargetFileWrosynException extends FileAlrexException
     /**
      * Constructor.
      *
-     * @param string         $fileUri Uri of file.
-     * @param Throwable|null $cause   Throwable that caused problem.
+     * @param string $fileUri Uri of file.
      *
      * @since v1.0
      */
-    public function __construct(string $fileUri, ?Throwable $cause = null)
+    public function __construct(string $fileUri)
     {
 
         // Lvd.
@@ -30,10 +28,5 @@ class TargetFileWrosynException extends FileAlrexException
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('fileName', $fileUri);
         $this->addInfo('hint', $hint);
-
-        // Set cause.
-        if (is_null($cause) === false) {
-            parent::__construct('TargetFileWrosynExceptionOnGeneratingXlsxFile', $fileUri, $cause);
-        }
     }
 }
