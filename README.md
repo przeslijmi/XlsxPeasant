@@ -1,5 +1,10 @@
 # Przeslijmi XlsxPeasant - my approach to generate and read XLSX files
 
+[![Run Status](https://api.shippable.com/projects/5e4da2352d50ee0007e90b92/badge?branch=master)]()
+
+[![Coverage Badge](https://api.shippable.com/projects/5e4da2352d50ee0007e90b92/coverageBadge?branch=master)]()
+
+
 Tool that creates XML files, and packs them into ZIP archive (using `ZipArchive` class).
 
 Tool has a full support for UTF-16 characters.
