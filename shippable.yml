@@ -5,7 +5,7 @@ php:
 
 before_script:
   - composer self-update -n
-  - composer install --prefer-dist -n
+  - composer install --prefer-source --no-interaction
 
 script:
   - phpunit --log-junit shippable/testresults/junit.xml --coverage-xml shippable/codecoverage
