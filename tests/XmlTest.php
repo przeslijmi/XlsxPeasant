@@ -51,7 +51,7 @@ final class XmlTest extends TestCase
         $xml->setHeader('<?xml?>');
 
         // Lvd.
-        $nl = "\r\n";
+        $nl = PHP_EOL;
 
         // Prepare.
         $stringLong   = '<?xml?>' . $nl . $nl . '<b class="aa">' . $nl . '    <anchor />' . $nl;
@@ -189,7 +189,7 @@ final class XmlTest extends TestCase
     {
 
         // Lvd.
-        $nl = "\r\n";
+        $nl = PHP_EOL;
 
         // Create.
         $xml = new Xml([
