@@ -9,3 +9,8 @@ before_script:
 
 script:
   - phpunit --log-junit shippable/testresults/junit.xml --coverage-xml shippable/codecoverage
+
+deploy:
+  github_token: $GH_TOKEN
+  api_key:
+    secure: $GH_TOKEN
