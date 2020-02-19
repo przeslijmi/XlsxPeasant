@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - "7.3"
+
+before_script:
+  - composer self-update -n
+  - composer install --prefer-dist -n
+
+script:
+  - phpunit --log-junit shippable/testresults/junit.xml --coverage-xml shippable/codecoverage
