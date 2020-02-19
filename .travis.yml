@@ -5,3 +5,5 @@ before_script: composer install --prefer-source --no-interaction
 script: phpunit
 deploy:
   github_token: $GH_TOKEN
+  api_key:
+    secure: $GH_TOKEN
