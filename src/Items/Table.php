@@ -420,13 +420,14 @@ class Table extends Items
      * ]);
      * ```
      *
-     * @param array $rows See example.
+     * @param array   $rows              See example.
+     * @param boolean $ignoreMissingCols Opt. false. If set to true data for nonexisting columns will be ignored.
      *
      * @since  v1.0
      * @throws ColumnDonoexException When Column called in data does not exists.
      * @return self
      */
-    public function addData(array $rows) : self
+    public function addData(array $rows, bool $ignoreMissingCols = false) : self
     {
 
         // Create cache of Columns.
@@ -446,7 +447,11 @@ class Table extends Items
 
                 // Throw on nonexisting column.
                 if (isset($columnsCache[$columnName]) === false) {
-                    throw new ColumnDonoexException($this->getName(), $columnName);
+                    if ($ignoreMissingCols === true) {
+                        continue;
+                    } else {
+                        throw new ColumnDonoexException($this->getName(), $columnName);
+                    }
                 }
 
                 // Lvd.
@@ -495,19 +500,20 @@ class Table extends Items
      * ]);
      * ```
      *
-     * @param array $rows See example.
+     * @param array   $rows              See example.
+     * @param boolean $ignoreMissingCols Opt. false. If set to true data for nonexisting columns will be ignored.
      *
      * @since  v1.0
      * @return self
      */
-    public function setData(array $rows) : self
+    public function setData(array $rows, bool $ignoreMissingCols = false) : self
     {
 
         // Delete current contents.
         $this->rows = [];
 
         // Add new contents.
-        $this->addData($rows);
+        $this->addData($rows, $ignoreMissingCols);
 
         return $this;
     }

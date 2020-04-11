@@ -50,8 +50,14 @@ class Tools
 
         // Throw.
         if ($number < 1 || $number > 702) {
+
+            // Lvd.
+            $hint  = 'You\'re trying to reach to cell which has wrong number. ';
+            $hint .= 'It has to be more than zero and less then 702 (ZZ).';
+
+            // Throw.
             throw (new ParamOtoranException('cellNumber', '>=1 && <=702', (string) $number))
-                ->addHint('You\'re trying to reach to cell which has wrong number. It has to be more than zero and less then 702 (ZZ).');
+                ->addHint($hint);
         }
 
         // Lvd.
@@ -246,7 +252,7 @@ class Tools
     }
 
     /**
-     * Creates standard UUID to use in XLSx files.
+     * Creates standard UUID to use in XLSX files.
      *
      * @param boolean $wrapInCurlyBraces Optional, true. If set to true curly braces are added at outskirts.
      *

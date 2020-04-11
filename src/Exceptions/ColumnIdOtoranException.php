@@ -13,8 +13,8 @@ class ColumnIdOtoranException extends ParamOtoranException
     /**
      * Constructor.
      *
-     * @param string         $tableName Name of table in which Columns are present.
-     * @param integer        $id        Given wrong id.
+     * @param string  $tableName Name of table in which Columns are present.
+     * @param integer $id        Given wrong id.
      *
      * @since v1.0
      */

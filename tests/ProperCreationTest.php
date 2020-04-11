@@ -65,7 +65,7 @@ final class ProperCreationTest extends TestCase
 
         // Open this file to lock it.
         $fh = fopen($uri, 'r+');
-        flock($fh, LOCK_EX|LOCK_NB);
+        flock($fh, ( LOCK_EX | LOCK_NB ));
 
         // Try to generate again to the same file.
         try {
@@ -84,7 +84,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if Simplest XLSx can be generated.
+     * Test if Simplest XLSX can be generated.
      *
      * @return void
      */
@@ -128,7 +128,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with colors can be generated.
+     * Test if XLSX with colors can be generated.
      *
      * @return void
      */
@@ -180,7 +180,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with fonts can be generated.
+     * Test if XLSX with fonts can be generated.
      *
      * @return void
      */
@@ -233,7 +233,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with fonts can be generated.
+     * Test if XLSX with fonts can be generated.
      *
      * @return void
      */
@@ -305,7 +305,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with Styles can be generated.
+     * Test if XLSX with Styles can be generated.
      *
      * @return void
      */
@@ -489,7 +489,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with may merge Cells in Sheet.
+     * Test if XLSX with may merge Cells in Sheet.
      *
      * @return void
      */
@@ -519,7 +519,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with many Sheets can be generated.
+     * Test if XLSX with many Sheets can be generated.
      *
      * @return void
      *
@@ -550,7 +550,7 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if XLSx with Tables can be generated.
+     * Test if XLSX with Tables can be generated.
      *
      * @return void
      */
@@ -653,18 +653,22 @@ final class ProperCreationTest extends TestCase
             [
                 'department' => 'Research and Development',
                 'phone' => '11122233',
+                'additionalColumn' => 'test',
             ],
             [
                 'department' => 'Sales',
                 'phone' => '11122234',
+                'additionalColumn' => 'test',
             ],
             [
                 'department' => 'Services',
                 'phone' => '11122235',
+                'additionalColumn' => 'test',
             ],
             [
                 'department' => 'Training',
                 'phone' => '11122236',
+                'additionalColumn' => 'test',
             ],
         ];
 
@@ -683,10 +687,10 @@ final class ProperCreationTest extends TestCase
         $table1->getColumnByName('readiness')->setConditionalFormat(new DataBar());
         $table1->addData($data1);
 
-        // Add table 2.
+        // Add table 2 with missing data.
         $table2 = $sheet->addTable('Dep.Phones', 2, 8);
         $table2->addColumns([ 'department', 'phone' ]);
-        $table2->setData($data2);
+        $table2->setData($data2, true);
 
         // Generate.
         $xlsx->generate($uri, true);

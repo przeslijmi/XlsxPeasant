@@ -349,6 +349,7 @@ class Sheet extends Items
             // Add to index.
             $this->cells[$row][$col] = $cell;
 
+            return $cell;
         }//end if
 
         // Return from index.

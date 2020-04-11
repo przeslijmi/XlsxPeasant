@@ -14,7 +14,7 @@ class CellMergeConflictException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param string         $cellRef Refs of Cell.
+     * @param string $cellRef Refs of Cell.
      *
      * @since v1.0
      */

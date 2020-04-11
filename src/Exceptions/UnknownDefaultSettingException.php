@@ -5,7 +5,7 @@ namespace Przeslijmi\XlsxPeasant\Exceptions;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtosetException;
 
 /**
- * Generation ox XLSx file has failed.
+ * Generation ox XLSX file has failed.
  */
 class UnknownDefaultSettingException extends ParamOtosetException
 {

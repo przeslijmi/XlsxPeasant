@@ -21,7 +21,7 @@ class TargetFileAlrexException extends FileAlrexException
     {
 
         // Lvd.
-        $hint  = 'File URI to generate XLSx to is already taken.';
+        $hint  = 'File URI to generate XLSX to is already taken.';
         $hint .= 'Change target URI or allow overwriting.';
 
         // Define.

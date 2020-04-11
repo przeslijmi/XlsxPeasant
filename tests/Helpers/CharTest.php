@@ -7,7 +7,7 @@ use Przeslijmi\XlsxPeasant\Exceptions\UnservedUnicodeException;
 use Przeslijmi\XlsxPeasant\Helpers\Char;
 
 /**
- * Methods for testing XLSxPeasant Char class.
+ * Methods for testing XLSXPeasant Char class.
  */
 final class CharTest extends TestCase
 {

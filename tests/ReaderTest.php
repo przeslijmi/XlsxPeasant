@@ -21,16 +21,17 @@ final class ReaderTest extends TestCase
     public function corruptedUrisProvider() : array
     {
 
+        $dir = dirname(__DIR__) . '/examples/';
+
         return [
-            [ 'examples/ReaderTestCorrupted1.xlsx' ],
-            [ 'examples/ReaderTestCorrupted2.xlsx' ],
-            // [ 'examples/ReaderTestCorrupted3.xlsx' ],
-            [ 'examples/ReaderTestCorrupted4.xlsx' ],
-            [ 'examples/ReaderTestCorrupted5.xlsx' ],
-            [ 'examples/ReaderTestCorrupted6.xlsx' ],
-            [ 'examples/ReaderTestCorrupted7.xlsx' ],
-            [ 'examples/ReaderTestCorrupted8.xlsx' ],
-            [ 'examples/ReaderTestCorrupted9.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted1.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted2.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted3.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted4.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted5.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted6.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted7.xlsx' ],
+            [ $dir . 'ReaderTestCorrupted8.xlsx' ],
         ];
     }
 
@@ -43,7 +44,7 @@ final class ReaderTest extends TestCase
     {
 
         // Read Xlsx.
-        $xlsx = new Reader('examples/ReaderTest.xlsx');
+        $xlsx = new Reader(dirname(__DIR__) . '/examples/ReaderTest.xlsx');
         $book = $xlsx->readIn()->getBook();
 
         // Get Sheets.
@@ -125,7 +126,7 @@ final class ReaderTest extends TestCase
         $this->expectException(ClassFopException::class);
 
         // Read Xlsx.
-        $xlsx = new Reader('examples/NonExistingReaderTest.xlsx');
+        $xlsx = new Reader(dirname(__DIR__) . '/examples/NonExistingReaderTest.xlsx');
     }
 
     /**
@@ -160,7 +161,7 @@ final class ReaderTest extends TestCase
         $this->expectException(ObjectDonoexException::class);
 
         // Read Xlsx.
-        $xlsx = new Reader('examples/ReaderTest.xlsx');
+        $xlsx = new Reader(dirname(__DIR__) . '/examples/ReaderTest.xlsx');
 
         // Get what is not present.
         $xlsx->getXlSharedStrings();
@@ -178,7 +179,7 @@ final class ReaderTest extends TestCase
         $this->expectException(ObjectDonoexException::class);
 
         // Read Xlsx.
-        $xlsx = new Reader('examples/ReaderTest.xlsx');
+        $xlsx = new Reader(dirname(__DIR__) . '/examples/ReaderTest.xlsx');
 
         // Get what is not present.
         $xlsx->getXlWorkbook();
@@ -193,7 +194,7 @@ final class ReaderTest extends TestCase
     {
 
         // Read Xlsx.
-        $xlsx  = new Reader('examples/ReaderTestNullValue.xlsx');
+        $xlsx  = new Reader(dirname(__DIR__) . '/examples/ReaderTestNullValue.xlsx');
         $book  = $xlsx->readIn()->getBook();
         $sheet = $book->getSheetByName('Sheet2');
 

@@ -17,7 +17,7 @@ class XlSharedStrings extends Xml
 {
 
     /**
-     * Parent XLSx file.
+     * Parent XLSX file.
      *
      * @var Xlsx
      */

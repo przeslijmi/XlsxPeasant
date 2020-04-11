@@ -16,7 +16,7 @@ class XlRelsWorkbook extends Xml
 {
 
     /**
-     * Parent XLSx file.
+     * Parent XLSX file.
      *
      * @var Xlsx
      */

@@ -7,7 +7,7 @@ use Przeslijmi\XlsxPeasant\Helpers\Tools;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
 
 /**
- * Methods for testing XLSxPeasant Tools.
+ * Methods for testing XLSXPeasant Tools.
  */
 final class ToolsTest extends TestCase
 {

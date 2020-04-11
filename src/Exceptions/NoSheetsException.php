@@ -19,7 +19,7 @@ class NoSheetsException extends ClassFopException
     {
 
         // Lvd.
-        $hint  = 'Trying to generate XLSx with no Sheets. Call eg.: ';
+        $hint  = 'Trying to generate XLSX with no Sheets. Call eg.: ';
         $hint .= '`$xlsx->getBook()->addSheet(\'name\');`';
 
         // Define.

@@ -12,7 +12,7 @@ class FontXml
 {
 
     /**
-     * Parent XLSx file.
+     * Parent XLSX file.
      *
      * @var Xlsx
      */

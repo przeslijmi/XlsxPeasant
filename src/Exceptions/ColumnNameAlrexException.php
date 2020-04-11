@@ -13,8 +13,8 @@ class ColumnNameAlrexException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param string         $tableName  Name of table in which Columns are present.
-     * @param string         $columnName Name of column that is duplicated.
+     * @param string $tableName  Name of table in which Columns are present.
+     * @param string $columnName Name of column that is duplicated.
      *
      * @since v1.0
      */

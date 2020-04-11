@@ -282,7 +282,7 @@ class Column extends Items
      *
      * @return null|float
      */
-    public function getWidth(?float $width = null) : ?float
+    public function getWidth() : ?float
     {
 
         return $this->cell->getColWidth();

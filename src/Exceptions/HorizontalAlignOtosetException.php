@@ -13,8 +13,8 @@ class HorizontalAlignOtosetException extends ParamOtosetException
     /**
      * Constructor.
      *
-     * @param array          $possibleAligns Possible values that can be given.
-     * @param string         $givenAlign     Actually given value.
+     * @param array  $possibleAligns Possible values that can be given.
+     * @param string $givenAlign     Actually given value.
      *
      * @since v1.0
      */

@@ -47,6 +47,8 @@ function callPhpCodeSniffing() {
   echo "";
   echo "=============== PHPCodeSniffing ==> started"
   echo "";
+  echo "php $PHPCS_PATH --standard=phpcs.xml --report-file=.phpcs.txt src tests";
+  echo "";
 
   # Call PHP code sniffer.
   php $PHPCS_PATH --standard=$DIR/phpcs.xml --report-file=$DIR/.phpcs.txt $DIR/src $DIR/tests
@@ -78,6 +80,8 @@ function callPhpUnitTesting() {
   echo "";
   echo "=============== PHPUnit ==> started"
   echo "";
+  echo "php $PHPUNITPHAR_PATH -c $DIR/phpunit.xml $DIR";
+  echo "";
 
   # Call PHP Unit.
   cd "../../../"
@@ -107,6 +111,8 @@ function callSamiGeneration() {
   # Start SAMI.
   echo "";
   echo "=============== SAMI ==> started"
+  echo "";
+  echo "php $SAMIPHAR_PATH update ../sami.php";
   echo "";
 
   # Change to dir in which sami has to be generated.

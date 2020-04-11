@@ -6,7 +6,7 @@ use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
 use Throwable;
 
 /**
- * Generation ox XLSx file has failed.
+ * Generation ox XLSX file has failed.
  */
 class TableNameAlrexException extends MethodFopException
 {

@@ -5,7 +5,7 @@ namespace Przeslijmi\XlsxPeasant\Exceptions;
 use Przeslijmi\Sexceptions\Exceptions\ParamOtoranException;
 
 /**
- * Generation ox XLSx file has failed.
+ * Generation ox XLSX file has failed.
  */
 class TableIdOtoranException extends ParamOtoranException
 {

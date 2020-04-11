@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Przeslijmi\XlsxPeasant\Helpers\Date;
 
 /**
- * Methods for testing XLSxPeasant Date class.
+ * Methods for testing XLSXPeasant Date class.
  */
 final class DateTest extends TestCase
 {

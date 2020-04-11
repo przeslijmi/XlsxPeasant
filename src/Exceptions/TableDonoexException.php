@@ -13,7 +13,7 @@ class TableDonoexException extends ObjectDonoexException
     /**
      * Constructor.
      *
-     * @param string         $name  Name of table that has data.
+     * @param string $name Name of table that has data.
      *
      * @since v1.0
      */

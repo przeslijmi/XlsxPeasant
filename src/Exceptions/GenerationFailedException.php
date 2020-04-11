@@ -6,7 +6,7 @@ use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 use Throwable;
 
 /**
- * Generation ox XLSx file has failed.
+ * Generation ox XLSX file has failed.
  */
 class GenerationFailedException extends ClassFopException
 {
@@ -22,7 +22,7 @@ class GenerationFailedException extends ClassFopException
     {
 
         // Lvd.
-        $hint = 'Generation of XLSx has somehow failed. See below.';
+        $hint = 'Generation of XLSX has somehow failed. See below.';
 
         // Define.
         $this->addInfo('context', 'GenerationOfXlsxFile');

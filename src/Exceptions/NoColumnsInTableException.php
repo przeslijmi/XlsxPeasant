@@ -19,7 +19,7 @@ class NoColumnsInTableException extends ClassFopException
     {
 
         // Lvd.
-        $hint  = 'Trying to generate XLSx table that has no columns. Call eg.: ';
+        $hint  = 'Trying to generate XLSX table that has no columns. Call eg.: ';
         $hint .= '`$table->addColumns([ \'a\', \'b\' ]);`';
 
         // Define.

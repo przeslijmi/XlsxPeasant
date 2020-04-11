@@ -21,7 +21,7 @@ class TargetFileWrosynException extends FileAlrexException
     {
 
         // Lvd.
-        $hint  = 'File URI to generate XLSx to is empty, or dir or has wrong syntax.';
+        $hint  = 'File URI to generate XLSX to is empty, or dir or has wrong syntax.';
         $hint .= 'Change target URI.';
 
         // Define.

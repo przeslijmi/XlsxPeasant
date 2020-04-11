@@ -22,7 +22,7 @@ use Throwable;
 use ZipArchive;
 
 /**
- * XLSx sheets generator.
+ * XLSX sheets generator.
  */
 class Xlsx
 {
@@ -192,10 +192,10 @@ class Xlsx
 
             // Throw if deletion is not possible.
             if (@touch($targetUri, time()) === false
-                || ($fh = @fopen($targetUri, 'r+')) === false
-                || @flock($fh, LOCK_EX|LOCK_NB) === false
+                || ( $fh = @fopen($targetUri, 'r+') ) === false
+                || @flock($fh, ( LOCK_EX | LOCK_NB )) === false
             ) {
-                throw new TargetFileDeletionFailedException();
+                throw new TargetFileDeletionFailedException($targetUri);
             }
 
             unlink($targetUri);
@@ -268,8 +268,7 @@ class Xlsx
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
      * @since  v1.0
-     * @throws GenerationFailedException When somehow generation failed.
-     * @throws GenerationFailedException When closing ZIP failed.
+     * @throws GenerationFailedException When somehow generation failed or when closing ZIP failed.
      * @return void
      *
      * @phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged

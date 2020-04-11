@@ -36,7 +36,7 @@ class Reader
     private $xlsx;
 
     /**
-     * Uri of XLSx file to read.
+     * Uri of XLSX file to read.
      *
      * @var string
      */
@@ -96,7 +96,7 @@ class Reader
     /**
      * Constructor.
      *
-     * @param string $xlsxFileUri Uri of XLSx file.
+     * @param string $xlsxFileUri Uri of XLSX file.
      *
      * @since  v1.0
      * @throws FileDonoexException Wher file to be read is not existing.
@@ -148,7 +148,7 @@ class Reader
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
 
-        // Create final XLSx object.
+        // Create final XLSX object.
         try {
 
             // Create.
@@ -308,7 +308,7 @@ class Reader
     }
 
     /**
-     * Creates final XLSx object to use.
+     * Creates final XLSX object to use.
      *
      * @since  v1.0
      * @throws ClassFopException When reading XML files somehow failed.

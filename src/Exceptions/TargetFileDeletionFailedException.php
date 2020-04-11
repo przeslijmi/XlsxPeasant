@@ -5,7 +5,7 @@ namespace Przeslijmi\XlsxPeasant\Exceptions;
 use Przeslijmi\Sexceptions\Exceptions\MethodFopException;
 
 /**
- * Generation ox XLSx file has failed.
+ * Generation ox XLSX file has failed.
  */
 class TargetFileDeletionFailedException extends MethodFopException
 {
@@ -13,16 +13,17 @@ class TargetFileDeletionFailedException extends MethodFopException
     /**
      * Constructor.
      *
-     * @since v1.0
+     * @param string $fileUri Uri of file which created problem.
      */
-    public function __construct()
+    public function __construct(string $fileUri)
     {
 
         // Lvd.
-        $hint  = 'Generation of XLSx failed because target file to generate to is unaccesible.';
+        $hint  = 'Generation of XLSX failed because target file to generate to is unaccesible. ';
         $hint .= 'Check permissions or maybe file is still in use?';
 
         // Define.
         $this->addInfo('hint', $hint);
+        $this->addInfo('fileUri', $fileUri);
     }
 }

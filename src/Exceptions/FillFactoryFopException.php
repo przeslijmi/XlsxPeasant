@@ -13,7 +13,7 @@ class FillFactoryFopException extends MethodFopException
     /**
      * Constructor.
      *
-     * @param integer        $paramCount Number of parameters given to factory.
+     * @param integer $paramCount Number of parameters given to factory.
      *
      * @since v1.0
      */
