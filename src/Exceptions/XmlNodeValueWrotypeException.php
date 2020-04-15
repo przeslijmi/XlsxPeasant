@@ -28,6 +28,6 @@ class XmlNodeValueWrotypeException extends ValueWrotypeException
         $this->addInfo('valueName', 'xmlNodeValue');
         $this->addInfo('typeExpected', 'array, scalar, null');
         $this->addInfo('actualType', $nodeValueType);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

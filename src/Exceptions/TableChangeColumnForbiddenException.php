@@ -26,6 +26,6 @@ class TableChangeColumnForbiddenException extends MethodFopException
 
         // Define.
         $this->addInfo('tableName', $name);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

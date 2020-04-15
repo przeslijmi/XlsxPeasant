@@ -29,6 +29,6 @@ class ColumnIdOtoranException extends ParamOtoranException
         $this->addInfo('paramName', 'columnId');
         $this->addInfo('range', '>=1');
         $this->addInfo('actualValue', (string) $id);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

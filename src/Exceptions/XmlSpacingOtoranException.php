@@ -29,6 +29,6 @@ class XmlSpacingOtoranException extends ParamOtoranException
         $this->addInfo('paramName', 'xmlSpacing');
         $this->addInfo('range', '0>x>10');
         $this->addInfo('actualValue', (string) $spacing);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

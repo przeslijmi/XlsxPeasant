@@ -27,6 +27,6 @@ class TableNameAlrexException extends MethodFopException
 
         // Define.
         $this->addInfo('name', $name);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

@@ -23,7 +23,7 @@ class TargetFileDeletionFailedException extends MethodFopException
         $hint .= 'Check permissions or maybe file is still in use?';
 
         // Define.
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
         $this->addInfo('fileUri', $fileUri);
     }
 }

@@ -30,6 +30,6 @@ class CellMergeConflictException extends MethodFopException
         $this->addInfo('cellRef', $cellRef);
         $this->addInfo('colRef', $colRef);
         $this->addInfo('col', (string) Tools::convRefToNumber($colRef));
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

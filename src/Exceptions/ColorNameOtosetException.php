@@ -28,6 +28,6 @@ class ColorNameOtosetException extends ValueOtosetException
         $this->addInfo('name', 'colorName');
         $this->addInfo('actualValue', $colorName);
         $this->addInfo('range', implode(', ', Color::DICTIONARY));
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

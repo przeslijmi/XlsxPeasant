@@ -26,7 +26,7 @@ class GenerationFailedException extends ClassFopException
 
         // Define.
         $this->addInfo('context', 'GenerationOfXlsxFile');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
 
         // Set cause.
         if (is_null($cause) === false) {

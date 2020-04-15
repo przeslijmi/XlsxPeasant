@@ -41,6 +41,6 @@ class XmlNodeNameWrosynException extends ValueWrosynException
         // Define.
         $this->addInfo('context', 'xmlNodeName');
         $this->addInfo('value', $nodeName);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

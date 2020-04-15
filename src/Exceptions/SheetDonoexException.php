@@ -30,6 +30,6 @@ class SheetDonoexException extends ObjectDonoexException
         // Define.
         $this->addInfo('sheetIdOrName', (string) $idOrName);
         $this->addInfo('context', 'GetXlsxSheet');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

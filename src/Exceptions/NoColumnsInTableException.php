@@ -24,6 +24,6 @@ class NoColumnsInTableException extends ClassFopException
 
         // Define.
         $this->addInfo('context', 'XlsxGeneration');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

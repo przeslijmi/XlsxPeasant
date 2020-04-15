@@ -25,6 +25,6 @@ class FillFactoryFopException extends MethodFopException
 
         // Define.
         $this->addInfo('paramCount', (string) $paramCount);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

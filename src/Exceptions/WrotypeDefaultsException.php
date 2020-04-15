@@ -33,6 +33,6 @@ class WrotypeDefaultsException extends ParamWrotypeException
         $this->addInfo('paramName', $defaultsName);
         $this->addInfo('typeExpected', $typeExpected);
         $this->addInfo('actualType', $actualType);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

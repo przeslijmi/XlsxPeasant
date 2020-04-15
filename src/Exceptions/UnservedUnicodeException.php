@@ -25,6 +25,6 @@ class UnservedUnicodeException extends ParamOtoranException
 
         // Define.
         $this->addInfo('decUnicode', (string) $decUnicode);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

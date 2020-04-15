@@ -27,6 +27,6 @@ class CellValueWrotypeException extends ValueWrotypeException
         // Define.
         $this->addInfo('sheetName', $cell->getSheet()->getName());
         $this->addInfo('cellRef', $cell->getRef());
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

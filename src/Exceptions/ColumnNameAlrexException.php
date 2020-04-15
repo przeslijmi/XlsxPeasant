@@ -29,6 +29,6 @@ class ColumnNameAlrexException extends MethodFopException
         // Define.
         $this->addInfo('tableName', $tableName);
         $this->addInfo('columnName', $columnName);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

@@ -27,6 +27,6 @@ class TargetFileAlrexException extends FileAlrexException
         // Define.
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('fileName', $fileUri);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

@@ -28,6 +28,6 @@ class TargetDirectoryDonoexException extends DirDonoexException
         $this->addInfo('context', 'generatingXlsxFile');
         $this->addInfo('directoryUri', $directoryUri);
         $this->addInfo('fullUri', $fullUri);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

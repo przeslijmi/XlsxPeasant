@@ -24,6 +24,6 @@ class StyleLockedException extends ClassFopException
 
         // Define.
         $this->addInfo('context', 'StyleLock');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

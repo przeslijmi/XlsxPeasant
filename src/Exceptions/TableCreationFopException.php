@@ -27,7 +27,7 @@ class TableCreationFopException extends MethodFopException
 
         // Define.
         $this->addInfo('name', $name);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
 
         // Set cause.
         if (is_null($cause) === false) {

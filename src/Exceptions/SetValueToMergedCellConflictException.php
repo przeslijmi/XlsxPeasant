@@ -25,6 +25,6 @@ class SetValueToMergedCellConflictException extends MethodFopException
 
         // Define.
         $this->addInfo('cellRef', $cellRef);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

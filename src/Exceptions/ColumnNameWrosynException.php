@@ -28,7 +28,7 @@ class ColumnNameWrosynException extends ParamWrosynException
         // Define.
         $this->addInfo('paramName', 'columnName');
         $this->addInfo('actualValue', $name);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
 
         // Set cause.
         if (is_null($cause) === false) {

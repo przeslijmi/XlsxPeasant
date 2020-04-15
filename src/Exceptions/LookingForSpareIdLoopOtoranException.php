@@ -24,7 +24,7 @@ class LookingForSpareIdLoopOtoranException extends LoopOtoranException
         $hint = 'Generator was looking for spare id - but it failed after ' . $maxRange . ' tries.';
 
         // Define.
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
         $this->addInfo('maxRange', (string) $maxRange);
     }
 }

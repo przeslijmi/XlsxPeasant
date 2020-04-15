@@ -40,6 +40,6 @@ class RefWrosynException extends ParamOtoranException
         $this->addInfo('paramName', 'cellRef');
         $this->addInfo('range', $range);
         $this->addInfo('actualValue', $actualValue);
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

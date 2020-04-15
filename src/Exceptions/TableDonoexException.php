@@ -26,6 +26,6 @@ class TableDonoexException extends ObjectDonoexException
         // Define.
         $this->addInfo('tableName', $name);
         $this->addInfo('context', 'GetXlsxTableByName');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }

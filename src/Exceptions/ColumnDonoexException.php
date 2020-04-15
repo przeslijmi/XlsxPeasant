@@ -32,6 +32,6 @@ class ColumnDonoexException extends ObjectDonoexException
         $this->addInfo('tableName', $tableName);
         $this->addInfo('columnIdOrName', (string) $idOrName);
         $this->addInfo('context', 'GetXlsxTableColumn');
-        $this->addInfo('hint', $hint);
+        $this->addHint($hint);
     }
 }
