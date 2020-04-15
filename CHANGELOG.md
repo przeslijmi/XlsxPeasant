@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.3 - 2020-04-15
+
+- Updated `shippable.yml`.
+
 ## v1.0.2 - 2020-04-15
 
 - Added `resources/configSpecimen.php`.
