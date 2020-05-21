@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Przeslijmi\Sexceptions\Exceptions\ClassFopException;
 use Przeslijmi\Sexceptions\Exceptions\ObjectDonoexException;
 use Przeslijmi\XlsxPeasant\Reader;
+use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlSharedStrings;
+use Przeslijmi\XlsxPeasant\Reader\XmlFile\XlWorkbook;
+use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
  * Methods for testing reading of XLSX files.
@@ -75,6 +78,10 @@ final class ReaderTest extends TestCase
         $this->assertEquals('Free cell B3', $sheet2->getCell(3, 2)->getSimpleValue());
         $this->assertEquals('Free cell B4 and bolded', $sheet2->getCell(4, 2)->getSimpleValue());
         $this->assertEquals('5', $sheet2->getCell(3, 4)->getSimpleValue());
+        $this->assertEquals(100, $xlsx->getStopReadingOnEmptyRows());
+        $this->assertInstanceOf(XlSharedStrings::class, $xlsx->getXlSharedStrings());
+        $this->assertInstanceOf(XlWorkbook::class, $xlsx->getXlWorkbook());
+        $this->assertInstanceOf(Xlsx::class, $xlsx->getXlsx());
 
         // Get XlTable.
         $xlTable = $xlsx->getXlTables()[0];
@@ -112,6 +119,12 @@ final class ReaderTest extends TestCase
         } catch (ObjectDonoexException $exc) {
             $this->assertTrue(true);
         }
+
+        // Change settings.
+        $xlsx->setStopReadingOnEmptyRows(-1);
+
+        // Test.
+        $this->assertEquals(-1, $xlsx->getStopReadingOnEmptyRows());
     }
 
     /**
@@ -205,5 +218,33 @@ final class ReaderTest extends TestCase
         $this->assertEquals(null, $xlWorksheet->getCellValue(3, 4));
         $this->assertEquals(null, $xlWorksheet->getCellValue(10, 10));
         $this->assertEquals(null, $xlWorksheet->getCellValue(3, 10));
+    }
+
+    /**
+     * Test if setting to ignore empty lines works.
+     *
+     * @return void
+     */
+    public function testIfIgnoringManyEmptyLinesWorks() : void
+    {
+
+        // Read Xlsx.
+        $xlsx = new Reader(dirname(__DIR__) . '/examples/ReaderTestManyEmptyRows.xlsx');
+        $xlsx->setStopReadingOnEmptyRows(3);
+
+        // Read Xlsx.
+        $book        = $xlsx->readIn()->getBook();
+        $sheet       = $book->getSheetByName('Sheet1');
+        $xlWorksheet = $xlsx->getXlWorksheets()[0];
+
+        // Test.
+        $this->assertEquals('Will read this', $sheet->getCell(1, 2)->getSimpleValue());
+        $this->assertEquals('Will read this', $xlWorksheet->getCellValue(1, 2));
+        $this->assertEquals('See below!', $sheet->getCell(2, 2)->getSimpleValue());
+        $this->assertEquals('See below!', $xlWorksheet->getCellValue(2, 2));
+
+        // This will not be read because of limit set to 100.
+        $this->assertEquals(null, $sheet->getCell(7, 2)->getSimpleValue());
+        $this->assertEquals('Won\'t read that!', $xlWorksheet->getCellValue(7, 2));
     }
 }

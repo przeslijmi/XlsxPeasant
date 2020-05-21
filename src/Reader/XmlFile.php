@@ -37,6 +37,13 @@ abstract class XmlFile
     protected $contents;
 
     /**
+     * Raw XML contents of file.
+     *
+     * @var string
+     */
+    protected $xmlRaw;
+
+    /**
      * XML rels object.
      *
      * @var DOMDocument
@@ -109,8 +116,10 @@ abstract class XmlFile
     private function readXml() : self
     {
 
+        $this->xmlRaw = file_get_contents($this->fileUri);
+
         $this->contents = new DOMDocument();
-        $this->contents->loadXML(file_get_contents($this->fileUri));
+        $this->contents->loadXML($this->xmlRaw);
 
         return $this;
     }

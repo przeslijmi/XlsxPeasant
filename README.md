@@ -421,3 +421,35 @@ $tableData = $book->getTableByName('Table1')->getData();
 `$tableData` is just a pure one dimensional array with keys (table columns names) and values (rows simple values for this columns).
 
 **BE AWARE** Reading large `XLSX` files can reach beyond 30 s PHP execution time limit.
+
+### Reading from actual XML file vs reading from object created on XML file
+
+When Reader reads XLSX file you can reach cell contents in two ways (this is only for pure cell values - not tables):
+
+```php
+// This reads from Book created while reading whole Sheet into object.
+$xlsx->getBook()->getSheetByName('Sheet1')->getCell(1, 1)->getSimpleValue();
+
+// This reads from actual worksheets' XML file.
+$xlsx->getXlWorksheets()[0]->getCellValue(1, 1);
+```
+
+It can happen that inside XLSX file dimensions of Sheet are much greater then real contents. Reading this kind of file
+can take much time. To avoid that situation parameter `stopReadingOnEmptyRows` has been introduced.
+
+When reading XLSX files all XLSX file content is read at once. Later - when you call `getCell(r, c)` it is only looked for
+already read in cells from XML files. The reader stops reading the sheet when it founds certain number of empty rows.
+
+This parameter is set to `100` on default which means - which means that after 100 of empty rows - reading will stop
+adding next rows into object.
+
+Contents of this row will however be still accessible by `getCellValue()` which reads XML contents every time.
+
+You can change `stopReadingOnEmptyRows` value when instantiating Reader.
+```php
+// Create instance.
+$xlsx = new Reader($uri);
+$xlsx->setStopReadingOnEmptyRows(50);
+```
+
+Change it to `-1` to turn the limit off.

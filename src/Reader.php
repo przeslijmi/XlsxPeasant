@@ -94,6 +94,13 @@ class Reader
     private $unzipUri;
 
     /**
+     * How many empty rows there has to be to stop reading XLSX file (default = 100).
+     *
+     * @var integer
+     */
+    private $stopReadingOnEmptyRows = 100;
+
+    /**
      * Constructor.
      *
      * @param string $xlsxFileUri Uri of XLSX file.
@@ -115,11 +122,50 @@ class Reader
 
             // Save.
             $this->xlsxFileUri = $xlsxFileUri;
-            $this->unzipUri    = 'examples/.temp/unpack_' . rand(10000, 99999);
+
+            // Find spare dir.
+            do {
+
+                // Try this.
+                $unzipUri = 'examples/.temp/unpack_' . rand(1000000, 9999999);
+
+                // Maybe this is ok.
+                if (file_exists($unzipUri) === false) {
+                    $this->unzipUri = $unzipUri;
+                }
+
+            } while (empty($this->unzipUri) === true);
 
         } catch (Throwable $thr) {
             throw new ClassFopException('creatingXlsxReader', $thr);
-        }
+        }//end try
+    }
+
+    /**
+     * Setter for how many empty rows there has to be to stop reading XLSX file (default = 100).
+     *
+     * @param integer $stopReadingOnEmptyRows How many empty rows there has to be to stop reading XLSX file.
+     *
+     * @return self
+     */
+    public function setStopReadingOnEmptyRows(int $stopReadingOnEmptyRows) : self
+    {
+
+        // Save.
+        $this->stopReadingOnEmptyRows = $stopReadingOnEmptyRows;
+
+        return $this;
+    }
+
+    /**
+     * Getter for how many empty rows there has to be to stop reading XLSX file (default = 100).
+     *
+     * @return integer
+     */
+    public function getStopReadingOnEmptyRows() : int
+    {
+
+        return $this->stopReadingOnEmptyRows;
     }
 
     /**
@@ -129,7 +175,7 @@ class Reader
      * @throws ClassFopException If any stage of creating Xlsx object from Xlsx file fails.
      * @return Xlsx
      */
-    public function readIn()
+    public function readIn() : Xlsx
     {
 
         // Call to unpack ZIP file (makes `$this->allFiles` nonempty).
@@ -161,6 +207,17 @@ class Reader
             throw (new ClassFopException('creatingXlsxFromReader', $thr))
                 ->addInfo('xlsxFileUri', $this->xlsxFileUri);
         }
+
+        return $this->xlsx;
+    }
+
+    /**
+     * Getter for whole XLSx.
+     *
+     * @return Xlsx
+     */
+    public function getXlsx() : Xlsx
+    {
 
         return $this->xlsx;
     }
@@ -356,8 +413,9 @@ class Reader
         foreach ($this->getXlWorksheets() as $sheetXml) {
 
             // Lvd.
-            $sheet = $this->xlsx->getBook()->getSheetByName($sheetXml->getName());
-            $dims  = $sheetXml->getDimensionRefAsArray();
+            $sheet            = $this->xlsx->getBook()->getSheetByName($sheetXml->getName());
+            $dims             = $sheetXml->getDimensionRefAsArray();
+            $emptyRowsCounter = 0;
 
             // Scan every row.
             for ($r = $dims['firstCell'][0]; $r <= $dims['lastCell'][0]; ++$r) {
@@ -386,8 +444,15 @@ class Reader
                     $sheet->getCell($r, $c)->setValue($value);
                 }
 
-                // Stop reading next rows - becuase this row was already empty in full.
+                // Enlarge or reset empty rows counter.
                 if ($wholeRowWasEmpty === true) {
+                    ++$emptyRowsCounter;
+                } else {
+                    $emptyRowsCounter = 0;
+                }
+
+                // If limit is set and counter is beyond limit - stop.
+                if ($this->stopReadingOnEmptyRows > -1 && $emptyRowsCounter >= $this->stopReadingOnEmptyRows) {
                     break;
                 }
             }//end for

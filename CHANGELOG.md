@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 - 2020-05-21
+
+- Added `getStopReadingOnEmptyRows()` and `setStopReadingOnEmptyRows()` methods for `Reader`.
+
 ## v1.0.3 - 2020-04-15
 
 - Updated `shippable.yml`.
