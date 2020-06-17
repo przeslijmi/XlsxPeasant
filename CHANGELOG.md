@@ -1,24 +1,28 @@
 # Changelog
 
+## v1.1.1 - 2020-06-17
+
+- Change: first try for better optimisation of memory.
+
 ## v1.1.0 - 2020-05-21
 
-- Added `getStopReadingOnEmptyRows()` and `setStopReadingOnEmptyRows()` methods for `Reader`.
+- New: Added `getStopReadingOnEmptyRows()` and `setStopReadingOnEmptyRows()` methods for `Reader`.
 
 ## v1.0.3 - 2020-04-15
 
-- Updated `shippable.yml`.
+- Change: Updated `shippable.yml`.
 
 ## v1.0.2 - 2020-04-15
 
-- Added `resources/configSpecimen.php`.
-- Updated exceptions.
-- Updated `phpcs.xml`.
+- New: Added `resources/configSpecimen.php`.
+- Change: Updated exceptions.
+- Change: Updated `phpcs.xml`.
 
 ## v1.0.1 - 2020-02-16
 
-- Reached 100 % code coverage.
-- Added `Shippable.yml`.
+- New: Added `Shippable.yml`.
+- Change: Reached 100 % code coverage.
 
 ## v1.0.0 - 2020-02-16
 
-- Offical release.
+- New: Offical release.

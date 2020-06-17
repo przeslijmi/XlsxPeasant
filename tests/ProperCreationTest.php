@@ -47,11 +47,11 @@ final class ProperCreationTest extends TestCase
     }
 
     /**
-     * Test if generating onto used file will throw.
+     * Test if generating onto existing, used file will throw.
      *
      * @return void
      */
-    public function testIfCreatingOntoUsedFileThrows() : void
+    public function testIfCreatingOntoExistingUsedFileThrows() : void
     {
 
         // Lvd.
@@ -81,6 +81,36 @@ final class ProperCreationTest extends TestCase
             flock($fh, LOCK_UN);
             unlink($uri);
         }
+    }
+
+    /**
+     * Test if generating onto exisiting, nonused file will throw.
+     *
+     * @return void
+     */
+    public function testIfCreatingOntoExistingUnusedFileWorks() : void
+    {
+
+        // Lvd.
+        $uri = PRZESLIJMI_XLSXPEASANT_TESTS_OUTPUT_DIRECTORY . 'tempFile.xlsx';
+
+        // Generate simplest file.
+        $xlsx  = new Xlsx();
+        $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+        $sheet->getCell(1, 1)->setValue('Hello World!');
+        $xlsx->generate($uri, true);
+
+        // Test.
+        $this->assertTrue(file_exists($uri));
+
+        // Generate again simplest file.
+        $xlsx  = new Xlsx();
+        $sheet = $xlsx->getBook()->addSheet('Simplest Test');
+        $sheet->getCell(1, 1)->setValue('Hello World!');
+        $xlsx->generate($uri, true);
+
+        // Test.
+        $this->assertTrue(file_exists($uri));
     }
 
     /**

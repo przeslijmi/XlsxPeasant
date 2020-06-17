@@ -129,6 +129,13 @@ class Xml
     protected $array = [];
 
     /**
+     * Contents of the whole XML as PHP array on construct.
+     *
+     * @var array
+     */
+    protected $constructArray = [];
+
+    /**
      * Counter of depth of indentation.
      *
      * @var integer
@@ -174,7 +181,8 @@ class Xml
     {
 
         if (is_null($array) === false) {
-            $this->array = $array;
+            $this->array          = $array;
+            $this->constructArray = $array;
         }
     }
 
@@ -188,6 +196,9 @@ class Xml
      */
     public function toXml(int $configs = 0) : string
     {
+
+        // Reset array to previous.
+        $this->constructArray = $this->array;
 
         // Call preparations.
         if (method_exists($this, 'prep') === true) {
@@ -216,6 +227,9 @@ class Xml
         // Format XML.
         $result = trim($result);
 
+        // Reset array to previous.
+        $this->array = $this->constructArray;
+
         return $result;
     }
 
@@ -232,7 +246,13 @@ class Xml
             $this->prep();
         }
 
-        return $this->array;
+        // Lvd.
+        $result = $this->array;
+
+        // Reset array to previous.
+        $this->array = $this->constructArray;
+
+        return $result;
     }
 
     /**
