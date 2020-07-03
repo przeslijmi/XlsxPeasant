@@ -15,8 +15,6 @@ class CellValueWrotypeException extends ValueWrotypeException
      * Constructor.
      *
      * @param Cell $cell Call causing the problem.
-     *
-     * @since v1.0
      */
     public function __construct(Cell $cell)
     {

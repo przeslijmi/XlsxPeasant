@@ -75,8 +75,6 @@ class Column extends Items
      * @param Table   $table Parent Table object.
      * @param string  $name  Name of Column.
      * @param integer $id    Id of Column.
-     *
-     * @since v1.0
      */
     public function __construct(Table $table, string $name, ?int $id = null)
     {
@@ -98,7 +96,6 @@ class Column extends Items
     /**
      * Getter for parent Table.
      *
-     * @since  v1.0
      * @return Table
      */
     public function getTable() : Table
@@ -110,7 +107,6 @@ class Column extends Items
     /**
      * Getter for Column id.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -133,7 +129,6 @@ class Column extends Items
     /**
      * Getter for name.
      *
-     * @since  v1.0
      * @return string
      */
     public function getName() : string
@@ -147,7 +142,6 @@ class Column extends Items
      *
      * @param integer $id Id of Column.
      *
-     * @since  v1.0
      * @throws ColumnIdOtoranException When ID is below 1.
      * @return self
      */
@@ -175,7 +169,6 @@ class Column extends Items
      *
      * @param string $name Name of Column.
      *
-     * @since  v1.0
      * @throws ColumnNameWrosynException When name has wrong syntax.
      * @throws ColumnNameAlrexException  When name in Book already exists.
      * @return self
@@ -211,7 +204,6 @@ class Column extends Items
      *
      * @param Format $format Format object to use in this Table Column.
      *
-     * @since  v1.0
      * @return null|Format
      */
     public function setFormat(?Format $format) : self
@@ -225,7 +217,6 @@ class Column extends Items
     /**
      * Getter for Format object for this Table Column - if is defined.
      *
-     * @since  v1.0
      * @return null|Format
      */
     public function getFormat() : ?Format
@@ -239,7 +230,6 @@ class Column extends Items
      *
      * @param ConditionalFormat $conditionalFormat ConditionalFormat object to use in this Table Column.
      *
-     * @since  v1.0
      * @return null|ConditionalFormat
      */
     public function setConditionalFormat(?ConditionalFormat $conditionalFormat) : self
@@ -253,7 +243,6 @@ class Column extends Items
     /**
      * Getter for Conditional Format object for this Table Column - if is defined.
      *
-     * @since  v1.0
      * @return null|ConditionalFormat
      */
     public function getConditionalFormat() : ?ConditionalFormat
@@ -291,7 +280,6 @@ class Column extends Items
     /**
      * Return row and col id for this Column.
      *
-     * @since  v1.0
      * @return int[2]
      */
     private function getRefs() : array

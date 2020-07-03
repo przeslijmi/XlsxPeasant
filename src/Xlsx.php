@@ -126,8 +126,6 @@ class Xlsx
 
     /**
      * Constructor.
-     *
-     * @since v1.0
      */
     public function __construct()
     {
@@ -152,7 +150,6 @@ class Xlsx
      * @param string  $targetUri Uri to which file has to be generated.
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
-     * @since  v1.0
      * @throws TargetFileAlrexException          When targetUri exists but overwriting is forbidden.
      * @throws TargetFileWrosynException         When targetUri is written wrong (eg. is empty).
      * @throws TargetDirectoryDonoexException    When targetUri directory does not exists.
@@ -209,7 +206,6 @@ class Xlsx
     /**
      * Getter for Book.
      *
-     * @since  v1.0
      * @return Book
      */
     public function getBook() : Book
@@ -221,7 +217,6 @@ class Xlsx
     /**
      * Getter for SharedStrings.
      *
-     * @since  v1.0
      * @return SharedStrings
      */
     public function getSharedStrings() : SharedStrings
@@ -233,7 +228,6 @@ class Xlsx
     /**
      * Getter for Styles.
      *
-     * @since  v1.0
      * @return Styles
      */
     public function getStyles() : Styles
@@ -247,7 +241,6 @@ class Xlsx
      *
      * @param boolean $onlyDir Optional, false. If set to true - only dir - not full target URI will be returned.
      *
-     * @since  v1.0
      * @return string
      */
     public function getTargetUri(bool $onlyDir = false) : string
@@ -267,7 +260,6 @@ class Xlsx
      * @param string  $targetUri Uri to which file has to be generated.
      * @param boolean $overwrite Optional, false. Set to true to allow to overwrite file if exists.
      *
-     * @since  v1.0
      * @throws GenerationFailedException When somehow generation failed or when closing ZIP failed.
      * @return void
      *
@@ -360,7 +352,6 @@ class Xlsx
      *
      * @param null|Style $style Style to use in new Cells.
      *
-     * @since  v1.0
      * @return self
      */
     public function useStyle(?Style $style) : self
@@ -374,7 +365,6 @@ class Xlsx
     /**
      * Getter for `useStyle`.
      *
-     * @since  v1.0
      * @return null|Style
      */
     public function getStyleToUse() : ?Style
@@ -388,7 +378,6 @@ class Xlsx
      *
      * @param Fill $fill Fill to use in new Cells.
      *
-     * @since  v1.0
      * @return self
      */
     public function useFill(?Fill $fill) : self
@@ -402,7 +391,6 @@ class Xlsx
     /**
      * Getter for `useFill`.
      *
-     * @since  v1.0
      * @return null|Fill
      */
     public function getFillToUse() : ?Fill
@@ -416,7 +404,6 @@ class Xlsx
      *
      * @param Font $font Font to use in new Cells.
      *
-     * @since  v1.0
      * @return self
      */
     public function useFont(?Font $font) : self
@@ -430,7 +417,6 @@ class Xlsx
     /**
      * Getter for `useFont`.
      *
-     * @since  v1.0
      * @return null|Font
      */
     public function getFontToUse() : ?Font
@@ -444,7 +430,6 @@ class Xlsx
      *
      * @param string $align Align to use in new Cells (eg. LC, RB).
      *
-     * @since  v1.0
      * @return self
      */
     public function useAlign(?string $align) : self
@@ -458,7 +443,6 @@ class Xlsx
     /**
      * Getter for `useAlign`.
      *
-     * @since  v1.0
      * @return null|string
      */
     public function getAlignToUse() : ?string
@@ -472,7 +456,6 @@ class Xlsx
      *
      * @param boolean $wrapText WrapText to use in new Cells (eg. LC, RB).
      *
-     * @since  v1.0
      * @return self
      */
     public function useWrapText(?bool $wrapText) : self
@@ -486,7 +469,6 @@ class Xlsx
     /**
      * Getter for `useWrapText`.
      *
-     * @since  v1.0
      * @return null|boolean
      */
     public function getWrapTextToUse() : ?bool
@@ -500,7 +482,6 @@ class Xlsx
      *
      * @param Format $format Number format to use in new Cells (eg. LC, RB).
      *
-     * @since  v1.0
      * @return self
      */
     public function useFormat(?Format $format) : self
@@ -514,7 +495,6 @@ class Xlsx
     /**
      * Getter for `useFormat`.
      *
-     * @since  v1.0
      * @return null|Format
      */
     public function getFormatToUse() : ?Format
@@ -528,7 +508,6 @@ class Xlsx
      *
      * @param Format $format Format Item object.
      *
-     * @since  v1.0
      * @return integer
      */
     public function registerFormatsId(Format $format) : int
@@ -564,7 +543,6 @@ class Xlsx
      * @param string                            $name  Setting name.
      * @param integer|float|boolean|string|null $value Setting value.
      *
-     * @since  v1.0
      * @throws WrotypeDefaultsException       When trying to set value of defaults with wrong type..
      * @throws UnknownDefaultSettingException When trying to set non-existing default.
      * @return self
@@ -601,7 +579,6 @@ class Xlsx
      *
      * @param string $name Setting name.
      *
-     * @since  v1.0
      * @throws UnknownDefaultSettingException When trying to get non-existing default.
      * @return mixed
      */
@@ -619,7 +596,6 @@ class Xlsx
     /**
      * Nullifies all `use*`. New cells will be as defaults are given.
      *
-     * @since  v1.0
      * @return self
      */
     public function useDefaults() : self
@@ -639,7 +615,6 @@ class Xlsx
     /**
      * Getter for default font.
      *
-     * @since  v1.0
      * @return Font
      */
     public function getDefaultFont() : Font

@@ -14,8 +14,6 @@ class TableChangeColumnForbiddenException extends MethodFopException
      * Constructor.
      *
      * @param string $name Name of table that has data.
-     *
-     * @since v1.0
      */
     public function __construct(string $name)
     {

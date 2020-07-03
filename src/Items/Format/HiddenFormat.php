@@ -12,8 +12,6 @@ class HiddenFormat extends Format
 
     /**
      * Construct.
-     *
-     * @since v1.0
      */
     public function __construct()
     {
@@ -24,7 +22,6 @@ class HiddenFormat extends Format
     /**
      * Return code of Format in XLSX language (syntax).
      *
-     * @since  v1.0
      * @return string
      */
     public function getCode() : string
@@ -36,7 +33,6 @@ class HiddenFormat extends Format
     /**
      * Getter for signature.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

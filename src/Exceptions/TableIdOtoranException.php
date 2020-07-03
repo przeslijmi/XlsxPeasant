@@ -14,8 +14,6 @@ class TableIdOtoranException extends ParamOtoranException
      * Constructor.
      *
      * @param integer $id Given wrong id.
-     *
-     * @since v1.0
      */
     public function __construct(int $id)
     {

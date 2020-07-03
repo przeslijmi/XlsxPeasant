@@ -27,8 +27,6 @@ class XlSharedStrings extends Xml
      * Constructor.
      *
      * @param Xlsx $xlsx Xlsx to import to this XML.
-     *
-     * @since v1.0
      */
     public function __construct(Xlsx $xlsx)
     {
@@ -47,7 +45,7 @@ class XlSharedStrings extends Xml
             ],
         ];
 
-        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS);
+        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS | Xml::NO_VALIDATION_NODE_NAME | Xml::NO_VALIDATION_ATTR_VALUE | Xml::NO_VALIDATION_ATTR_NAME);
         $this->setHeader('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>');
 
         parent::__construct();
@@ -69,7 +67,6 @@ class XlSharedStrings extends Xml
     /**
      * Preparation of `si` node.
      *
-     * @since  v1.0
      * @return self
      *
      * @phpcs:disable Zend.NamingConventions.ValidVariableName.ContainsNumbers

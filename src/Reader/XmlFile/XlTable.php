@@ -66,7 +66,6 @@ class XlTable extends XmlFile
      * @param string $fileUri Uri of XML file.
      * @param Reader $reader  Parent Reader instance.
      *
-     * @since  v1.0
      * @throws ClassFopException When creating table failed.
      */
     public function __construct(string $fileUri, Reader $reader)
@@ -92,7 +91,6 @@ class XlTable extends XmlFile
     /**
      * Getter for `id`.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -104,7 +102,6 @@ class XlTable extends XmlFile
     /**
      * Getter for `number`.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getNumber() : int
@@ -116,7 +113,6 @@ class XlTable extends XmlFile
     /**
      * Getter for `name`.
      *
-     * @since  v1.0
      * @return string
      */
     public function getName() : string
@@ -128,7 +124,6 @@ class XlTable extends XmlFile
     /**
      * Getter for `xlWorksheet`.
      *
-     * @since  v1.0
      * @return XlWorkSheet
      */
     public function getXlWorksheet() : XlWorkSheet
@@ -140,7 +135,6 @@ class XlTable extends XmlFile
     /**
      * Get this Table XML node.
      *
-     * @since  v1.0
      * @return object XML node.
      */
     public function getTableNode() : object
@@ -152,7 +146,6 @@ class XlTable extends XmlFile
     /**
      * Get number of first row for this Table (row 1 equals 1 [not 0]).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getFirstRow() : int
@@ -170,7 +163,6 @@ class XlTable extends XmlFile
     /**
      * Get number of last row for this Table (row 1 equals 1 [not 0]).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getLastRow() : int
@@ -188,7 +180,6 @@ class XlTable extends XmlFile
     /**
      * Get number of first column for this Table (column A equals 1).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getFirstCol() : int
@@ -206,7 +197,6 @@ class XlTable extends XmlFile
     /**
      * Get number of last column for this Table (column A equals 1).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getLastCol() : int
@@ -226,7 +216,6 @@ class XlTable extends XmlFile
      *
      * @param integer $number Desired order number of column.
      *
-     * @since  v1.0
      * @throws KeyDonoexException    When column with given `$number` does not exists.
      * @throws ObjectDonoexException When column with given `$number` does not exists.
      * @return string
@@ -282,7 +271,6 @@ class XlTable extends XmlFile
      * ]
      * ```
      *
-     * @since  v1.0
      * @throws MethodFopException If getting data is impossible.
      * @return array
      */
@@ -339,7 +327,6 @@ class XlTable extends XmlFile
      * [ [ 1, 1 ], [ 1, 2 ], [ 1, 3 ], [ 1, 4 ] ]
      * ```
      *
-     * @since  v1.0
      * @return array
      */
     public function getCellsRead() : array
@@ -351,7 +338,6 @@ class XlTable extends XmlFile
     /**
      * Setter for `id`.
      *
-     * @since  v1.0
      * @return self
      */
     private function setIdAndNumber() : self
@@ -377,7 +363,6 @@ class XlTable extends XmlFile
     /**
      * Setter for `name`.
      *
-     * @since  v1.0
      * @return self
      */
     private function setName() : self
@@ -395,7 +380,6 @@ class XlTable extends XmlFile
     /**
      * Setter for `xlWorksheet`.
      *
-     * @since  v1.0
      * @throws MethodFopException When is unable to find worksheet.
      * @return self
      */
@@ -421,7 +405,6 @@ class XlTable extends XmlFile
     /**
      * Setter for `columns`.
      *
-     * @since  v1.0
      * @return self
      */
     private function setColumns() : self

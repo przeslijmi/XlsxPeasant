@@ -35,7 +35,6 @@ class Styles extends Items
      *
      * @param Style $style Style to be registerd.
      *
-     * @since  v1.0
      * @return void
      */
     public function registerStyle(Style $style) : void
@@ -64,7 +63,6 @@ class Styles extends Items
     /**
      * Get whole index but without signatures - only Style[].
      *
-     * @since  v1.0
      * @return Style[]
      */
     public function getIndex() : array

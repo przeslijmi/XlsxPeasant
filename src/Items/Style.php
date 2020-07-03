@@ -87,7 +87,6 @@ class Style extends Items
     /**
      * Getter for Style ID of this Style.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -108,7 +107,6 @@ class Style extends Items
      *
      * @param integer $id Created id.
      *
-     * @since  v1.0
      * @return self
      */
     public function setId(int $id) : self
@@ -122,7 +120,6 @@ class Style extends Items
     /**
      * Checks if Style has defined Fill.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasFill() : bool
@@ -134,7 +131,6 @@ class Style extends Items
     /**
      * Setter for Fill of this Style.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFill() : self
@@ -152,7 +148,6 @@ class Style extends Items
     /**
      * Getter for Fill of this Style.
      *
-     * @since  v1.0
      * @return ?Fill
      */
     public function getFill() : ?Fill
@@ -164,7 +159,6 @@ class Style extends Items
     /**
      * Checks if Style has defined Font.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasFont() : bool
@@ -178,7 +172,6 @@ class Style extends Items
      *
      * @param null|Font $font Font to use.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFont(?Font $font = null) : self
@@ -201,7 +194,6 @@ class Style extends Items
     /**
      * Getter for Font of this Style.
      *
-     * @since  v1.0
      * @return ?Font
      */
     public function getFont() : ?Font
@@ -215,7 +207,6 @@ class Style extends Items
      *
      * @param string $name Name of font.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFontName(string $name) : self
@@ -240,7 +231,6 @@ class Style extends Items
      *
      * @param integer $size Size of font.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFontSize(int $size) : self
@@ -263,7 +253,6 @@ class Style extends Items
     /**
      * Setter for font color of this Style.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFontColor() : self
@@ -288,7 +277,6 @@ class Style extends Items
      *
      * @param string $which Optional, `both`. Possible values: `both`, `h` or `v`.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasAlign(string $which = 'both') : bool
@@ -314,7 +302,6 @@ class Style extends Items
      *
      * @param string $align Align for Style (eg. L, C, CC, CB, LT).
      *
-     * @since  v1.0
      * @return self
      */
     public function setAlign(string $align) : self
@@ -342,7 +329,6 @@ class Style extends Items
      *
      * @param string $align Desired horizontal align.
      *
-     * @since  v1.0
      * @throws HorizontalAlignOtosetException On wrong horizontal align.
      * @return self
      */
@@ -386,7 +372,6 @@ class Style extends Items
      *
      * @param string $align Desired vertical align.
      *
-     * @since  v1.0
      * @throws VerticalAlignOtosetException On wrong vertical align.
      * @return self
      */
@@ -431,7 +416,6 @@ class Style extends Items
      * ## Retrun value.
      * Array with two keys 'h' and 'v'.
      *
-     * @since  v1.0
      * @return array
      */
     public function getAlign() : array
@@ -446,7 +430,6 @@ class Style extends Items
     /**
      * Checks if Style has defined text wrap.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasWrapText() : bool
@@ -460,7 +443,6 @@ class Style extends Items
      *
      * @param boolean $wrapText WrapText for Style.
      *
-     * @since  v1.0
      * @return self
      */
     public function setWrapText(bool $wrapText) : self
@@ -477,7 +459,6 @@ class Style extends Items
     /**
      * Getter for Style wrap text.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function getWrapText() : bool
@@ -489,7 +470,6 @@ class Style extends Items
     /**
      * Checks if Style has format defined.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasFormat() : bool
@@ -503,7 +483,6 @@ class Style extends Items
      *
      * @param Format $format Format of this Style.
      *
-     * @since  v1.0
      * @return self
      */
     public function setFormat(Format $format) : self
@@ -520,7 +499,6 @@ class Style extends Items
     /**
      * Getter for format of this Style.
      *
-     * @since  v1.0
      * @return Format
      */
     public function getFormat() : Format
@@ -532,7 +510,6 @@ class Style extends Items
     /**
      * Checks if Style has conditional format defined.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasConditionalFormat() : bool
@@ -546,7 +523,6 @@ class Style extends Items
      *
      * @param ConditionalFormat $conditionalFormat Conditional format of this Style.
      *
-     * @since  v1.0
      * @return self
      */
     public function setConditionalFormat(ConditionalFormat $conditionalFormat) : self
@@ -563,7 +539,6 @@ class Style extends Items
     /**
      * Getter for conditional format of this Style.
      *
-     * @since  v1.0
      * @return ConditionalFormat
      */
     public function getConditionalFormat() : ConditionalFormat
@@ -577,7 +552,6 @@ class Style extends Items
      *
      * @param boolean $lock Optional, true. Set true to set lock, false otherwise.
      *
-     * @since  v1.0
      * @return self
      */
     public function setLock(bool $lock = true) : self
@@ -591,7 +565,6 @@ class Style extends Items
     /**
      * Getter for lock (locked Style can't be changed).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function getLock() : bool
@@ -603,7 +576,6 @@ class Style extends Items
     /**
      * Check if Style is locked and throw if it is (locked Style can't be changed).
      *
-     * @since  v1.0
      * @throws StyleLockedException When Style is locked.
      * @return void
      */
@@ -621,7 +593,6 @@ class Style extends Items
     /**
      * Return signature of this Style - to use it in Styles collection for hasing.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

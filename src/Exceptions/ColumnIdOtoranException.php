@@ -15,8 +15,6 @@ class ColumnIdOtoranException extends ParamOtoranException
      *
      * @param string  $tableName Name of table in which Columns are present.
      * @param integer $id        Given wrong id.
-     *
-     * @since v1.0
      */
     public function __construct(string $tableName, int $id)
     {

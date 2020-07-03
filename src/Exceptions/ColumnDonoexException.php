@@ -15,8 +15,6 @@ class ColumnDonoexException extends ObjectDonoexException
      *
      * @param string         $tableName Name of Table in which Column is searched for and missing.
      * @param integer|string $idOrName  Id or name of Column.
-     *
-     * @since v1.0
      */
     public function __construct(string $tableName, $idOrName)
     {

@@ -26,7 +26,6 @@ abstract class Format
      *
      * @param Xlsx $xlsx For which Xlsx id has to be given (one Format can be used in multiple Xlsx).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getIdForXlsx(Xlsx $xlsx) : int
@@ -40,7 +39,6 @@ abstract class Format
      *
      * @param string $type Type of format (number, date).
      *
-     * @since  v1.0
      * @return self
      */
     public function setType(string $type) : self
@@ -54,7 +52,6 @@ abstract class Format
     /**
      * Getter for type.
      *
-     * @since  v1.0
      * @return string
      */
     public function getType() : string

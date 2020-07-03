@@ -15,8 +15,6 @@ class XmlSpacingOtoranException extends ParamOtoranException
      * Constructor.
      *
      * @param integer $spacing Ordered spacing value.
-     *
-     * @since v1.0
      */
     public function __construct(int $spacing)
     {

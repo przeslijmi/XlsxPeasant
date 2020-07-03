@@ -55,8 +55,6 @@ abstract class XmlFile
      *
      * @param string $fileUri Uri of XML file.
      * @param Reader $reader  Reader parent obj.
-     *
-     * @since v1.0
      */
     public function __construct(string $fileUri, Reader $reader)
     {
@@ -69,7 +67,6 @@ abstract class XmlFile
     /**
      * Getter for `reader`.
      *
-     * @since  v1.0
      * @return Reader
      */
     public function getReader() : Reader
@@ -83,7 +80,6 @@ abstract class XmlFile
      *
      * @param string $fileUri Uri of XML file.
      *
-     * @since  v1.0
      * @return self
      */
     private function setFileUri(string $fileUri) : self
@@ -98,7 +94,6 @@ abstract class XmlFile
     /**
      * Getter for `fileUri`.
      *
-     * @since  v1.0
      * @return string
      */
     public function getFileUri() : string
@@ -110,7 +105,6 @@ abstract class XmlFile
     /**
      * Reads in XML as object.
      *
-     * @since  v1.0
      * @return self
      */
     private function readXml() : self

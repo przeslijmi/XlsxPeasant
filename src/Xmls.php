@@ -88,8 +88,6 @@ class Xmls
      * Constrtor.
      *
      * @param Xlsx $xlsx Xlsx document.
-     *
-     * @since v1.0
      */
     public function __construct(Xlsx $xlsx)
     {
@@ -109,7 +107,6 @@ class Xmls
     /**
      * Getter for `contentTypes` XML.
      *
-     * @since  v1.0
      * @return ContentTypes
      */
     public function getContentTypes() : ContentTypes
@@ -121,7 +118,6 @@ class Xmls
     /**
      * Getter for `docPropsApp` XML.
      *
-     * @since  v1.0
      * @return DocPropsApp
      */
     public function getDocPropsApp() : DocPropsApp
@@ -133,7 +129,6 @@ class Xmls
     /**
      * Getter for `docPropsCore` XML.
      *
-     * @since  v1.0
      * @return DocPropsCore
      */
     public function getDocPropsCore() : DocPropsCore
@@ -145,7 +140,6 @@ class Xmls
     /**
      * Getter for `relsRels` XML.
      *
-     * @since  v1.0
      * @return RelsRels
      */
     public function getRelsRels() : RelsRels
@@ -157,7 +151,6 @@ class Xmls
     /**
      * Getter for `xlRelsWorkbook` XML.
      *
-     * @since  v1.0
      * @return XlRelsWorkbook
      */
     public function getXlRelsWorkbook() : XlRelsWorkbook
@@ -169,7 +162,6 @@ class Xmls
     /**
      * Getter for `xlStyles` XML.
      *
-     * @since  v1.0
      * @return XlStyles
      */
     public function getXlStyles() : XlStyles
@@ -181,7 +173,6 @@ class Xmls
     /**
      * Getter for `xlSharedStrings` XML.
      *
-     * @since  v1.0
      * @return XlSharedStrings
      */
     public function getXlSharedStrings() : XlSharedStrings
@@ -193,7 +184,6 @@ class Xmls
     /**
      * Getter for `xlTheme` XML.
      *
-     * @since  v1.0
      * @return XlTheme
      */
     public function getXlTheme() : XlTheme
@@ -205,7 +195,6 @@ class Xmls
     /**
      * Getter for `xlWorkbook` XML.
      *
-     * @since  v1.0
      * @return XlWorkbook
      */
     public function getXlWorkbook() : XlWorkbook

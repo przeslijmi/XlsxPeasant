@@ -41,7 +41,6 @@ class Tools
      *
      * @param integer $number Number to be converted (larger than zero).
      *
-     * @since  v1.0
      * @throws ParamOtoranException When called number is lower than 1.
      * @return string
      */
@@ -104,7 +103,6 @@ class Tools
      *
      * @param string $ref Reference to be converted (only [A-Z]+).
      *
-     * @since  v1.0
      * @return integer
      */
     public static function convRefToNumber(string $ref) : int
@@ -143,7 +141,6 @@ class Tools
      * @param integer $row Row number starting from 1.
      * @param integer $col Col number starting from 1.
      *
-     * @since  v1.0
      * @return string
      */
     public static function convToCellRef(int $row, int $col) : string
@@ -157,7 +154,6 @@ class Tools
      *
      * @param string $ref Cell ref, eg. `A1`.
      *
-     * @since  v1.0
      * @return array
      */
     public static function convCellRefToNumbers(string $ref) : array
@@ -193,7 +189,6 @@ class Tools
      *
      * @param string $refs Cells ref (eg. `A2:B4` or just `B34`).
      *
-     * @since  v1.0
      * @return array
      */
     public static function convCellsRefToNumbers(string $refs) : array
@@ -231,7 +226,6 @@ class Tools
      *
      * @param string $ref Sheet ref (eg. `Sheet1!A3:B6`).
      *
-     * @since  v1.0
      * @return array
      */
     public static function explainSheetRef(string $ref) : array
@@ -256,7 +250,6 @@ class Tools
      *
      * @param boolean $wrapInCurlyBraces Optional, true. If set to true curly braces are added at outskirts.
      *
-     * @since  v1.0
      * @return string
      */
     public static function createUuid(bool $wrapInCurlyBraces = true) : string

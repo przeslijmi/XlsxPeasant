@@ -14,8 +14,6 @@ class SheetDonoexException extends ObjectDonoexException
      * Constructor.
      *
      * @param integer|string $idOrName Id or name of Sheet.
-     *
-     * @since v1.0
      */
     public function __construct($idOrName)
     {

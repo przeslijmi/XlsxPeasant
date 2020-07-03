@@ -90,7 +90,6 @@ class Cell extends Items
      * @param integer $col    Column id of this cell (starting with 1).
      * @param boolean $merged If this cell is merged (its "almost-cell" then).
      *
-     * @since  v1.0
      * @throws RefWrosynException When row or col are below 1.
      */
     public function __construct(Sheet $sheet, int $row, int $col, bool $merged = false)
@@ -116,7 +115,6 @@ class Cell extends Items
      *
      * @param string|integer|float $valueParts Contents of the cell.
      *
-     * @since  v1.0
      * @throws SetValueToMergedCellConflictException When trying to add value to merged Cell.
      * @return self
      */
@@ -126,6 +124,11 @@ class Cell extends Items
         // Throw.
         if ($this->merged === true) {
             throw new SetValueToMergedCellConflictException($this->getRef());
+        }
+
+        // Save for null.
+        if ($valueParts === null) {
+            $valueParts = '';
         }
 
         // Save as new ValuePart (overwrite old value parts).
@@ -139,7 +142,6 @@ class Cell extends Items
      *
      * @param array $parts Contents of the cell as multiple parts.
      *
-     * @since  v1.0
      * @throws SetValueToMergedCellConflictException When trying to add value to merged Cell.
      * @return self
      */
@@ -165,7 +167,6 @@ class Cell extends Items
     /**
      * Getter for all parts of value.
      *
-     * @since  v1.0
      * @return ValuePart[]
      */
     public function getValue() : array
@@ -177,7 +178,6 @@ class Cell extends Items
     /**
      * Getter for value of cell - all parts imploded to a string.
      *
-     * @since  v1.0
      * @return null|string
      */
     public function getSimpleValue() : ?string
@@ -197,7 +197,6 @@ class Cell extends Items
     /**
      * Return numeric value of Cell if its contents is integer or float.
      *
-     * @since  v1.0
      * @throws CellValueWrotypeException If Cell is not numeric.
      * @return integer|float
      */
@@ -215,17 +214,12 @@ class Cell extends Items
     /**
      * Return type of value this call has (string or integer, etc.).
      *
-     * @since  v1.0
      * @return string Value from `gettype()` function.
      */
     public function getValueType() : string
     {
 
-        if (count($this->valueParts) === 0) {
-            return 'string';
-        }
-
-        if (count($this->valueParts) > 1) {
+        if (count($this->valueParts) === 0 || count($this->valueParts) > 1) {
             return 'string';
         }
 
@@ -235,7 +229,6 @@ class Cell extends Items
     /**
      * Getter for contents ID - used by XlWorksheet while generating XLSX.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getSharedStringsId() : int
@@ -255,7 +248,6 @@ class Cell extends Items
      *
      * @param integer $id SharedStrings ID.
      *
-     * @since  v1.0
      * @return $this
      */
     public function setShardStringId(int $id) : self
@@ -269,7 +261,6 @@ class Cell extends Items
     /**
      * Getter for row id.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getRow() : int
@@ -281,7 +272,6 @@ class Cell extends Items
     /**
      * Getter for col id.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getCol() : int
@@ -293,7 +283,6 @@ class Cell extends Items
     /**
      * Getter for Sheet.
      *
-     * @since  v1.0
      * @return Sheet
      */
     public function getSheet() : Sheet
@@ -305,7 +294,6 @@ class Cell extends Items
     /**
      * Getter for col ref (eg. A, B, C).
      *
-     * @since  v1.0
      * @return string
      */
     public function getColRef() : string
@@ -317,7 +305,6 @@ class Cell extends Items
     /**
      * Getter for Cell ref (eg. A1, B4, C2).
      *
-     * @since  v1.0
      * @return string
      */
     public function getRef() : string
@@ -329,7 +316,6 @@ class Cell extends Items
     /**
      * Is Cell is a subject to be merged (is hidden, overridden by merging cell).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function isMerged() : bool
@@ -341,7 +327,6 @@ class Cell extends Items
     /**
      * Is Cell is merging other cells (overwriting them with its value).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function isMerging() : bool
@@ -356,7 +341,6 @@ class Cell extends Items
      * @param integer $rows How many rows it have to merge.
      * @param integer $cols How many columns it have to merge.
      *
-     * @since  v1.0
      * @return self
      */
     public function setMerge(int $rows, int $cols) : self
@@ -404,7 +388,6 @@ class Cell extends Items
     /**
      * Getter for merge ref (eg. A1:A2, B4:C6, C2:C6).
      *
-     * @since  v1.0
      * @return string
      */
     public function getMergeRef() : string
@@ -421,7 +404,6 @@ class Cell extends Items
     /**
      * Is Cell have Style.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasStyle() : bool
@@ -435,7 +417,6 @@ class Cell extends Items
      *
      * @param Style $style Style for this Cell.
      *
-     * @since  v1.0
      * @return self
      */
     public function setStyle(Style $style) : self
@@ -451,7 +432,6 @@ class Cell extends Items
      *
      * @param boolean $createIfNone Optional, true. If set to true create Style automatically if it is not present.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function getStyle(bool $createIfNone = true) : ?Style
@@ -470,7 +450,6 @@ class Cell extends Items
      *
      * @param null|float $width This Cell's Column width.
      *
-     * @since  v1.0
      * @return self
      */
     public function setColWidth(?float $width = null) : self
@@ -497,7 +476,6 @@ class Cell extends Items
      *
      * @param null|float $height This Cell's Row height.
      *
-     * @since  v1.0
      * @return self
      */
     public function setRowHeight(?float $height = null) : self

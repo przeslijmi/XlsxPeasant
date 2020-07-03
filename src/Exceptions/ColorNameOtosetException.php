@@ -15,8 +15,6 @@ class ColorNameOtosetException extends ValueOtosetException
      * Constructor.
      *
      * @param string $colorName Name of unknown color.
-     *
-     * @since v1.0
      */
     public function __construct(string $colorName)
     {

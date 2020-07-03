@@ -87,8 +87,6 @@ class Sheet extends Items
      * @param Xlsx         $xlsx Parent XLSX object.
      * @param string       $name Name of Sheet.
      * @param null|integer $id   Optional Id of Sheet.
-     *
-     * @since v1.0
      */
     public function __construct(Xlsx $xlsx, string $name, ?int $id = null)
     {
@@ -109,7 +107,6 @@ class Sheet extends Items
      *
      * @param integer $id Id of Table.
      *
-     * @since  v1.0
      * @throws SheetIdOtoranException When ID is below 1.
      * @return self
      */
@@ -135,7 +132,6 @@ class Sheet extends Items
     /**
      * Getter for id.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -147,7 +143,6 @@ class Sheet extends Items
     /**
      * Getter for uuid.
      *
-     * @since  v1.0
      * @return string
      */
     public function getUuid() : string
@@ -161,7 +156,6 @@ class Sheet extends Items
      *
      * @param string $name Name of Sheet.
      *
-     * @since  v1.0
      * @throws SheetNameWrosynException When Sheet name has wrong syntax.
      * @throws SheetNameAlrexException  When Sheet name is already taken (exists).
      * @return self
@@ -203,7 +197,6 @@ class Sheet extends Items
     /**
      * Getter for name.
      *
-     * @since  v1.0
      * @return sttring
      */
     public function getName() : string
@@ -217,7 +210,6 @@ class Sheet extends Items
      *
      * @param Book $book Book parent object.
      *
-     * @since  v1.0
      * @return self
      */
     public function setBook(Book $book) : self
@@ -231,7 +223,6 @@ class Sheet extends Items
     /**
      * Getter for book.
      *
-     * @since  v1.0
      * @return Book
      */
     public function getBook() : Book
@@ -243,7 +234,6 @@ class Sheet extends Items
     /**
      * Getter for XlWorksheet XML.
      *
-     * @since  v1.0
      * @return XlWorksheet
      */
     public function getXml() : XlWorksheet
@@ -255,7 +245,6 @@ class Sheet extends Items
     /**
      * Getter for XlWorksheet XML.
      *
-     * @since  v1.0
      * @return XlRelsWorksheet
      */
     public function getRelsXml() : XlRelsWorksheet
@@ -272,7 +261,6 @@ class Sheet extends Items
      * @param integer      $col  Col to start Table in.
      * @param null|integer $id   Optional id of Table.
      *
-     * @since  v1.0
      * @throws TableCreationFopException When creation of Table somehow failed.
      * @return Table
      */
@@ -293,7 +281,6 @@ class Sheet extends Items
     /**
      * Getter for Cells.
      *
-     * @since  v1.0
      * @return Cell[]
      */
     public function getCells() : array
@@ -314,7 +301,6 @@ class Sheet extends Items
      * @param integer $row Cell from which row.
      * @param integer $col Cell from which col.
      *
-     * @since  v1.0
      * @return Cell
      */
     public function getCell(int $row, int $col) : Cell
@@ -362,7 +348,6 @@ class Sheet extends Items
      * @param integer $row Cell from which row.
      * @param integer $col Cell from which col.
      *
-     * @since  v1.0
      * @throws CellMergeConflictException When merge is trying to overwrite existing Cell.
      * @return Cell
      */
@@ -388,7 +373,6 @@ class Sheet extends Items
      * @param integer $row Cell from which row.
      * @param integer $col Cell from which col.
      *
-     * @since  v1.0
      * @return self
      */
     public function deleteCell(int $row, int $col) : self
@@ -404,7 +388,6 @@ class Sheet extends Items
     /**
      * Getter for ref of first cell in Sheet (most often it will be A1).
      *
-     * @since  v1.0
      * @return string
      */
     public function getFirstCellRef() : string
@@ -432,7 +415,6 @@ class Sheet extends Items
     /**
      * Getter for ref of lass cell in Sheet (max col from all rows).
      *
-     * @since  v1.0
      * @return string
      */
     public function getLastCellRef() : string
@@ -465,7 +447,6 @@ class Sheet extends Items
     /**
      * Getter for dimension ref for this cell, ie. 'A1:T932'.
      *
-     * @since  v1.0
      * @return string
      */
     public function getDimensionRef() : string
@@ -502,7 +483,6 @@ class Sheet extends Items
      * @param integer    $col   For which column width is to be set.
      * @param null|float $width Desired width or null to make width default.
      *
-     * @since  v1.0
      * @return self
      */
     public function setColWidth(int $col, ?float $width = null) : self
@@ -524,7 +504,6 @@ class Sheet extends Items
     /**
      * Getter for all defined witdth for all cols.
      *
-     * @since  v1.0
      * @return float[] Array with width of subsequent rows (key is row id).
      */
     public function getColsWidth() : array
@@ -538,7 +517,6 @@ class Sheet extends Items
      *
      * @param integer $col For which column width has to be returned.
      *
-     * @since  v1.0
      * @return null|float Float as col width or null if width for given col has not been defined.
      */
     public function getColWidth(int $col) : ?float
@@ -553,7 +531,6 @@ class Sheet extends Items
      * @param integer    $row    For which row height is to be set.
      * @param null|float $height Desired height or null to make height default.
      *
-     * @since  v1.0
      * @return self
      */
     public function setRowHeight(int $row, ?float $height = null) : self
@@ -577,7 +554,6 @@ class Sheet extends Items
      *
      * @param integer $row For which row height has to be returned.
      *
-     * @since  v1.0
      * @return null|float Float as row height or null if height for given row has not been defined.
      */
     public function getRowHeight(int $row) : ?float

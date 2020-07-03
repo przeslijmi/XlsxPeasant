@@ -15,8 +15,6 @@ class TargetDirectoryDonoexException extends DirDonoexException
      *
      * @param string $directoryUri Uri of file that can not be taken.
      * @param string $fullUri      Full uri of XLSX.
-     *
-     * @since v1.0
      */
     public function __construct(string $directoryUri, string $fullUri)
     {

@@ -16,8 +16,6 @@ class TableCreationFopException extends MethodFopException
      *
      * @param string         $name  Name of table that is duplicated.
      * @param Throwable|null $cause Throwable that caused the problem.
-     *
-     * @since v1.0
      */
     public function __construct(string $name, ?Throwable $cause = null)
     {

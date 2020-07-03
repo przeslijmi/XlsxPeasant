@@ -37,8 +37,6 @@ class NumFormat extends Format
      * @param integer $decimalPlaces Optional, 0. Number of decimal places.
      * @param integer $leadingZeros  Optional, 0. Number of leading zeros.
      * @param string  $unit          Optional, none. Unit for number.
-     *
-     * @since v1.0
      */
     public function __construct(int $decimalPlaces = 0, int $leadingZeros = 0, string $unit = '')
     {
@@ -54,7 +52,6 @@ class NumFormat extends Format
      *
      * @param integer $decimalPlaces Number of decimal places.
      *
-     * @since  v1.0
      * @return self
      */
     public function setDecimalPlaces(int $decimalPlaces) : self
@@ -68,7 +65,6 @@ class NumFormat extends Format
     /**
      * Getter for decimalPlaces.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getDecimalPlaces() : int
@@ -82,7 +78,6 @@ class NumFormat extends Format
      *
      * @param integer $leadingZeros Number of leading zeros.
      *
-     * @since  v1.0
      * @return self
      */
     public function setLeadingZeros(int $leadingZeros) : self
@@ -96,7 +91,6 @@ class NumFormat extends Format
     /**
      * Getter for leadingZeros.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getLeadingZeros() : int
@@ -110,7 +104,6 @@ class NumFormat extends Format
      *
      * @param string $unit Number of leading zeros.
      *
-     * @since  v1.0
      * @return self
      */
     public function setUnit(string $unit) : self
@@ -124,7 +117,6 @@ class NumFormat extends Format
     /**
      * Getter for unit.
      *
-     * @since  v1.0
      * @return null|string
      */
     public function getUnit() : ?string
@@ -136,7 +128,6 @@ class NumFormat extends Format
     /**
      * Return code of Format in XLSX language (syntax).
      *
-     * @since  v1.0
      * @return string
      */
     public function getCode() : string
@@ -156,7 +147,6 @@ class NumFormat extends Format
     /**
      * Getter for signature.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

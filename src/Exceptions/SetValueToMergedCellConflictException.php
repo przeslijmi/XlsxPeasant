@@ -14,8 +14,6 @@ class SetValueToMergedCellConflictException extends MethodFopException
      * Constructor.
      *
      * @param string $cellRef Refs of Cell.
-     *
-     * @since v1.0
      */
     public function __construct(string $cellRef)
     {

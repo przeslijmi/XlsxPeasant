@@ -22,7 +22,6 @@ class Fill
     /**
      * Factory of Fill.
      *
-     * @since  v1.0
      * @throws FillFactoryFopException When called with wrong parameters.
      * @return Fill
      */
@@ -52,8 +51,6 @@ class Fill
      * Construct.
      *
      * @param Color $color Color to use in Fill.
-     *
-     * @since v1.0
      */
     public function __construct(Color $color)
     {
@@ -64,7 +61,6 @@ class Fill
     /**
      * Getter for Color.
      *
-     * @since  v1.0
      * @return Color
      */
     public function getColor() : Color
@@ -76,7 +72,6 @@ class Fill
     /**
      * Getter for signature.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

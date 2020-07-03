@@ -13,7 +13,6 @@ class DataBar extends ConditionalFormat
     /**
      * Getter for signature.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

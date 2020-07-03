@@ -15,8 +15,6 @@ class UnknownDefaultSettingException extends ParamOtosetException
      *
      * @param string $actualValue Actually given value.
      * @param array  $range       Possible values that can be given.
-     *
-     * @since v1.0
      */
     public function __construct(string $actualValue, array $range)
     {

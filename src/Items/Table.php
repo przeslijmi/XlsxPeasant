@@ -9,12 +9,13 @@ use Przeslijmi\XlsxPeasant\Exceptions\NoColumnsInTableException;
 use Przeslijmi\XlsxPeasant\Exceptions\RefWrosynException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableChangeColumnForbiddenException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableHasWrongColumnsException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableIdOtoranException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableNameAlrexException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableNameWrosynException;
+use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Column;
-use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Xlsx;
 use Przeslijmi\XlsxPeasant\Xmls\XlTable;
 
@@ -94,7 +95,6 @@ class Table extends Items
      * @param string       $name Name of Table.
      * @param null|integer $id   Optional Id of Table.
      *
-     * @since  v1.0
      * @throws TableCreationFopException When Table creation somehow failed.
      */
     public function __construct(Xlsx $xlsx, string $name, ?int $id = null)
@@ -125,7 +125,6 @@ class Table extends Items
      * @param integer $row   Optional, 1. Row for left top corner location refs of Table (starting at 1).
      * @param integer $col   Optional, 1. Col for left top corner location refs of Table (starting at 1).
      *
-     * @since  v1.0
      * @throws RefWrosynException When row or col are below 1.
      * @return self
      */
@@ -150,7 +149,6 @@ class Table extends Items
      *
      * @param string $name Name of Table.
      *
-     * @since  v1.0
      * @throws TableNameWrosynException When name has wrong syntax.
      * @throws TableNameAlrexException  When name in Book already exists.
      * @return self
@@ -193,7 +191,6 @@ class Table extends Items
      *
      * @param integer $id Id of Table.
      *
-     * @since  v1.0
      * @throws TableIdOtoranException When ID is below 1.
      * @return self
      */
@@ -219,7 +216,6 @@ class Table extends Items
     /**
      * Getter for id.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -231,7 +227,6 @@ class Table extends Items
     /**
      * Getter for uuid.
      *
-     * @since  v1.0
      * @return string
      */
     public function getUuid() : string
@@ -243,7 +238,6 @@ class Table extends Items
     /**
      * Getter for name.
      *
-     * @since  v1.0
      * @return string
      */
     public function getName() : string
@@ -255,7 +249,6 @@ class Table extends Items
     /**
      * Getter for Sheet.
      *
-     * @since  v1.0
      * @return Sheet
      */
     public function getSheet() : Sheet
@@ -267,7 +260,6 @@ class Table extends Items
     /**
      * Getter for XlTable XML.
      *
-     * @since  v1.0
      * @return XlTable
      */
     public function getXml() : XlTable
@@ -282,7 +274,6 @@ class Table extends Items
      * @param string       $name Name of Column.
      * @param integer|null $id   Optional id of Column.
      *
-     * @since  v1.0
      * @throws TableChangeColumnForbiddenException When trying to change Columns after inserting data to Table.
      * @return Column
      */
@@ -311,7 +302,6 @@ class Table extends Items
      *
      * @param array $columns Array of Columns names.
      *
-     * @since  v1.0
      * @return self
      */
     public function addColumns(array $columns) : self
@@ -330,7 +320,6 @@ class Table extends Items
      *
      * @param boolean $throwOnEmpty Optional, true. If set to true will throw when no Column is added.
      *
-     * @since  v1.0
      * @throws NoColumnsInTableException When collection is empty and throwing is on.
      * @return Column[]
      */
@@ -346,11 +335,37 @@ class Table extends Items
     }
 
     /**
+     * Getter for all column names.
+     *
+     * @param boolean $throwOnEmpty Optional, true. If set to true will throw when no Column is added.
+     *
+     * @throws NoColumnsInTableException When collection is empty and throwing is on.
+     * @return array
+     */
+    public function getColumnsNames(bool $throwOnEmpty = true) : array
+    {
+
+        // If collection is empty and throwing is on - throw.
+        if ($throwOnEmpty === true && count($this->columns) === 0) {
+            throw new NoColumnsInTableException();
+        }
+
+        // Lvd.
+        $result = [];
+
+        // Prepare result.
+        foreach ($this->columns as $column) {
+            $result[] = $column->getName();
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets Column by its name.
      *
      * @param string $name Name of Column.
      *
-     * @since  v1.0
      * @throws ColumnDonoexException When there is no Column with given name.
      * @return Column
      */
@@ -372,7 +387,6 @@ class Table extends Items
      *
      * @param integer $id Id of Column.
      *
-     * @since  v1.0
      * @throws ColumnDonoexException When there is no Column with given id.
      * @return Column
      */
@@ -392,7 +406,6 @@ class Table extends Items
     /**
      * Count how many columns there are.
      *
-     * @since  v1.0
      * @return integer
      */
     public function countColumns() : int
@@ -423,7 +436,6 @@ class Table extends Items
      * @param array   $rows              See example.
      * @param boolean $ignoreMissingCols Opt. false. If set to true data for nonexisting columns will be ignored.
      *
-     * @since  v1.0
      * @throws ColumnDonoexException When Column called in data does not exists.
      * @return self
      */
@@ -503,7 +515,6 @@ class Table extends Items
      * @param array   $rows              See example.
      * @param boolean $ignoreMissingCols Opt. false. If set to true data for nonexisting columns will be ignored.
      *
-     * @since  v1.0
      * @return self
      */
     public function setData(array $rows, bool $ignoreMissingCols = false) : self
@@ -521,7 +532,6 @@ class Table extends Items
     /**
      * Getter for all rows of data of table.
      *
-     * @since  v1.0
      * @return array
      */
     public function getData() : array
@@ -533,7 +543,6 @@ class Table extends Items
     /**
      * Returns number of rows in data for this Table.
      *
-     * @since  v1.0
      * @return integer
      */
     public function countRows() : int
@@ -545,7 +554,6 @@ class Table extends Items
     /**
      * Returns array with refs to this Table [ row, col ].
      *
-     * @since  v1.0
      * @return integer[2]
      */
     public function getRefs() : array
@@ -557,7 +565,6 @@ class Table extends Items
     /**
      * Returns string with dimension refs to this Table, eg. A1:C4.
      *
-     * @since  v1.0
      * @return string
      */
     public function getDimensionRef() : string
@@ -581,5 +588,24 @@ class Table extends Items
         $result .= $lastRowNum;
 
         return $result;
+    }
+
+    /**
+     * Check if Table has all Columns that were given (also in proper order).
+     *
+     * @param array $columns Set of proper columns.
+     *
+     * @throws TableHasWrongColumnsException On false.
+     * @return boolean
+     */
+    public function hasColumns(array $columns) : bool
+    {
+
+        // Throw.
+        if ($columns !== $this->getColumnsNames()) {
+            throw new TableHasWrongColumnsException([ $columns, $this->getColumnsNames() ]);
+        }
+
+        return true;
     }
 }

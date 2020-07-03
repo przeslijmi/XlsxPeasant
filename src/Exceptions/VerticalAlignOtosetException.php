@@ -15,8 +15,6 @@ class VerticalAlignOtosetException extends ParamOtosetException
      *
      * @param array  $possibleAligns Possible values that can be given.
      * @param string $givenAlign     Actually given value.
-     *
-     * @since v1.0
      */
     public function __construct(array $possibleAligns, string $givenAlign)
     {

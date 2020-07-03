@@ -31,7 +31,6 @@ class SharedStrings extends Items
      *
      * @param Cell $cell Cell with content to register.
      *
-     * @since  v1.0
      * @return void
      */
     public function registerValue(Cell $cell) : void
@@ -65,7 +64,6 @@ class SharedStrings extends Items
     /**
      * Get whole index but without signatures - only ValuePart[].
      *
-     * @since  v1.0
      * @return array Array of ValuePart[].
      */
     public function getIndex() : array

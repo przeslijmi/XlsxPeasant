@@ -183,7 +183,6 @@ class Color
      * $color = Color::factory('white');
      * ```
      *
-     * @since  v1.0
      * @throws ColorNameOtosetException When color name donoex in dictionary.
      * @throws ColorFactoryFopException When called with wrong parameters.
      * @return Color
@@ -243,7 +242,6 @@ class Color
      *
      * @param string $rgb Hexadecimal value of RGB, eg. AA00ED.
      *
-     * @since  v1.0
      * @throws ParamWrosynException When given RGB hex is wrong.
      * @return self
      */
@@ -275,7 +273,6 @@ class Color
      * @param integer $green Value for green channel.
      * @param integer $blue  Value for blue channel.
      *
-     * @since  v1.0
      * @throws ParamOtoranException When red, blue or green parameters is out of range.
      * @return self
      */
@@ -304,7 +301,6 @@ class Color
     /**
      * Return Color in XLSX value (preceded with FF).
      *
-     * @since  v1.0
      * @return string
      */
     public function get() : string

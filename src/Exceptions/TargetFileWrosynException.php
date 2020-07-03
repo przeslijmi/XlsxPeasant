@@ -14,8 +14,6 @@ class TargetFileWrosynException extends FileAlrexException
      * Constructor.
      *
      * @param string $fileUri Uri of file.
-     *
-     * @since v1.0
      */
     public function __construct(string $fileUri)
     {

@@ -39,8 +39,6 @@ class ValuePart
      * @param Cell                 $cell     Cell parent.
      * @param string|integer|float $contents Actual contents of part..
      * @param null|Font            $font     Optional Font to use in this part.
-     *
-     * @since v1.0
      */
     public function __construct(Cell $cell, $contents, ?Font $font = null)
     {
@@ -58,7 +56,6 @@ class ValuePart
     /**
      * If this part has Font defined.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasFont() : bool
@@ -70,7 +67,6 @@ class ValuePart
     /**
      * Getter for Font.
      *
-     * @since  v1.0
      * @return null|Font
      */
     public function getFont() : ?Font
@@ -82,7 +78,6 @@ class ValuePart
     /**
      * Getter for merged Font (valuePart Font + cell Font).
      *
-     * @since  v1.0
      * @return null|Font
      */
     public function getFontMerged() : ?Font
@@ -114,7 +109,6 @@ class ValuePart
     /**
      * Getter for contents of this part.
      *
-     * @since  v1.0
      * @return string|integer|float|array
      */
     public function getContents()
@@ -140,7 +134,6 @@ class ValuePart
     /**
      * Getter for contents of this part but only as scalar.
      *
-     * @since  v1.0
      * @return string|integer|float
      */
     public function getContentsAsScalar()
@@ -152,7 +145,6 @@ class ValuePart
     /**
      * Return signature of this ValuePart - to use it in SharedStrings collection.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

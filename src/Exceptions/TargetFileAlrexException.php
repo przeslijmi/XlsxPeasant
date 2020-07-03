@@ -14,8 +14,6 @@ class TargetFileAlrexException extends FileAlrexException
      * Constructor.
      *
      * @param string $fileUri Uri of file that can not be taken.
-     *
-     * @since v1.0
      */
     public function __construct(string $fileUri)
     {

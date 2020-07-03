@@ -36,7 +36,6 @@ class Book extends Items
      * @param string       $name Name of Sheet.
      * @param null|integer $id   Optional id of Sheet.
      *
-     * @since  v1.0
      * @return Sheet
      */
     public function addSheet(string $name, ?int $id = null) : Sheet
@@ -57,7 +56,6 @@ class Book extends Items
      *
      * @param boolean $throwOnEmpty Optional, true. If set to true will throw when no Column is added.
      *
-     * @since  v1.0
      * @throws NoSheetsException When collection is empty and throwing is on.
      * @return Sheet[]
      */
@@ -77,7 +75,6 @@ class Book extends Items
      *
      * @param integer $id Id of Sheet.
      *
-     * @since  v1.0
      * @throws SheetDonoexException When Sheet with given id does not exists.
      * @return Sheet
      */
@@ -98,7 +95,6 @@ class Book extends Items
      *
      * @param string $name Name of Sheet.
      *
-     * @since  v1.0
      * @throws SheetDonoexException When Sheet with given id does not exists.
      * @return Sheet
      */
@@ -119,7 +115,6 @@ class Book extends Items
      *
      * @param string $name Name of Sheet.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasSheetByName(string $name) : bool
@@ -140,7 +135,6 @@ class Book extends Items
      * @param string       $name Name of Table.
      * @param null|integer $id   Optional id of Table.
      *
-     * @since  v1.0
      * @return Table
      */
     public function addTable(string $name, ?int $id = null) : Table
@@ -160,7 +154,6 @@ class Book extends Items
      *
      * @param null|Sheet $sheet Optional Sheet to narrow searching only to Tables from given Sheet.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasTables(?Sheet $sheet = null) : bool
@@ -188,7 +181,6 @@ class Book extends Items
      *
      * @param null|Sheet $sheet Optional Sheet to narrow searching only to Tables from given Sheet.
      *
-     * @since  v1.0
      * @return Table[]
      */
     public function getTables(?Sheet $sheet = null) : array
@@ -219,7 +211,6 @@ class Book extends Items
      *
      * @param string $name Name of Table.
      *
-     * @since  v1.0
      * @throws TableDonoexException When Table with this name does not exits.
      * @return Table
      */
@@ -242,7 +233,6 @@ class Book extends Items
      * @param string     $name  Name of Table.
      * @param null|Sheet $sheet Optional Sheet to narrow searching only to Tables from given Sheet.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasTableByName(string $name, ?Sheet $sheet = null) : bool

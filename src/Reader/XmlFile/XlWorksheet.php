@@ -48,7 +48,6 @@ class XlWorksheet extends XmlFile
      * @param string $fileUri Uri of XML file.
      * @param Reader $reader  Parent Reader instance.
      *
-     * @since  v1.0
      * @throws ClassFopException When sth went wrong on creation.
      */
     public function __construct(string $fileUri, Reader $reader)
@@ -73,7 +72,6 @@ class XlWorksheet extends XmlFile
     /**
      * Getter for `id` (numbers are used in file names, id's are defined in XML).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getId() : int
@@ -85,7 +83,6 @@ class XlWorksheet extends XmlFile
     /**
      * Getter for `number` (numbers are used in file names, id's are defined in XML).
      *
-     * @since  v1.0
      * @return integer
      */
     public function getNumber() : int
@@ -97,7 +94,6 @@ class XlWorksheet extends XmlFile
     /**
      * Getter for `name`.
      *
-     * @since  v1.0
      * @return string
      */
     public function getName() : string
@@ -113,7 +109,6 @@ class XlWorksheet extends XmlFile
      *
      * @param integer $tableNumber Id of table (starting with 1).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function doYouUseTable(int $tableNumber) : bool
@@ -143,7 +138,6 @@ class XlWorksheet extends XmlFile
      * @param integer $row Starting with 1 (not 0).
      * @param integer $col Starting with 1 (not 0).
      *
-     * @since  v1.0
      * @throws ClassFopException When reaching cell value is impossible.
      * @return null|string String if cell exists and has value (arrays are imploded); null otherwise.
      */
@@ -192,7 +186,6 @@ class XlWorksheet extends XmlFile
      * @param integer $row Starting with 1 (not 0).
      * @param integer $col Starting with 1 (not 0).
      *
-     * @since  v1.0
      * @return null|object XML node if exists, null otherwise.
      */
     public function getCellNode(int $row, int $col) : ?object
@@ -294,7 +287,6 @@ class XlWorksheet extends XmlFile
     /**
      * Setter for `id` and `number` - as both taken from worksheet file.
      *
-     * @since  v1.0
      * @return self
      */
     private function setIdAndNumber() : self
@@ -320,7 +312,6 @@ class XlWorksheet extends XmlFile
     /**
      * Setter for `name`.
      *
-     * @since  v1.0
      * @return self
      */
     private function setName() : self
@@ -338,7 +329,6 @@ class XlWorksheet extends XmlFile
     /**
      * Call to check if this worksheet has rels file and read it in if it has.
      *
-     * @since  v1.0
      * @return self
      */
     private function setRels() : self

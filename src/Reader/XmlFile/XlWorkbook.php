@@ -19,7 +19,6 @@ class XlWorkbook extends XmlFile
      *
      * @param integer $id Existing Sheet's id.
      *
-     * @since  v1.0
      * @throws KeyDonoexException    When sheet with this id does not exists.
      * @throws ObjectDonoexException When sheet with this id does not exists.
      * @return string
@@ -53,7 +52,6 @@ class XlWorkbook extends XmlFile
      *
      * @param integer $number Number (not id of Sheet [see XlWorksheet fi disambigustation]).
      *
-     * @since  v1.0
      * @throws ObjectDonoexException When no <sheet> node is present inside Workbook XML contents.
      * @return integer Sheet's id.
      */

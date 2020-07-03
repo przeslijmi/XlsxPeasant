@@ -15,7 +15,6 @@ class Date
      *
      * @param integer $excel Excel's date as integer.
      *
-     * @since  v1.0
      * @return string
      */
     public static function decode(int $excel) : string

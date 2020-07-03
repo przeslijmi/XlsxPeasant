@@ -29,8 +29,6 @@ class XmlNodeNameWrosynException extends ValueWrosynException
      * Constructor.
      *
      * @param string $nodeName Given name of node.
-     *
-     * @since v1.0
      */
     public function __construct(string $nodeName)
     {

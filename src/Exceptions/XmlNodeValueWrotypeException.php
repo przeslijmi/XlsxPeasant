@@ -15,8 +15,6 @@ class XmlNodeValueWrotypeException extends ValueWrotypeException
      * Constructor.
      *
      * @param string $nodeValueType Given type of node value.
-     *
-     * @since v1.0
      */
     public function __construct(string $nodeValueType)
     {

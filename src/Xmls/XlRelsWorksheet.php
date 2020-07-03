@@ -26,8 +26,6 @@ class XlRelsWorksheet extends Xml
      * Constructor.
      *
      * @param Sheet $sheet Sheet to import to this XML.
-     *
-     * @since v1.0
      */
     public function __construct(Sheet $sheet)
     {
@@ -46,7 +44,7 @@ class XlRelsWorksheet extends Xml
             ],
         ];
 
-        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS);
+        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS | Xml::NO_VALIDATION_NODE_NAME | Xml::NO_VALIDATION_ATTR_VALUE | Xml::NO_VALIDATION_ATTR_NAME);
         $this->setHeader('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>');
 
         parent::__construct();
@@ -68,7 +66,6 @@ class XlRelsWorksheet extends Xml
     /**
      * Preparation of `Relationship` node.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepRelations() : self

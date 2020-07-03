@@ -120,6 +120,9 @@ class Xml
     const NO_NEW_LINES             = 2;
     const NO_NEW_LINE_AFTER_HEADER = 4;
     const NO_SPACE_ON_SHORTTAGS    = 8;
+    const NO_VALIDATION_NODE_NAME  = 16;
+    const NO_VALIDATION_ATTR_NAME  = 32;
+    const NO_VALIDATION_ATTR_VALUE = 64;
 
     /**
      * Contents of the whole XML as PHP array.
@@ -174,8 +177,6 @@ class Xml
      * Constructor.
      *
      * @param array $array Optional XML contents.
-     *
-     * @since v1.0
      */
     public function __construct(?array $array = null)
     {
@@ -191,7 +192,6 @@ class Xml
      *
      * @param integer $configs Configs integer as progression number.
      *
-     * @since  v1.0
      * @return string
      */
     public function toXml(int $configs = 0) : string
@@ -258,7 +258,6 @@ class Xml
     /**
      * Getter for `$this->spaces`.
      *
-     * @since  v1.0
      * @return integer
      */
     public function getSpaces() : int
@@ -272,7 +271,6 @@ class Xml
      *
      * @param integer $spaces How many spaces use on indentation (4 by default).
      *
-     * @since  v1.0
      * @throws XmlSpacingOtoranException When given spacing is below 0 ar above 10.
      * @return self
      */
@@ -293,7 +291,6 @@ class Xml
     /**
      * Getter for `$this->header`.
      *
-     * @since  v1.0
      * @return string
      */
     public function getHeader() : string
@@ -307,7 +304,6 @@ class Xml
      *
      * @param string $header Needed header of XML file.
      *
-     * @since  v1.0
      * @return self
      */
     public function setHeader(string $header) : self
@@ -323,7 +319,6 @@ class Xml
      *
      * @param integer $configs Progression number to read configurations in.
      *
-     * @since  v1.0
      * @return self
      */
     public function setConfigs(int $configs) : self
@@ -339,7 +334,6 @@ class Xml
      *
      * @param array $nodes Set of nodes.
      *
-     * @since  v1.0
      * @throws XmlNodeNameWrosynException If node name has wrong syntax.
      * @return string
      */
@@ -448,9 +442,10 @@ class Xml
      * @param string            $name Name of node.
      * @param null|scalar|array $node Contents of node.
      *
-     * @since  v1.0
      * @throws XmlNodeValueWrotypeException If node value is in wrong type.
      * @return string
+     *
+     * @phpcs:disable Generic.Metrics.CyclomaticComplexity
      */
     private function nodeToXml(string $name, $node) : string
     {
@@ -461,6 +456,7 @@ class Xml
         // Lvd.
         $addNewLineBeforClosing = false;
         $contents               = '';
+        $contentsIsAlreadyXml   = false;
 
         // Check proper type of node.
         if (is_scalar($node) === false
@@ -471,14 +467,18 @@ class Xml
         }
 
         // Check if node name is proper.
-        $this->validateNodeName($name);
+        if (in_array(self::NO_VALIDATION_NODE_NAME, $this->configs) === false) {
+            $this->validateNodeName($name);
+        }
 
         // Check if there is any contents.
         if (isset($node['@@']) === true) {
             $contents = $node['@@'];
-        }
-        if (is_scalar($node) === true) {
+        } elseif (is_scalar($node) === true) {
             $contents = (string) $node;
+        } elseif (isset($node['@@@']) === true) {
+            $contents             = $node['@@@'];
+            $contentsIsAlreadyXml = true;
         }
 
         // Draw beginning of the result.
@@ -506,12 +506,16 @@ class Xml
 
             // Call to draw all nodes that are deeper.
             $result .= $this->nodesToXml($contents);
-        } else {
+
+        } elseif (is_string($contents) === true && $contentsIsAlreadyXml === false) {
 
             $replacesFrom = [ '&', '<', '>', '"', "'" ];
             $replacesTo   = [ '&amp;', '&lt;', '&gt;', '&quot;', '&apos;' ];
 
             $result .= str_replace($replacesFrom, $replacesTo, $contents);
+
+        } elseif (is_string($contents) === true && $contentsIsAlreadyXml === true) {
+            $result .= $contents;
         }
 
         // Draw ending tag.
@@ -526,12 +530,12 @@ class Xml
     /**
      * Draw indentation as XML.
      *
-     * @since  v1.0
      * @return string
      */
     private function indentToXml() : string
     {
 
+        // Check in configs.
         if (in_array(self::NO_INDENTATION, $this->configs) === true) {
             return '';
         }
@@ -544,7 +548,6 @@ class Xml
      *
      * @param array $node Array with attributes with @ as key suffix.
      *
-     * @since  v1.0
      * @return string
      */
     private function attributesToXml(array $node) : string
@@ -581,8 +584,12 @@ class Xml
                 $attrValue = (string) $attrValue;
 
                 // Validate.
-                $this->validateAttributeName($attrName);
-                $this->validateAttributeValue($attrName);
+                if (in_array(self::NO_VALIDATION_ATTR_NAME, $this->configs) === false) {
+                    $this->validateAttributeName($attrName);
+                }
+                if (in_array(self::NO_VALIDATION_ATTR_VALUE, $this->configs) === false) {
+                    $this->validateAttributeValue($attrName);
+                }
 
                 // Draw result.
                 $result .= ' ' . $attrName . '="' . $attrValue . '"';
@@ -598,7 +605,6 @@ class Xml
      * @param string  $name  Name of the tag.
      * @param boolean $short Optional, false. If it has to be short tag or not.
      *
-     * @since  v1.0
      * @return string
      */
     private function closeNodeToXml(string $name, bool $short = false) : string
@@ -625,7 +631,6 @@ class Xml
      *
      * @param string $name Name of node.
      *
-     * @since  v1.0
      * @return void
      */
     private function validateNodeName(string $name) : void
@@ -640,7 +645,6 @@ class Xml
      *
      * @param string $name Name of attribute.
      *
-     * @since  v1.0
      * @return void
      */
     private function validateAttributeName(string $name) : void
@@ -654,7 +658,6 @@ class Xml
      *
      * @param string $value Value of attribute.
      *
-     * @since  v1.0
      * @return void
      */
     private function validateAttributeValue(string $value) : void

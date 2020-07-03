@@ -18,7 +18,6 @@ class XlSharedStrings extends XmlFile
      *
      * @param integer $id Id of shared string.
      *
-     * @since  v1.0
      * @return array
      */
     public function getValue(int $id) : array

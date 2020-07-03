@@ -105,7 +105,6 @@ class Reader
      *
      * @param string $xlsxFileUri Uri of XLSX file.
      *
-     * @since  v1.0
      * @throws FileDonoexException Wher file to be read is not existing.
      * @throws ClassFopException   When creating XLSX Reader object fails.
      */
@@ -171,7 +170,6 @@ class Reader
     /**
      * Main working function - reads file into XLSX object.
      *
-     * @since  v1.0
      * @throws ClassFopException If any stage of creating Xlsx object from Xlsx file fails.
      * @return Xlsx
      */
@@ -225,7 +223,6 @@ class Reader
     /**
      * Getter for `xlSharedStrings`.
      *
-     * @since  v1.0
      * @throws ObjectDonoexException If SharedString object does not exists.
      * @return self
      */
@@ -243,7 +240,6 @@ class Reader
     /**
      * Getter for `xlWorkbook`.
      *
-     * @since  v1.0
      * @throws ObjectDonoexException If Workbook object does not exists.
      * @return self
      */
@@ -261,7 +257,6 @@ class Reader
     /**
      * Getter for `xlWorksheet`.
      *
-     * @since  v1.0
      * @return self
      */
     public function getXlWorksheets() : array
@@ -273,7 +268,6 @@ class Reader
     /**
      * Getter for `xlTables`.
      *
-     * @since  v1.0
      * @return array
      */
     public function getXlTables() : array
@@ -285,7 +279,6 @@ class Reader
     /**
      * Used by Sexceptions to introduce this object when it causes exceptions.
      *
-     * @since  v1.0
      * @return array
      */
     public function getExceptionInfos() : array
@@ -299,7 +292,6 @@ class Reader
     /**
      * Unpacks ZIP into XML and RELS files.
      *
-     * @since  v1.0
      * @throws MethodFopException If unpacking failed somehow.
      * @return self
      *
@@ -331,7 +323,6 @@ class Reader
     /**
      * Find all unpacekd files and convert them to XML Objects.
      *
-     * @since  v1.0
      * @return self
      */
     private function readXmlFilesIntoObjects() : self
@@ -367,7 +358,6 @@ class Reader
     /**
      * Creates final XLSX object to use.
      *
-     * @since  v1.0
      * @throws ClassFopException When reading XML files somehow failed.
      * @return self
      */
@@ -466,7 +456,6 @@ class Reader
      *
      * @param null|string $dir Optional directory path. If not given $this->unzipUri is used.
      *
-     * @since  v1.0
      * @throws DirIsEmptyException If unpacked directory is empty.
      * @return array
      */
@@ -520,7 +509,6 @@ class Reader
      *
      * @param string $fileUri File URI of XML SharedStrings file unpacked from XLSX.
      *
-     * @since  v1.0
      * @return self
      */
     private function setXlSharedStrings(string $fileUri) : self
@@ -537,7 +525,6 @@ class Reader
      *
      * @param string $fileUri File URI of XML Workbook file unpacked from XLSX.
      *
-     * @since  v1.0
      * @return self
      */
     private function setXlWorkbook(string $fileUri) : self
@@ -554,7 +541,6 @@ class Reader
      *
      * @param string $fileUri File URI of XML worksheet file unpacked from XLSX.
      *
-     * @since  v1.0
      * @return self
      */
     private function addXlWorksheet(string $fileUri) : self
@@ -571,7 +557,6 @@ class Reader
      *
      * @param string $fileUri File URI of XML table files unpacked from XLSX.
      *
-     * @since  v1.0
      * @return self
      */
     private function addXlTable(string $fileUri) : self

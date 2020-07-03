@@ -14,8 +14,6 @@ class UnservedUnicodeException extends ParamOtoranException
      * Constructor.
      *
      * @param integer $decUnicode Deciman integer - number of char in unicode.
-     *
-     * @since v1.0
      */
     public function __construct(int $decUnicode)
     {

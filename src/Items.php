@@ -23,8 +23,6 @@ class Items
      * Constructor.
      *
      * @param Xlsx $xlsx XLSX object.
-     *
-     * @since v1.0
      */
     public function __construct(Xlsx $xlsx)
     {
@@ -35,7 +33,6 @@ class Items
     /**
      * Getter for Xlsx.
      *
-     * @since  v1.0
      * @return Xlsx
      */
     public function getXlsx() : Xlsx
@@ -51,7 +48,6 @@ class Items
      * @param integer $start        Id to be returned when Items[] is empty.
      * @param integer $limit        Optional, 10000. When to break searching.
      *
-     * @since  v1.0
      * @throws LookingForSpareIdLoopOtoranException When more than $limit tryes failed.
      * @return integer
      */

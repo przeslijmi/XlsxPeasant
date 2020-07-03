@@ -29,6 +29,7 @@ use Przeslijmi\XlsxPeasant\Exceptions\StyleLockedException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableChangeColumnForbiddenException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableCreationFopException;
 use Przeslijmi\XlsxPeasant\Exceptions\TableDonoexException;
+use Przeslijmi\XlsxPeasant\Exceptions\TableHasWrongColumnsException;
 use Przeslijmi\XlsxPeasant\Exceptions\UnknownDefaultSettingException;
 use Przeslijmi\XlsxPeasant\Exceptions\VerticalAlignOtosetException;
 use Przeslijmi\XlsxPeasant\Exceptions\WrotypeDefaultsException;
@@ -306,6 +307,13 @@ final class ItemsTest extends TestCase
             $this->assertTrue(true);
         }
 
+        // Test if no Columns there are.
+        try {
+            $table->getColumnsNames();
+        } catch (NoColumnsInTableException $exc) {
+            $this->assertTrue(true);
+        }
+
         // Add columns.
         $column = $table->addColumn('Column1', 1);
         $column->setWidth(20.00);
@@ -319,6 +327,15 @@ final class ItemsTest extends TestCase
         $this->assertEquals(20.00, $column->getWidth());
         $this->assertEquals(3, $table->countColumns());
         $this->assertEquals(38, strlen($column->getUuid()));
+        $this->assertEquals([ 'Column1', 'Column2', 'Column3' ], $table->getColumnsNames());
+        $this->assertTrue($table->hasColumns([ 'Column1', 'Column2', 'Column3' ]));
+
+        // Test if asking for different set of columns throws.
+        try {
+            $table->hasColumns([ 'Column4', 'Column5' ]);
+        } catch (TableHasWrongColumnsException $exc) {
+            $this->assertTrue(true);
+        }
 
         // Test if getting nonexisting Column throws.
         try {
@@ -469,11 +486,13 @@ final class ItemsTest extends TestCase
 
         // Add cell 3.
         $cell3 = $sheet->getCell(3, 1);
+        $cell3->setValue(null);
 
         // Test.
         $this->assertInstanceOf(Cell::class, $cell1);
         $this->assertEquals('aaa', $cell1->getValue()[0]->getContentsAsScalar());
         $this->assertEquals('bbb', $cell2->getValue()[1]->getContentsAsScalar());
+        $this->assertEquals('', $cell3->getValue()[0]->getContentsAsScalar());
         $this->assertEquals('aaa', $cell1->getSimpleValue());
         $this->assertEquals('aaabbb', $cell2->getSimpleValue());
         $this->assertEquals('string', $cell1->getValueType());

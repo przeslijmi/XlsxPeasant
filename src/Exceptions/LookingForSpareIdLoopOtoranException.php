@@ -14,8 +14,6 @@ class LookingForSpareIdLoopOtoranException extends LoopOtoranException
      * Constructor.
      *
      * @param integer $maxRange What was the maxiumum loop range reached.
-     *
-     * @since v1.0
      */
     public function __construct(int $maxRange)
     {

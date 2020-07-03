@@ -37,8 +37,6 @@ class FontXml
      *
      * @param Xlsx $xlsx Xlsx to import to this XML.
      * @param Font $font Font to create for.
-     *
-     * @since v1.0
      */
     public function __construct(Xlsx $xlsx, Font $font)
     {
@@ -52,7 +50,6 @@ class FontXml
      *
      * @param boolean $forSharedStrings If this is for SharedString XML or WorkSheet XML.
      *
-     * @since  v1.0
      * @return self
      */
     public function setForSharedStrings(bool $forSharedStrings) : self
@@ -66,7 +63,6 @@ class FontXml
     /**
      * Create XML nodes.
      *
-     * @since  v1.0
      * @return array
      */
     public function toXmlArray() : array

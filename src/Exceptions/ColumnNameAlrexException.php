@@ -15,8 +15,6 @@ class ColumnNameAlrexException extends MethodFopException
      *
      * @param string $tableName  Name of table in which Columns are present.
      * @param string $columnName Name of column that is duplicated.
-     *
-     * @since v1.0
      */
     public function __construct(string $tableName, string $columnName)
     {

@@ -15,7 +15,6 @@ class Char
      *
      * @param integer $decUnicode Unicode Code Point in decimal value.
      *
-     * @since  v1.0
      * @throws UnservedUnicodeException When call is above range 1 ... 1023.
      * @return char
      *
@@ -92,7 +91,6 @@ class Char
      *
      * @param string $hexUnicode Unicode Code Point in hev value (eg. 1FF --> ǿ).
      *
-     * @since  v1.0
      * @return char
      */
     public static function byHex(string $hexUnicode) : string
@@ -106,7 +104,6 @@ class Char
      *
      * @param string $unicode Unicode Code Point as is (eg. U+01FF --> ǿ).
      *
-     * @since  v1.0
      * @return char
      */
     public static function byCode(string $unicode) : string

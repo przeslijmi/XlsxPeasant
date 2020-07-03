@@ -15,8 +15,6 @@ class TableNameAlrexException extends MethodFopException
      * Constructor.
      *
      * @param string $name Name of table that is duplicated.
-     *
-     * @since v1.0
      */
     public function __construct(string $name)
     {

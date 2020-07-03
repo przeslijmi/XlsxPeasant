@@ -12,8 +12,6 @@ class StyleLockedException extends ClassFopException
 
     /**
      * Constructor.
-     *
-     * @since v1.0
      */
     public function __construct()
     {

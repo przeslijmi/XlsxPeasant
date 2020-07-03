@@ -16,8 +16,6 @@ class WrotypeDefaultsException extends ParamWrotypeException
      * @param string $defaultsName Name of the parameter with error.
      * @param string $typeExpected What type should be given.
      * @param string $actualType   Actually given type.
-     *
-     * @since v1.0
      */
     public function __construct(
         string $defaultsName,

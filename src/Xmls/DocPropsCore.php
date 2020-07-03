@@ -16,8 +16,6 @@ class DocPropsCore extends Xml
 
     /**
      * Constructor.
-     *
-     * @since v1.0
      */
     public function __construct()
     {
@@ -45,7 +43,7 @@ class DocPropsCore extends Xml
             ],
         ];
 
-        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS);
+        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS | Xml::NO_VALIDATION_NODE_NAME | Xml::NO_VALIDATION_ATTR_VALUE | Xml::NO_VALIDATION_ATTR_NAME);
         $this->setHeader('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>');
 
         parent::__construct();

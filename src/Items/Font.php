@@ -56,7 +56,6 @@ class Font
     /**
      * Factory of Font redirects to FontFactory class.
      *
-     * @since  v1.0
      * @return Font
      */
     public static function factory() : Font
@@ -68,7 +67,6 @@ class Font
     /**
      * If font has a name.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasName() : bool
@@ -82,7 +80,6 @@ class Font
      *
      * @param string $name Name of font.
      *
-     * @since  v1.0
      * @return self
      */
     public function setName(string $name) : self
@@ -96,7 +93,6 @@ class Font
     /**
      * Getter for name.
      *
-     * @since  v1.0
      * @return null|string
      */
     public function getName() : ?string
@@ -108,7 +104,6 @@ class Font
     /**
      * If font has a size.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasSize() : bool
@@ -122,7 +117,6 @@ class Font
      *
      * @param integer $size Size of font.
      *
-     * @since  v1.0
      * @return self
      */
     public function setSize(int $size) : self
@@ -136,7 +130,6 @@ class Font
     /**
      * Getter for size.
      *
-     * @since  v1.0
      * @return null|integer
      */
     public function getSize() : ?int
@@ -148,7 +141,6 @@ class Font
     /**
      * If font has a color.
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasColor() : bool
@@ -160,7 +152,6 @@ class Font
     /**
      * Setter for Color.
      *
-     * @since  v1.0
      * @return self
      */
     public function setColor() : self
@@ -174,7 +165,6 @@ class Font
     /**
      * Getter for Color.
      *
-     * @since  v1.0
      * @return null|Color
      */
     public function getColor() : ?Color
@@ -186,7 +176,6 @@ class Font
     /**
      * If font has a bold definition (false or true, but it has).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasBold() : bool
@@ -200,7 +189,6 @@ class Font
      *
      * @param boolean $bold If Font is bold.
      *
-     * @since  v1.0
      * @return self
      */
     public function setBold(bool $bold) : self
@@ -215,7 +203,6 @@ class Font
     /**
      * Getter for bold.
      *
-     * @since  v1.0
      * @return null|boolean
      */
     public function isBold() : ?bool
@@ -227,7 +214,6 @@ class Font
     /**
      * If font has a italic definition (false or true, but it has).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasItalic() : bool
@@ -241,7 +227,6 @@ class Font
      *
      * @param boolean $italic If Font is italic.
      *
-     * @since  v1.0
      * @return self
      */
     public function setItalic(bool $italic) : self
@@ -255,7 +240,6 @@ class Font
     /**
      * Getter for italic.
      *
-     * @since  v1.0
      * @return null|boolean
      */
     public function isItalic() : ?bool
@@ -267,7 +251,6 @@ class Font
     /**
      * If font has a underline definition (false or true, but it has).
      *
-     * @since  v1.0
      * @return boolean
      */
     public function hasUnderline() : bool
@@ -281,7 +264,6 @@ class Font
      *
      * @param boolean $underline If Font is underline.
      *
-     * @since  v1.0
      * @return self
      */
     public function setUnderline(bool $underline) : self
@@ -295,7 +277,6 @@ class Font
     /**
      * Getter for underline.
      *
-     * @since  v1.0
      * @return null|boolean
      */
     public function isUnderline() : ?bool
@@ -307,7 +288,6 @@ class Font
     /**
      * Getter for signature.
      *
-     * @since  v1.0
      * @return string
      */
     public function getSignature() : string

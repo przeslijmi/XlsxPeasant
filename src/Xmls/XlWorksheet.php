@@ -27,8 +27,6 @@ class XlWorksheet extends Xml
      * Constructor.
      *
      * @param Sheet $sheet Sheet to import to this XML.
-     *
-     * @since v1.0
      */
     public function __construct(Sheet $sheet)
     {
@@ -96,7 +94,7 @@ class XlWorksheet extends Xml
             ],
         ];
 
-        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS);
+        $this->setConfigs(Xml::NO_INDENTATION | Xml::NO_NEW_LINES | Xml::NO_SPACE_ON_SHORTTAGS | Xml::NO_VALIDATION_NODE_NAME | Xml::NO_VALIDATION_ATTR_VALUE | Xml::NO_VALIDATION_ATTR_NAME);
         $this->setHeader('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>');
 
         parent::__construct();
@@ -125,7 +123,6 @@ class XlWorksheet extends Xml
     /**
      * Preparation of `sheetData` node.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepCells() : self
@@ -138,13 +135,13 @@ class XlWorksheet extends Xml
         foreach ($this->sheet->getCells() as $row => $cols) {
 
             // Lvd.
-            $colsAr = [];
-            $minCol = array_keys($cols)[0];
-            $maxCol = array_reverse(array_keys($cols))[0];
+            $colsXml = '';
+            $minCol  = array_keys($cols)[0];
+            $maxCol  = array_reverse(array_keys($cols))[0];
 
             // Foreach Col in Row.
             foreach ($cols as $col => $cell) {
-                $colsAr[] = $this->prepOneCell($cell);
+                $colsXml .= $this->prepOneCell($cell);
             }
 
             // Prepare row.
@@ -152,9 +149,7 @@ class XlWorksheet extends Xml
                 '@r'               => $row,
                 '@spans'           => $minCol . ':' . $maxCol,
                 '@x14ac:dyDescent' => '0.3',
-                '@@' => [
-                    'c' => $colsAr,
-                ]
+                '@@@'              => $colsXml,
             ];
 
             // Check height.
@@ -180,34 +175,36 @@ class XlWorksheet extends Xml
      *
      * @param Cell $cell Cell to prepare.
      *
-     * @since  v1.0
-     * @return array
+     * @return string
      */
-    private function prepOneCell(Cell $cell) : array
+    private function prepOneCell(Cell $cell) : string
     {
 
+        // Lvd.
+        $result = '';
+
         // Default always.
-        $result = [
+        $arr = [
             '@r' => $cell->getColRef() . $cell->getRow(),
         ];
 
         // If this Cell has style - add it.
         if ($cell->hasStyle() === true) {
-            $result['@s'] = $cell->getStyle()->getId();
+            $arr['@s'] = $cell->getStyle()->getId();
         } else {
-            $result['@s'] = 1;
+            $arr['@s'] = 1;
         }
 
         // If this is not merged - add value.
         if ($cell->isMerged() === false) {
 
             if ($cell->getValueType() === 'string' || $cell->getValueType() === 'array') {
-                $result['@t'] = 's';
-                $result['@@'] = [
+                $arr['@t'] = 's';
+                $arr['@@'] = [
                     'v' => $cell->getSharedStringsId(),
                 ];
             } else {
-                $result['@@'] = [
+                $arr['@@'] = [
                     'v' => $cell->getNumericValue(),
                 ];
             }
@@ -216,7 +213,16 @@ class XlWorksheet extends Xml
 
         // If this is merged - add 0 style.
         if ($cell->isMerged() === true) {
-            $result['@s'] = '0';
+            $arr['@s'] = '0';
+        }
+
+        // Compose result as direct XML contents.
+        if (isset($arr['@t']) === true) {
+            $result = '<c r="' . $arr['@r'] . '" s="' . $arr['@s'] . '" t="s"><v>' . $arr['@@']['v'] . '</v></c>';
+        } elseif (isset($arr['@@']) === true) {
+            $result = '<c r="' . $arr['@r'] . '" s="' . $arr['@s'] . '"><v>' . $arr['@@']['v'] . '</v></c>';
+        } else {
+            $result = '<c r="' . $arr['@r'] . '" s="' . $arr['@s'] . '"/>';
         }
 
         return $result;
@@ -225,7 +231,6 @@ class XlWorksheet extends Xml
     /**
      * Prepare 'mergeCells' node.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepMerges() : self
@@ -265,7 +270,6 @@ class XlWorksheet extends Xml
     /**
      * Preparation of `tableParts` node.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepTables() : self
@@ -296,7 +300,6 @@ class XlWorksheet extends Xml
     /**
      * Preparation of `cols` node.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepCols() : self
@@ -329,7 +332,6 @@ class XlWorksheet extends Xml
     /**
      * Preparation of `conditionalFormatting` and `extLst` nodes - or deleting them.
      *
-     * @since  v1.0
      * @return self
      */
     private function prepConditionalFormats() : self

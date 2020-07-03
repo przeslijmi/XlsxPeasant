@@ -17,8 +17,6 @@ class RefWrosynException extends ParamOtoranException
      * @param string  $name     Percise name of the context (sheet name, table name, etc.).
      * @param integer $givenRow Id of row.
      * @param integer $givenCol Id of column.
-     *
-     * @since v1.0
      */
     public function __construct(
         string $context,

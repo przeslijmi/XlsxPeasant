@@ -1,8 +1,18 @@
 # Changelog
 
+## v1.2.0 - 2020-07-03
+
+- New: Xml generator has three more configuration settings: `Xml::NO_VALIDATION_NODE_NAME`, `Xml::NO_VALIDATION_ATTR_NAME`, `Xml::NO_VALIDATION_ATTR_VALUE`. All Xlsx Xml are bu default defined with this setting.
+- New: Added `->getColumnsNames()` method to `Table`.
+- New: Added `->hasColumns()` method to `Table` that checks if table has identical set of columns added and also in given order only.
+- Change: Final cell XML is now generated directly as XML - without array step.
+- Change: Generation of big XLSX files speed up significant (few times faster).
+- Change: Removed unused tag `@since` from docs.
+- Fix: Defining cell value as null is not causing error anymore. Empty string is used.
+
 ## v1.1.1 - 2020-06-17
 
-- Change: first try for better optimisation of memory.
+- Change: First try for better optimisation of memory.
 
 ## v1.1.0 - 2020-05-21
 

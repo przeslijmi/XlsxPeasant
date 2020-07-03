@@ -23,7 +23,6 @@ class FontFactory
      * @param null|Font|string $param1 Font object or font name in string.
      * @param null|string      $param2 Optional Font variant definition.
      *
-     * @since  v1.0
      * @throws FontFactoryFopException When called with wrong parameters.
      * @return Font
      *
@@ -77,7 +76,6 @@ class FontFactory
      * @param null|Font|string $name    Font object or font name in string - or null if font is not to be changed.
      * @param null|string      $variant Optional Font variant definition.
      *
-     * @since  v1.0
      * @return Font
      */
     public static function makeVariant(?string $name = null, string $variant) : Font
@@ -131,7 +129,6 @@ class FontFactory
      * @param Font $fontA Base font.
      * @param Font $fontB Additional font.
      *
-     * @since  v1.0
      * @return Font
      */
     public static function makeMerged(Font $fontA, Font $fontB) : Font
