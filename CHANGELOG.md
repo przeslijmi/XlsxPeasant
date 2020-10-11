@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.2 - 2020-10-11
+
+- Shared strings provider has now cache builded.
+
 ## v1.2.0 - 2020-07-03
 
 - New: Xml generator has three more configuration settings: `Xml::NO_VALIDATION_NODE_NAME`, `Xml::NO_VALIDATION_ATTR_NAME`, `Xml::NO_VALIDATION_ATTR_VALUE`. All Xlsx Xml are bu default defined with this setting.

@@ -12,6 +12,22 @@ class XlSharedStrings extends XmlFile
 {
 
     /**
+     * Saves information if there was interest on this string id.
+     *
+     * Cache is saved only for strings for which at least one question has been asked.
+     *
+     * @var boolean[]
+     */
+    private $asked;
+
+    /**
+     * Cache of string.
+     *
+     * @var array
+     */
+    private $cache;
+
+    /**
      * Returns array with values under given shared strings id.
      *
      * Even if cell has no value parts - it returns array with one element.
@@ -22,6 +38,10 @@ class XlSharedStrings extends XmlFile
      */
     public function getValue(int $id) : array
     {
+
+        if (isset($this->asked[$id]) === true && isset($this->cache[$id]) === true) {
+            return $this->cache[$id];
+        }
 
         // Lvd.
         $result = [];
@@ -36,6 +56,13 @@ class XlSharedStrings extends XmlFile
             foreach ($siNode->getElementsByTagName('r') as $rNode) {
                 $result[] = $rNode->nodeValue;
             }
+        }
+
+        // Save.
+        if (isset($this->asked[$id]) === false) {
+            $this->asked[$id] = true;
+        } else {
+            $this->cache[$id] = $result;
         }
 
         return $result;

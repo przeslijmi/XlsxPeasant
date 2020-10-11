@@ -1,0 +1,89 @@
+<?php declare(strict_types=1);
+
+namespace Przeslijmi\XlsxPeasant;
+
+use Przeslijmi\XlsxPeasant\Exceptions\LookingForSpareIdLoopOtoranException;
+use Przeslijmi\XlsxPeasant\Xlsx;
+use Przeslijmi\XlsxPeasant\Xmls;
+
+/**
+ */
+class Comparer
+{
+
+    private $originalFile;
+    private $changedFile;
+
+    public function setOriginalFile(string $originalFile) : self
+    {
+
+        var_dump('will open original File');
+        $this->originalFile = ( new Reader($originalFile) )->readIn()->getBook();
+        var_dump('original File opened');
+
+        return $this;
+    }
+
+    public function setChangedFile(string $changedFile) : self
+    {
+
+        var_dump('will open changed File');
+        $this->changedFile = ( new Reader($changedFile) )->readIn()->getBook();
+        var_dump('changed File opened');
+
+        return $this;
+    }
+
+    public function compareTables(string $originalTableName, string $changedTableName = '') : self
+    {
+
+        // Unify.
+        if (empty($changedTableName) === true) {
+            $changedTableName = $originalTableName;
+        }
+
+        // Lvd.
+        $changedData  = $this->changedFile->getTableByName($changedTableName)->getData();
+        $changedKeys  = array_keys($changedData);
+        $originalData = $this->originalFile->getTableByName($originalTableName)->getData();
+        $originalKeys = array_keys($originalData);
+
+        // Compare keys.
+        $keysMissingInChanged  = array_diff($originalKeys, $changedKeys);
+        $keysMissingInOriginal = array_diff($changedKeys, $originalKeys);
+
+        // Sort data.
+        usort($changedData, [ get_class($this), 'compare' ]);
+        usort($originalData, [ get_class($this), 'compare' ]);
+
+        // Compare data.
+        foreach ($originalData as $rowId => $row) {
+
+            foreach ($row as $colId => $originalCell) {
+
+                $changedCell = ( $changedData[$rowId][$colId] ?? null );
+
+                if ($changedCell !== $originalCell) {
+                    print_r('row: ' . $rowId . ', col: ' . $colId . PHP_EOL . '   original: ' . $originalCell . PHP_EOL . '   changed: ' . $changedCell . PHP_EOL);
+                }
+            }
+        }
+
+
+        return $this;
+    }
+
+    private static function compare($oneRow, $otherRow)
+    {
+        if ($oneRow['NIP'] == $otherRow['NIP']) {
+
+            if ($oneRow['Zawarcie'] === $otherRow['Zawarcie']) {
+                return 0;
+            } else {
+                return ($oneRow['Zawarcie'] < $otherRow['Zawarcie']) ? -1 : 1;
+            }
+        }
+        return ($oneRow['NIP'] < $otherRow['NIP']) ? -1 : 1;
+    }
+
+}

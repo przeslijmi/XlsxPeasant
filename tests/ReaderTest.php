@@ -77,6 +77,10 @@ final class ReaderTest extends TestCase
         $this->assertEquals('Free cell C2', $sheet2->getCell(2, 3)->getSimpleValue());
         $this->assertEquals('Free cell B3', $sheet2->getCell(3, 2)->getSimpleValue());
         $this->assertEquals('Free cell B4 and bolded', $sheet2->getCell(4, 2)->getSimpleValue());
+        $this->assertEquals('Repeated text', $sheet2->getCell(6, 2)->getSimpleValue());
+        $this->assertEquals('Repeated text', $sheet2->getCell(7, 2)->getSimpleValue());
+        $this->assertEquals('Repeated text', $sheet2->getCell(8, 2)->getSimpleValue());
+        $this->assertEquals('Repeated text', $sheet2->getCell(9, 2)->getSimpleValue());
         $this->assertEquals('5', $sheet2->getCell(3, 4)->getSimpleValue());
         $this->assertEquals(100, $xlsx->getStopReadingOnEmptyRows());
         $this->assertInstanceOf(XlSharedStrings::class, $xlsx->getXlSharedStrings());
