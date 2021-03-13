@@ -1,7 +1,7 @@
 {
   "name": "przeslijmi/xlsxpeasant",
   "description": "PHP library for generating and reading XLSX files.",
-  "version": "v1.2.2",
+  "version": "v1.3.0",
   "type": "library",
   "license": "MIT",
   "authors": [

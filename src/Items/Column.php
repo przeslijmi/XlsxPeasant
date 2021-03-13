@@ -251,6 +251,12 @@ class Column extends Items
         return $this->conditionalFormat;
     }
 
+    public function hasFormatOrConditionalFormat() : bool
+    {
+
+        return ( $this->format !== null || $this->conditionalFormat !== null );
+    }
+
     /**
      * Sets width of this Column.
      *

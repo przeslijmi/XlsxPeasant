@@ -289,7 +289,9 @@ class Sheet extends Items
         ksort($this->cells);
 
         foreach ($this->cells as $rowId => $row) {
-            ksort($this->cells[$rowId]);
+            if (is_array($row) === true) {
+                ksort($this->cells[$rowId]);
+            }
         }
 
         return $this->cells;
@@ -342,6 +344,18 @@ class Sheet extends Items
         return $this->cells[$row][$col];
     }
 
+    public function getRow(int $row) : Row
+    {
+
+        // If it already exists - throw.
+        // @todo
+
+        // Add to index.
+        $rowObj            = new Row($this, $row);
+        $this->cells[$row] = $rowObj;
+
+        return $rowObj;
+    }
     /**
      * Create cells but only to lock merged cells. If Cell already exists - will cause throws.
      *
@@ -430,6 +444,11 @@ class Sheet extends Items
 
         // Go thru every row looking for longest row (highest col in that row).
         foreach ($this->cells as $lastRowId => $row) {
+
+            // @temp
+            if (is_array($row) === false) {
+                continue;
+            }
 
             // Get last col in this row.
             ksort($row);

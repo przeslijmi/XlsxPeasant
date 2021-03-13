@@ -4,6 +4,7 @@ namespace Przeslijmi\XlsxPeasant\Items\Collections;
 
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Row;
 use Przeslijmi\XlsxPeasant\Xlsx;
 
 /**
@@ -33,7 +34,7 @@ class SharedStrings extends Items
      *
      * @return void
      */
-    public function registerValue(Cell $cell) : void
+    public function registerCell(Cell $cell) : void
     {
 
         // Lvd.
@@ -59,6 +60,32 @@ class SharedStrings extends Items
 
         // Call back to Cell to set ID.
         $cell->setShardStringId($this->index[$signature]['id']);
+    }
+
+    /**
+     * Register string contents in shared strings dictionary.
+     *
+     * @param string $value String to be registered.
+     *
+     * @return integer
+     */
+    public function registerValue(string $value) : int
+    {
+
+        // Add if not exists.
+        if (isset($this->index[$value]) === false) {
+
+            // Increase index counter.
+            ++$this->lastIndex;
+
+            // Add.
+            $this->index[$value] = [
+                'valueParts' => $value,
+                'id'         => $this->lastIndex,
+            ];
+        }
+
+        return $this->index[$value]['id'];
     }
 
     /**

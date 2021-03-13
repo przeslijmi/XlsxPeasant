@@ -9,6 +9,7 @@ namespace Przeslijmi\XlsxPeasant\Xmls;
 use Przeslijmi\XlsxPeasant\Xml;
 use Przeslijmi\XlsxPeasant\Items\Sheet;
 use Przeslijmi\XlsxPeasant\Items\Cell;
+use Przeslijmi\XlsxPeasant\Items\Row;
 
 /**
  * XML nodes for `xl\worksheets\sheet*.xml`.
@@ -132,16 +133,29 @@ class XlWorksheet extends Xml
         $rowsAr = [];
 
         // Foreach Row.
-        foreach ($this->sheet->getCells() as $row => $cols) {
+        foreach ($this->sheet->getCells() as $row => $colsOrRow) {
 
             // Lvd.
             $colsXml = '';
-            $minCol  = array_keys($cols)[0];
-            $maxCol  = array_reverse(array_keys($cols))[0];
 
-            // Foreach Col in Row.
-            foreach ($cols as $col => $cell) {
-                $colsXml .= $this->prepOneCell($cell);
+            if (is_array($colsOrRow) === true) {
+
+                // Lvd.
+                $cols   = $colsOrRow;
+                $minCol = array_keys($cols)[0];
+                $maxCol = array_reverse(array_keys($cols))[0];
+
+                // Foreach Col in Row.
+                foreach ($cols as $col => $cell) {
+                    $colsXml .= $this->prepOneCell($cell);
+                }
+            } else {
+
+                // Lvd.
+                $rowObj  = $colsOrRow;
+                $minCol  = 1;
+                $maxCol  = count($rowObj->getData());
+                $colsXml = $this->prepOneRow($rowObj);
             }
 
             // Prepare row.
@@ -228,6 +242,29 @@ class XlWorksheet extends Xml
         return $result;
     }
 
+    private function prepOneRow(Row $row) : string
+    {
+
+        // Lvd.
+        $result = '';
+
+        if ($row->getRowId() === 7) {
+            // print_r($row->getData());
+            // die;
+        }
+
+        foreach ($row->getData() as $col) {
+
+            if ($col['sharedStringsId'] !== null) {
+                $result .= '<c r="' . $col['colRef'] . $row->getRowId() . '" s="' . $col['style'] . '" t="s"><v>' . $col['sharedStringsId'] . '</v></c>';
+            } else {
+                $result .= '<c r="' . $col['colRef'] . $row->getRowId() . '" s="' . $col['style'] . '"><v>' . $col['value'] . '</v></c>';
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Prepare 'mergeCells' node.
      *
@@ -241,6 +278,10 @@ class XlWorksheet extends Xml
 
         // Find all merges going through all Cells.
         foreach ($this->sheet->getCells() as $row => $cols) {
+
+            if (is_array($cols) === false) {
+                continue;
+            }
             foreach ($cols as $col => $cell) {
 
                 // If this is not merging Cell - don't go further.
@@ -344,6 +385,11 @@ class XlWorksheet extends Xml
 
         // Find all conditional formatting in all Cells.
         foreach ($this->sheet->getCells() as $row => $cols) {
+
+            if (is_array($cols) === false) {
+                continue;
+            }
+
             foreach ($cols as $col => $cell) {
 
                 // If this is not merging Cell - don't go further.

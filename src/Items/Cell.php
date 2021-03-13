@@ -235,9 +235,9 @@ class Cell extends Items
     {
 
         // If unknown. Register and receive it.
-        // After calling registerValue() - setShardStringId() is called.
+        // After calling registerCell() - setShardStringId() is called.
         if ($this->sharedStringsId === null) {
-            $this->getXlsx()->getSharedStrings()->registerValue($this);
+            $this->getXlsx()->getSharedStrings()->registerCell($this);
         }
 
         return $this->sharedStringsId;

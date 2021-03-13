@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.0 - 2021-03-13
+
+- New: Added methods to build-up fast large data `Tables`.
+
 ## v1.2.2 - 2020-10-11
 
 - Shared strings provider has now cache builded.

@@ -85,7 +85,16 @@ class XlSharedStrings extends Xml
             $thisParts = null;
             $oneSi     = [];
 
-            if (count($valueParts) === 1) {
+            if (is_string($valueParts) === true) {
+
+                // Save one shared string item.
+                $oneSi = [
+                    '@@' => [
+                        't' => $valueParts,
+                    ],
+                ];
+
+            } elseif (count($valueParts) === 1) {
 
                 // Define this term.
                 $valuePart = $valueParts[0];

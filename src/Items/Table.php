@@ -16,6 +16,7 @@ use Przeslijmi\XlsxPeasant\Exceptions\TableNameWrosynException;
 use Przeslijmi\XlsxPeasant\Helpers\Tools as XlsxTools;
 use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Column;
+use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Xlsx;
 use Przeslijmi\XlsxPeasant\Xmls\XlTable;
 
@@ -529,6 +530,53 @@ class Table extends Items
         return $this;
     }
 
+    public function addFastData(array $rows) : self
+    {
+
+        // Create styles.
+        $stylesForColumns = [];
+
+        foreach ($this->columns as $column) {
+
+            // Ignore non-styled columns.
+            if ($column->hasFormatOrConditionalFormat() === false) {
+                $stylesForColumns[$column->getId()] = 0;
+            }
+
+            $style = new Style($this->getXlsx());
+
+            if ($column->getFormat() !== null) {
+                $style->setFormat($column->getFormat());
+            }
+            if ($column->getConditionalFormat() !== null) {
+                $style->setConditionalFormat($column->getConditionalFormat());
+            }
+
+            $stylesForColumns[$column->getId()] = $style->getId();
+        }
+
+        // Serve each row.
+        foreach ($rows as $row) {
+
+            // Increase row counter.
+            ++$this->rowsCounter;
+
+            // Lvd.
+            $rowRef = ( $this->refs[0] + 1 + $this->rowsCounter );
+
+            // Add this row.
+            $rowObject = $this->getSheet()->getRow($rowRef);
+            $rowObject->setTable($this);
+            $rowObject->setStyles($stylesForColumns);
+            $rowObject->setContents($row);
+
+            // Save rows for future reference.
+            $this->rows[] = $row;
+        }//end foreach
+
+        return $this;
+    }
+
     /**
      * Getter for all rows of data of table.
      *
@@ -591,7 +639,7 @@ class Table extends Items
     }
 
     /**
-     * Check if Table has all Columns that were given (also in proper order).
+     * Check if Table has exactly those Columns that were given (also in proper order).
      *
      * @param array $columns Set of proper columns.
      *
@@ -603,6 +651,27 @@ class Table extends Items
 
         // Throw.
         if ($columns !== $this->getColumnsNames()) {
+            throw new TableHasWrongColumnsException([ $columns, $this->getColumnsNames() ]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if Table has at least given columns (in any order).
+     *
+     * @param array $columns Set of columns to be found.
+     *
+     * @throws TableHasWrongColumnsException On false.
+     * @return boolean
+     */
+    public function hasAtLeastColumns(array $columns) : bool
+    {
+
+        // Check.
+        $isProper = (count($columns) === count(array_intersect($columns, $this->getColumnsNames())));
+
+        if ($isProper === false) {
             throw new TableHasWrongColumnsException([ $columns, $this->getColumnsNames() ]);
         }
 
