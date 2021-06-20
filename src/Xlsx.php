@@ -187,17 +187,38 @@ class Xlsx
         // Delete target file Uri if exists.
         if (file_exists($targetUri) === true) {
 
-            // Throw if deletion is not possible.
-            if (@touch($targetUri, time()) === false
-                || ( $fh = @fopen($targetUri, 'r+') ) === false
-                || @flock($fh, ( LOCK_EX | LOCK_NB )) === false
-            ) {
-                throw new TargetFileDeletionFailedException($targetUri);
+            // Lvd.
+            $deletionPossible = true;
+
+            // Try to check if deletion is possible - checking itself might throw.
+            try {
+
+                // Check.
+                if (@touch($targetUri, time()) === false
+                    || ( $fh = @fopen($targetUri, 'r+') ) === false
+                    || @flock($fh, ( LOCK_EX | LOCK_NB )) === false
+                ) {
+                    $deletionPossible = false;
+                }
+
+                // Delete finally.
+                if ($deletionPossible === true) {
+                    unlink($targetUri);
+                }
+
+            } catch (Throwable $thr) {
+
+                // Translate error to good one.
+                throw new TargetFileDeletionFailedException($targetUri, $thr);
             }
 
-            unlink($targetUri);
+            // If checking did not throw but returned false - throw anyway.
+            if ($deletionPossible === false) {
+                throw new TargetFileDeletionFailedException($targetUri);
+            }
         }
 
+        // Save.
         $this->targetUri = $targetUri;
 
         return $this;
