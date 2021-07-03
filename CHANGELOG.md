@@ -1,12 +1,16 @@
 # Changelog
 
+## v1.3.2 - 2021-07-03
+
+- Change: fleshgrinder/uuid lib is no loner needed.
+
 ## v1.3.0 - 2021-03-13
 
 - New: Added methods to build-up fast large data `Tables`.
 
 ## v1.2.2 - 2020-10-11
 
-- Shared strings provider has now cache builded.
+- New: Shared strings provider has now cache builded.
 
 ## v1.2.0 - 2020-07-03
 
