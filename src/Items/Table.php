@@ -161,7 +161,7 @@ class Table extends Items
         try {
 
             // Proper chars, at least 2 chars length.
-            RegEx::ifMatches($name, '/^([_\\\\A-Z]){1}([_\\\\A-Z0-9.]){1,}$/i');
+            RegEx::ifMatches($name, '/^([_\\\\A-Z]){1}([\\w\\.\\\\]){1,}$/iu');
 
             // Rule out A1, C2, R2C2, Z3:ZZ55.
             RegEx::ifNotMatches($name, '/^(([A-Z]){0,2}(\\d)+)+(:)?(([A-Z])+(\\d)+)?$/i');

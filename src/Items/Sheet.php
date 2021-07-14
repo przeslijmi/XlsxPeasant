@@ -167,13 +167,10 @@ class Sheet extends Items
         try {
 
             // Lvd.
-            $special = '\\!\\@\\#\\$\\%\\^\\&\\(\\)\\_\\+\\-\\=\\{\\}\\|\\"\\;\\.\\,\\ \\<\\>';
-
-            // Add polish accented letters.
-            $special .= 'ążśźęćńółĄŻŚŹĘĆŃÓŁ';
+            $special = '\\!\\@\\#\\$\\%\\^\\&\\(\\)\\+\\-\\=\\{\\}\\|\\"\\;\\.\\,\\ \\<\\>';
 
             // Proper chars, at least 2 chars length, max length.
-            RegEx::ifMatches($name, '/^([\\\\A-Z0-9' . $special . ']){1,256}$/i');
+            RegEx::ifMatches($name, '/^([\\w' . $special . ']){1,256}$/iu');
 
         } catch (Exception $exc) {
             throw new SheetNameWrosynException($name, $exc);
