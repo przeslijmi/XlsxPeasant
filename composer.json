@@ -1,7 +1,7 @@
 {
   "name": "przeslijmi/xlsxpeasant",
   "description": "PHP library for generating and reading XLSX files.",
-  "version": "v1.3.3",
+  "version": "v1.3.4",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -18,14 +18,10 @@
     {
       "type": "vcs",
       "url": "https://github.com/przeslijmi/sivalidator"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/Fleshgrinder/php-uuid"
     }
   ],
   "require": {
-    "php" : "^7.3",
+    "php": "^7.3,^8.0",
     "ext-zip": "*",
     "przeslijmi/sexceptions": "~1.0",
     "przeslijmi/sivalidator": "~2.0"
