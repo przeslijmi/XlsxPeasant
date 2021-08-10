@@ -24,7 +24,7 @@
     "php": "^7|^8",
     "ext-zip": "*",
     "przeslijmi/sexceptions": ">=1.8",
-    "przeslijmi/sivalidator": "~2.0"
+    "przeslijmi/sivalidator": ">=2.2"
   },
   "autoload": {
     "psr-4": {
