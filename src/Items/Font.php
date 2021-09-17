@@ -194,7 +194,6 @@ class Font
     public function setBold(bool $bold) : self
     {
 
-
         $this->bold = $bold;
 
         return $this;

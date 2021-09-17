@@ -104,7 +104,6 @@ class DocPropsApp extends Xml
         return $this;
     }
 
-
     /**
      * Preparation of `sheet` node.
      *
