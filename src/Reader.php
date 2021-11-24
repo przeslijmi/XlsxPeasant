@@ -170,10 +170,13 @@ class Reader
     /**
      * Main working function - reads file into XLSX object.
      *
+     * @param null|array $limitToTables Optional, null. You can limit to read in only given tables by name (or none).
+     * @param null|array $limitToSheets Optional, null. You can limit to read in only given sheets by name (or none).
+     *
      * @throws ClassFopException If any stage of creating Xlsx object from Xlsx file fails.
      * @return Xlsx
      */
-    public function readIn() : Xlsx
+    public function readIn(?array $limitToTables = null, ?array $limitToSheets = null) : Xlsx
     {
 
         // Call to unpack ZIP file (makes `$this->allFiles` nonempty).
@@ -199,7 +202,7 @@ class Reader
             $this->xlsx = new Xlsx();
 
             // Fill up.
-            $this->createXlsx();
+            $this->createXlsx($limitToTables, $limitToSheets);
 
         } catch (Throwable $thr) {
             throw (new ClassFopException('creatingXlsxFromReader', $thr))
@@ -358,10 +361,13 @@ class Reader
     /**
      * Creates final XLSX object to use.
      *
+     * @param null|array $limitToTables Optional, null. You can limit to read in only given tables by name (or none).
+     * @param null|array $limitToSheets Optional, null. You can limit to read in only given sheets by name (or none).
+     *
      * @throws ClassFopException When reading XML files somehow failed.
      * @return self
      */
-    private function createXlsx() : self
+    private function createXlsx(?array $limitToTables = null, ?array $limitToSheets = null) : self
     {
 
         // Lvd.
@@ -374,6 +380,11 @@ class Reader
 
         // Add tables.
         foreach ($this->getXlTables() as $tableXml) {
+
+            // Check if this table is not going to be ignored - ignore if needed.
+            if ($limitToTables !== null && in_array($tableXml->getName(), $limitToTables) === false) {
+                continue;
+            }
 
             // Lvd.
             $sheetId = $tableXml->getXlWorksheet()->getId();
@@ -401,6 +412,11 @@ class Reader
         // Read cells from sheets - but only those that were not read by tables already.
         // List of these is stored in $this->cellsReadByTables[for_sheet_id].
         foreach ($this->getXlWorksheets() as $sheetXml) {
+
+            // Check if this table is not going to be ignored - ignore if needed.
+            if ($limitToSheets !== null && in_array($sheetXml->getName(), $limitToSheets) === false) {
+                continue;
+            }
 
             // Lvd.
             $sheet            = $this->xlsx->getBook()->getSheetByName($sheetXml->getName());
@@ -446,7 +462,7 @@ class Reader
                     break;
                 }
             }//end for
-        }//end foreach
+        }//end foreachforeach
 
         return $this;
     }
