@@ -134,11 +134,17 @@ class NumFormat extends Format
     {
 
         // Lvd.
-        $unit          = '&quot;' . $this->getUnit() . '&quot;';
         $dp            = $this->getDecimalPlaces();
         $decimalPlaces = ( ( $dp > 0 ) ? '.' . str_repeat('0', $dp) : '' );
 
-        $mtZero = '#,##0' . $decimalPlaces . '\ ' . $unit . ' ';
+        // Define unit.
+        if ($this->getUnit() === '%') {
+            $unit = '%';
+        } else {
+            $unit = '\ ' . '&quot;' . $this->getUnit() . '&quot;';
+        }
+
+        $mtZero = '#,##0' . $decimalPlaces . $unit . ' ';
         $ltZero = '-' . $mtZero;
 
         return $mtZero . ';' . $ltZero;

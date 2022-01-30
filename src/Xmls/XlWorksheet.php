@@ -248,11 +248,6 @@ class XlWorksheet extends Xml
         // Lvd.
         $result = '';
 
-        if ($row->getRowId() === 7) {
-            // print_r($row->getData());
-            // die;
-        }
-
         foreach ($row->getData() as $col) {
 
             if ($col['sharedStringsId'] !== null) {
