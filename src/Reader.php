@@ -462,7 +462,7 @@ class Reader
                     break;
                 }
             }//end for
-        }//end foreachforeach
+        }//end foreach
 
         return $this;
     }

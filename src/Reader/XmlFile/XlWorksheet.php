@@ -225,7 +225,16 @@ class XlWorksheet extends XmlFile
 
         // Fast lane.
         if (isset($this->rowNodesCache[$row]) === true) {
-            return $this->rowNodesCache[$row];
+
+            // Lvd.
+            $rowNode = $this->rowNodesCache[$row];
+
+            // Nullify.
+            if ($rowNode === 'null') {
+                $rowNode = null;
+            }
+
+            return $rowNode;
         }
 
         // Scan and return.
@@ -242,6 +251,9 @@ class XlWorksheet extends XmlFile
                 return $rowNode;
             }
         }
+
+        // Save that there is no row like this (it is nullifide in fast lane).
+        $this->rowNodesCache[$row] = 'null';
 
         return null;
     }
@@ -280,6 +292,33 @@ class XlWorksheet extends XmlFile
 
         // Lvd.
         $refs = $this->contents->getElementsByTagName('dimension')->item(0)->getAttribute('ref');
+
+        // Alternative way to found.
+        if ($refs === 'A1' || empty($refs) === true) {
+
+            // Lvd.
+            $rows      = 0;
+            $cols      = 0;
+            $dataNode  = ( $this->contents->getElementsByTagName('sheetData') ?? null );
+            $rowsNodes = [];
+
+            // How many rows there are.
+            if ($dataNode !== null) {
+                $rowsNodes = $dataNode[0]->getElementsByTagName('row');
+                $rows      = (int) count($rowsNodes);
+            }
+
+            // How many cols there is maximum in every of first 25 rows.
+            for ($r = 0; $r < min($rows, 25); ++$r) {
+                $cols = max($cols, count($rowsNodes[$r]->getElementsByTagName('c')));
+            }
+
+            // Return ready number set.
+            return [
+              'firstCell' => [ 1, 1 ],
+              'lastCell'  => [ $rows, $cols ],
+            ];
+        }
 
         return XlsxTools::convCellsRefToNumbers($refs);
     }
