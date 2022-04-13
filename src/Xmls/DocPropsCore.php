@@ -29,8 +29,8 @@ class DocPropsCore extends Xml
                 '@xmlns:dcmitype' => 'http://purl.org/dc/dcmitype/',
                 '@xmlns:xsi'      => 'http://www.w3.org/2001/XMLSchema-instance',
                 '@@'              => [
-                    'dc:creator'        => 'Karol Nowakowski',
-                    'cp:lastModifiedBy' => 'Karol Nowakowski',
+                    'dc:creator'        => 'XlsxPeasant',
+                    'cp:lastModifiedBy' => 'XlsxPeasant',
                     'dcterms:created'   => [
                         '@xsi:type' => 'dcterms:W3CDTF',
                         '@@'        => '2019-04-23T10:00:38Z',
