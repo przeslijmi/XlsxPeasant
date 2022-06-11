@@ -566,9 +566,8 @@ class Table extends Items
 
             // Add this row.
             $rowObject = $this->getSheet()->getRow($rowRef);
-            $rowObject->setTable($this);
             $rowObject->setStyles($stylesForColumns);
-            $rowObject->setContents($row);
+            $rowObject->setTableContents($this, $row);
 
             // Save rows for future reference.
             $this->rows[] = $row;

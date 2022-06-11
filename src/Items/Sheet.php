@@ -344,15 +344,18 @@ class Sheet extends Items
     public function getRow(int $row) : Row
     {
 
-        // If it already exists - throw.
-        // @todo
+        // If it already exists - deliver existing.
+        if (isset($this->cells[$row]) === true) {
+            return $this->cells[$row];
+        }
 
-        // Add to index.
+        // If not exists - create new and add to index.
         $rowObj            = new Row($this, $row);
         $this->cells[$row] = $rowObj;
 
         return $rowObj;
     }
+
     /**
      * Create cells but only to lock merged cells. If Cell already exists - will cause throws.
      *

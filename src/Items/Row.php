@@ -58,14 +58,6 @@ class Row extends Items
         $this->row    = $row;
     }
 
-    public function setTable(Table $table) : self
-    {
-
-        $this->table = $table;
-
-        return $this;
-    }
-
     public function setStyles(array $styles) : self
     {
 
@@ -74,12 +66,12 @@ class Row extends Items
         return $this;
     }
 
-    public function setContents(array $data) : self
+    public function setTableContents(Table $table, array $data) : self
     {
 
         // Create cache of Columns.
         $columnsCache = [];
-        foreach ($this->table->getColumns() as $column) {
+        foreach ($table->getColumns() as $column) {
             $columnsCache[$column->getName()] = $column;
         }
 
@@ -92,7 +84,7 @@ class Row extends Items
 
             // Lvd.
             $column = $columnsCache[$columnName];
-            $colID  = ( $this->table->getRefs()[1] + $column->getId() - 1 );
+            $colID  = ( $table->getRefs()[1] + $column->getId() - 1 );
             $ssId   = null;
 
             if (is_string($value) === true && strlen($value) > 0) {
