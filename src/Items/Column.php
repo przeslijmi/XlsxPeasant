@@ -12,6 +12,7 @@ use Przeslijmi\XlsxPeasant\Items;
 use Przeslijmi\XlsxPeasant\Items\Cell;
 use Przeslijmi\XlsxPeasant\Items\ConditionalFormat;
 use Przeslijmi\XlsxPeasant\Items\Format;
+use Przeslijmi\XlsxPeasant\Items\Style;
 use Przeslijmi\XlsxPeasant\Items\Table;
 
 /**
@@ -54,6 +55,13 @@ class Column extends Items
      * @var Cell
      */
     private $cell;
+
+    /**
+     * Style if it has to be added.
+     *
+     * @var string
+     */
+    private $style;
 
     /**
      * Which Format is used in this Table Column.
@@ -200,11 +208,37 @@ class Column extends Items
     }
 
     /**
+     * Setter for style.
+     *
+     * @param null|Style $style Style to use in this Table Column.
+     *
+     * @return self
+     */
+    public function setStyle(?Style $style) : self
+    {
+
+        $this->style = $style;
+
+        return $this;
+    }
+
+    /**
+     * Getter for style for this Table Column - if is defined.
+     *
+     * @return null|Style
+     */
+    public function getStyle() : ?Style
+    {
+
+        return $this->style;
+    }
+
+    /**
      * Setter for Format object.
      *
      * @param Format $format Format object to use in this Table Column.
      *
-     * @return null|Format
+     * @return self
      */
     public function setFormat(?Format $format) : self
     {
@@ -230,7 +264,7 @@ class Column extends Items
      *
      * @param ConditionalFormat $conditionalFormat ConditionalFormat object to use in this Table Column.
      *
-     * @return null|ConditionalFormat
+     * @return self
      */
     public function setConditionalFormat(?ConditionalFormat $conditionalFormat) : self
     {

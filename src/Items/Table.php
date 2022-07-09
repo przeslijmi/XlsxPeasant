@@ -541,10 +541,17 @@ class Table extends Items
             // Ignore non-styled columns.
             if ($column->hasFormatOrConditionalFormat() === false) {
                 $stylesForColumns[$column->getId()] = 0;
+                continue;
             }
 
-            $style = new Style($this->getXlsx());
+            // Set style for the column.
+            if ($column->getStyle() === null) {
+                $style = new Style($this->getXlsx());
+            } else {
+                $style = clone $column->getStyle();
+            }
 
+            // Set format and conditional format for the column.
             if ($column->getFormat() !== null) {
                 $style->setFormat($column->getFormat());
             }
@@ -552,6 +559,7 @@ class Table extends Items
                 $style->setConditionalFormat($column->getConditionalFormat());
             }
 
+            // Save this a style to use.
             $stylesForColumns[$column->getId()] = $style->getId();
         }
 

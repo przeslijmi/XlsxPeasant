@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.3 - 2022-07-09
+
+- New: Added styling possibility to columns when fast-adding Table.
+
 ## v1.3.2 - 2021-07-03
 
 - Change: fleshgrinder/uuid lib is no loner needed.
